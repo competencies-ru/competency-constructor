@@ -34,7 +34,6 @@ func setDefaults() {
 
 func Parse(pathToConfigs string) (*Config, error) {
 	setDefaults()
-
 	var cfg Config
 	if err := unmarshall(&cfg); err != nil {
 		return nil, err
