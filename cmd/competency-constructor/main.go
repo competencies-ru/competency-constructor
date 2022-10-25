@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/competencies-ru/competency-constructor/internal/runner"
 	"log"
 	"os/signal"
 	"syscall"
+
+	"github.com/competencies-ru/competency-constructor/internal/runner"
 )
 
 const defaultConfigPath = "configs"
@@ -14,6 +15,7 @@ const defaultConfigPath = "configs"
 func main() {
 	flag.Parse()
 	configPath := flag.Arg(0)
+
 	if configPath == "" {
 		configPath = defaultConfigPath
 	}
