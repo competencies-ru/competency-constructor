@@ -4,7 +4,7 @@
 *.dll
 *.so
 *.dylib
-local.env
+*.a
 
 # Test binary, built with `go test -c`
 *.test
@@ -20,7 +20,8 @@ local.env
 .idea/
 .data/
 .vscode/
-
+bin
+*.env
 
 # Dependency directories (remove the comment below to include it)
 # vendor/

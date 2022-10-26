@@ -48,6 +48,10 @@ func (r *Runner) StartServer() {
 }
 
 func (r *Runner) Stop() {
+	r.shutdownServer()
+}
+
+func (r *Runner) shutdownServer() {
 	log.Println("Start shutdown server...")
 
 	ctx, stop := context.WithTimeout(context.Background(), r.cfg.HTTP.ShutdownTimeout)
