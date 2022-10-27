@@ -122,7 +122,7 @@ func getValueEnv(key string) (string, error) {
 		return value, nil
 	}
 
-	return "", errors.Errorf("no %s env", "key")
+	return "", errors.Errorf("no %s env", key)
 }
 
 func parsEnv(env string) (key, value string, hasDef bool) {
