@@ -25,6 +25,15 @@ type (
 		WriteTimeout    time.Duration
 		ShutdownTimeout time.Duration
 	}
+
+	Postgres struct {
+		Host         string
+		Port         string
+		UserName     string
+		Password     string
+		DataBaseName string
+		SslMode      bool
+	}
 )
 
 const (

@@ -5,5 +5,10 @@ http:
   shutdownTimeout: 10s
 
 postgres:
-    
+  host: ${POSTGRES_HOST:localhost}
+  port: ${POSTGRES_PORT:5432}
+  databaseName: ${POSTGRES_DATABASE:constructor}
+  username: ${POSTGRES_USERNAME:postgres}
+  password: ${POSTGRES_PASSWORD:root}
+  sslMode: ${POSTGRES_SSL_MODE:false}
 
