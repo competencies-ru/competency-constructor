@@ -16,7 +16,8 @@ const LocalEnv = "local"
 
 type (
 	Config struct {
-		HTTP HTTP
+		HTTP     HTTP
+		Postgres Postgres
 	}
 
 	HTTP struct {
@@ -94,6 +95,10 @@ func parseConfig(path string, env string) error {
 
 func unmarshall(cfg *Config) error {
 	if err := viper.UnmarshalKey("http", &cfg.HTTP); err != nil {
+		return err
+	}
+
+	if err := viper.UnmarshalKey("postgres", &cfg.Postgres); err != nil {
 		return err
 	}
 

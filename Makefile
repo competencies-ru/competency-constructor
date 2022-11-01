@@ -9,3 +9,6 @@ lint:
 
 gofumpt:
 	gofumpt -l -w .
+
+run:
+	go run ./cmd/competency-constructor
