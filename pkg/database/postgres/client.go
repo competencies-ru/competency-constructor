@@ -42,12 +42,11 @@ func NewClient(cfg config.Postgres) (*pgxpool.Pool, error) {
 }
 
 func initURLPostgres(cfg config.Postgres) string {
-	return fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%t",
+	return fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s",
 		cfg.Host,
 		cfg.Port,
 		cfg.UserName,
 		cfg.DataBaseName,
 		cfg.Password,
-		cfg.SslMode,
 	)
 }

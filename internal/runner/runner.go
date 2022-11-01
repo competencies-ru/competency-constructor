@@ -3,11 +3,12 @@ package runner
 import (
 	"context"
 	"errors"
-	"github.com/competencies-ru/competency-constructor/pkg/database/postgres"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
 	"net/http"
 	"sync"
+
+	"github.com/competencies-ru/competency-constructor/pkg/database/postgres"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/competencies-ru/competency-constructor/internal/config"
 	"github.com/competencies-ru/competency-constructor/internal/server"
@@ -30,6 +31,7 @@ func New(path string) *Runner {
 
 	r.initConfig(path)
 	r.initServer()
+	r.initPersistent()
 
 	return r
 }
@@ -45,6 +47,12 @@ func (r *Runner) initConfig(path string) {
 	r.cfg = cfg
 }
 
+func (r *Runner) initPersistent() {
+	_ = r.postgres()
+
+	log.Println("postgres init")
+}
+
 func (r *Runner) initServer() {
 	log.Println("init server")
 
@@ -55,7 +63,7 @@ func (r *Runner) postgres() *pgxpool.Pool {
 	r.singletonPostgres.one.Do(func() {
 		client, err := postgres.NewClient(r.cfg.Postgres)
 		if err != nil {
-			return
+			log.Println("error connection database", err)
 		}
 
 		r.singletonPostgres.db = client
@@ -66,7 +74,7 @@ func (r *Runner) postgres() *pgxpool.Pool {
 
 func (r *Runner) StartServer() {
 	if err := r.server.Start(); !errors.Is(err, http.ErrServerClosed) {
-		log.Fatal("HTTP Server stopped with an error", err)
+		log.Fatal("HTTP Server stopped with an error\n", err)
 	}
 }
 
