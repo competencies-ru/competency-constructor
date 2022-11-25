@@ -1,0 +1,398 @@
+openapi: 3.0.3
+info:
+  title: Constructor competence API
+  description: The service is designed to create and fill a bank of competencies
+  version: 0.0.1
+servers:
+  - url: "https://{hostname}/v1"
+paths:
+  /ugsn:
+    get:
+      tags:
+        - education
+      operationId: getLevelEducation
+      summary: Returns level educations.
+      responses:
+        200:
+          description: Found ugsn.
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/UgsnResponse"
+        403:
+          description: User does not have access.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      tags:
+        - education
+      operationId: createUgsn
+      summary: create ugsn
+      requestBody:
+        description: Ugsn create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UgsnRequest"
+      responses:
+        201:
+          description: ugsn is created.
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: User does not have access.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+
+  /ugsn/{ugsnCode}:
+    get:
+      tags:
+        - education
+      operationId: getUgsn
+      summary: Returns ugsn with such code.
+      parameters:
+        - in: path
+          name: ugsnCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.0{2}\.0{2}$'
+          required: true
+          description: code ugsn.
+      responses:
+        200:
+          description: Found previously added ugsn.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpecificUgsnResponse"
+        404:
+          description: Ugsn not found with such code.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: User does not have access.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+  /ugsn/{ugsnCode}/specialties:
+    get:
+      tags:
+        - education
+      operationId: getSpecialties
+      summary: Returns specialties with such code ugsn.
+      parameters:
+        - in: path
+          name: ugsnCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.0{2}\.0{2}$'
+          required: true
+          description: code ugsn.
+      responses:
+        200:
+          description: Found previously added ugsn.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpecialtiesResponse"
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+        404:
+          description: Ugsn not found with such code.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: User does not have access.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      tags:
+        - education
+      operationId: addedSpecialties
+      summary: Adding specialties for ugsn
+      parameters:
+        - in: path
+          name: code
+          schema:
+            type: string
+            pattern: '^\d{2}\.0{2}\.0{2}$'
+          required: true
+          description: code ugsn.
+      requestBody:
+        description: specialties items with such code ugsn.
+        required: true
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: "#/components/schemas/SpecialtiesRequest"
+      responses:
+        201:
+          description: Added specialty for ugsn.
+        404:
+          description: Ugsn not found with such code.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: User does not have access.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /specialties/{specialtyCode}:
+    get:
+      tags:
+        - education
+      operationId: getSpecialty
+      summary: Returns specialty with such code.
+      parameters:
+        - in: path
+          name: specialtyCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.\d{2}\.\d{2}$'
+          required: true
+          description: code specialty.
+      responses:
+        200:
+          description: Found previously added specialty.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpecificSpecialtyResponse"
+        404:
+          description: Specialty not found with such code.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: User does not have access.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /specialties/{specialtyCode}/program:
+    get:
+      tags:
+        - education
+      operationId: getSpecialty
+      summary: Returns specialty with such code.
+      parameters:
+        - in: path
+          name: specialtyCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.\d{2}\.\d{2}$'
+          required: true
+          description: code specialty.
+      responses:
+        200:
+          description: Found previously added specialty.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgramResponse"
+        404:
+          description: Specialty not found with such code.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: User does not have access.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - education
+      operationId: addedProgram
+      summary: Adding program for specialty
+      parameters:
+        - in: path
+          name: code
+          schema:
+            type: string
+            pattern: '^\d{2}\.\d{2}\.\d{2}$'
+          required: true
+          description: code specialty.
+      requestBody:
+        description: program items with such code ugsn.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        201:
+          description: Added programs for specialty.
+        404:
+          description: Specialty not found with such code.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: User does not have access.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+
+
+
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - slug
+        - details
+      properties:
+        slug:
+          $ref: "#/components/schemas/ErrorSlug"
+        details:
+          type: string
+
+    ErrorSlug:
+      type: string
+      enum:
+        - bad-request
+
+    SpecialtiesResponse:
+      type: object
+      required:
+        - code
+        - title
+        - ugsnCode
+      properties:
+        code:
+          type: string
+          pattern: '^\d{2}\.\d{2}\.\d{2}$'
+        title:
+          type: string
+        ugsnCode:
+          type: string
+          pattern: '^\d{2}\.0{2}\.0{2}$'
+
+    SpecialtiesRequest:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^\d{2}\.\d{2}\.\d{2}$'
+        title:
+          type: string
+
+    UgsnResponse:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^\d{2}\.0{2}\.0{2}$'
+        title:
+          type: string
+
+    UgsnRequest:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^\d{2}\.0{2}\.0{2}$'
+        title:
+          type: string
+
+    ProgramResponse:
+      type: object
+      required:
+        - id
+        - title
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+
+    SpecificSpecialtyResponse:
+      type: object
+      required:
+        - code
+        - title
+        - program
+      properties:
+        code:
+          type: string
+          pattern: '^\d{2}\.\d{2}\.\d{2}$'
+        title:
+          type: string
+        program:
+          items:
+            $ref: "#/components/schemas/ProgramResponse"
+
+
+    SpecificUgsnResponse:
+      type: object
+      required:
+        - code
+        - title
+        - specialty
+      properties:
+        code:
+          type: string
+          pattern: '^\d{2}\.0{2}\.0{2}$'
+        title:
+          type: string
+        specialty:
+          items:
+            $ref: "#/components/schemas/SpecificSpecialtyResponse"
+
+
+
