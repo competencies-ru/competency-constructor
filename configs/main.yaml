@@ -12,3 +12,7 @@ postgres:
   password: ${POSTGRES_PASSWORD:root}
   sslMode: ${POSTGRES_SSL_MODE:false}
 
+logger:
+  level: debug
+  lig: zap
+

@@ -15,9 +15,25 @@ import (
 const LocalEnv = "local"
 
 type (
+	LoggerLevel = string
+	LoggerLib   = string
+)
+
+const Zap LoggerLib = "zap"
+
+const (
+	DebugLevel LoggerLevel = "DEBUG"
+	InfoLevel  LoggerLevel = "INFO"
+	WarnLevel  LoggerLevel = "WARN"
+	ErrorLevel LoggerLevel = "ERROR"
+	FatalLevel LoggerLevel = "FATAL"
+)
+
+type (
 	Config struct {
 		HTTP     HTTP
 		Postgres Postgres
+		Logger   Logger
 	}
 
 	HTTP struct {
@@ -35,6 +51,11 @@ type (
 		DataBaseName string
 		SslMode      bool
 	}
+
+	Logger struct {
+		Lib   LoggerLib
+		Level LoggerLevel
+	}
 )
 
 const (
@@ -43,11 +64,18 @@ const (
 	defaultHTTPShutdown         = 10 * time.Second
 )
 
+const (
+	defaultLoggerLib   = Zap
+	defaultLoggerLevel = InfoLevel
+)
+
 func setDefaults() {
 	viper.SetDefault("http.port", defaultHTTTPort)
 	viper.SetDefault("http.readTimeout", defaultHTTPReadWriteTimeout)
 	viper.SetDefault("http.writeTimeout", defaultHTTPReadWriteTimeout)
 	viper.SetDefault("http.shutdownTimeout", defaultHTTPShutdown)
+	viper.SetDefault("logger.lib", defaultLoggerLib)
+	viper.SetDefault("logger.level", defaultLoggerLevel)
 }
 
 func Parse(pathToConfigs string) (*Config, error) {
@@ -99,6 +127,10 @@ func unmarshall(cfg *Config) error {
 	}
 
 	if err := viper.UnmarshalKey("postgres", &cfg.Postgres); err != nil {
+		return err
+	}
+
+	if err := viper.UnmarshalKey("logger", &cfg.Logger); err != nil {
 		return err
 	}
 
