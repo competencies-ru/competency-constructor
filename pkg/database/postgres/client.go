@@ -38,6 +38,10 @@ func NewClient(cfg config.Postgres) (*pgxpool.Pool, error) {
 		return nil, err
 	}
 
+	if err := pool.Ping(context.Background()); err != nil {
+		return nil, err
+	}
+
 	return pool, nil
 }
 
