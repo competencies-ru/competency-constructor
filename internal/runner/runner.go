@@ -7,6 +7,13 @@ import (
 	"net/http"
 	"sync"
 
+	zapAdapter "github.com/competencies-ru/competency-constructor/internal/core/adapter/driven/logger/zap"
+	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
+
+	"go.uber.org/zap/zapcore"
+
+	"go.uber.org/zap"
+
 	"github.com/competencies-ru/competency-constructor/pkg/database/postgres"
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -19,10 +26,17 @@ type singletonPostgres struct {
 	one sync.Once
 }
 
+type singletonZapLogger struct {
+	one    sync.Once
+	logger *zap.Logger
+}
+
 type Runner struct {
+	singletonZapLogger
 	singletonPostgres
 
-	cfg    *config.Config
+	logger service.Logger
+	config *config.Config
 	server *server.Server
 }
 
@@ -30,6 +44,7 @@ func New(path string) *Runner {
 	r := &Runner{}
 
 	r.initConfig(path)
+	r.initLogger()
 	r.initServer()
 	r.initPersistent()
 
@@ -41,35 +56,61 @@ func (r *Runner) initConfig(path string) {
 
 	cfg, err := config.Parse(path)
 	if err != nil {
-		log.Fatal("config parsing error", err)
+		log.Fatalf("config parsing error: %v", err)
 	}
 
-	r.cfg = cfg
+	r.config = cfg
 }
 
 func (r *Runner) initPersistent() {
 	_ = r.postgres()
+}
 
-	log.Println("postgres init")
+func (r *Runner) initLogger() {
+	if r.config.Logger.Lib == config.Zap {
+		r.logger = zapAdapter.NewLogger(r.zap())
+	}
+
+	r.logger.Info(
+		"Logger library used",
+		"lib", r.config.Logger.Lib,
+		"level", r.config.Logger.Level,
+	)
 }
 
 func (r *Runner) initServer() {
-	log.Println("init server")
+	r.logger.Info("Init server")
 
-	r.server = server.NewServer(r.cfg.HTTP, nil)
+	r.server = server.NewServer(r.config.HTTP, nil)
 }
 
 func (r *Runner) postgres() *pgxpool.Pool {
 	r.singletonPostgres.one.Do(func() {
-		client, err := postgres.NewClient(r.cfg.Postgres)
+		client, err := postgres.NewClient(r.config.Postgres)
 		if err != nil {
-			log.Println("error connection database", err)
+			r.logger.Fatal("failed to connect to database", err)
 		}
 
 		r.singletonPostgres.db = client
 	})
 
 	return r.singletonPostgres.db
+}
+
+func (r *Runner) zap() *zap.Logger {
+	r.singletonZapLogger.one.Do(func() {
+		cfg := zap.NewProductionConfig()
+		cfg.Level = zap.NewAtomicLevelAt(r.levelLogger())
+
+		build, err := cfg.Build()
+		if err != nil {
+			log.Fatalf("failed to configure logger: %v", err)
+		}
+
+		r.singletonZapLogger.logger = build
+	})
+
+	return r.singletonZapLogger.logger
 }
 
 func (r *Runner) StartServer() {
@@ -84,16 +125,33 @@ func (r *Runner) Stop() {
 }
 
 func (r *Runner) shutdownServer() {
-	log.Println("Start shutdown server...")
+	r.logger.Info("Start shutdown server...")
 
-	ctx, stop := context.WithTimeout(context.Background(), r.cfg.HTTP.ShutdownTimeout)
+	ctx, stop := context.WithTimeout(context.Background(), r.config.HTTP.ShutdownTimeout)
 	defer stop()
 
 	if err := r.server.Shutdown(ctx); err != nil {
-		log.Println("error shutdown server", err)
+		r.logger.Fatal("error shutdown server", err)
 	}
 }
 
 func (r *Runner) disconnectPostgres() {
 	r.singletonPostgres.db.Close()
+}
+
+func (r *Runner) levelLogger() zapcore.Level {
+	switch r.config.Logger.Level {
+	case config.DebugLevel:
+		return zapcore.DebugLevel
+	case config.InfoLevel:
+		return zapcore.InfoLevel
+	case config.WarnLevel:
+		return zapcore.WarnLevel
+	case config.ErrorLevel:
+		return zapcore.ErrorLevel
+	case config.FatalLevel:
+		return zapcore.FatalLevel
+	default:
+		return zapcore.InfoLevel
+	}
 }
