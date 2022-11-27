@@ -20,7 +20,7 @@ const (
 // NewClient creates a new pool connection to the postgres database.
 func NewClient(cfg config.Postgres) (*pgxpool.Pool, error) {
 	ctx := context.Background()
-	url := initURLPostgres(cfg)
+	url := parseConfig(cfg)
 
 	parseConfig, err := pgxpool.ParseConfig(url)
 	if err != nil {
@@ -45,7 +45,7 @@ func NewClient(cfg config.Postgres) (*pgxpool.Pool, error) {
 	return pool, nil
 }
 
-func initURLPostgres(cfg config.Postgres) string {
+func parseConfig(cfg config.Postgres) string {
 	return fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s",
 		cfg.Host,
 		cfg.Port,
