@@ -79,7 +79,7 @@ func (r *Runner) initLogger() {
 }
 
 func (r *Runner) initServer() {
-	r.logger.Info("Init server")
+	r.logger.Info("start init server")
 
 	r.server = server.NewServer(r.config.HTTP, nil)
 }
@@ -115,7 +115,7 @@ func (r *Runner) zap() *zap.Logger {
 
 func (r *Runner) StartServer() {
 	if err := r.server.Start(); !errors.Is(err, http.ErrServerClosed) {
-		log.Fatal("HTTP Server stopped with an error\n", err)
+		r.logger.Fatal("HTTP Server stopped with an error", err)
 	}
 }
 
