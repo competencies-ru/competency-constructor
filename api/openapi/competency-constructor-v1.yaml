@@ -10,8 +10,8 @@ paths:
     get:
       tags:
         - education
-      operationId: getLevelEducation
-      summary: Returns level educations.
+      operationId: getUgsn
+      summary: Returns ugsn.
       responses:
         200:
           description: Found ugsn.
@@ -61,7 +61,7 @@ paths:
     get:
       tags:
         - education
-      operationId: getUgsn
+      operationId: getSpecificUgsn
       summary: Returns ugsn with such code.
       parameters:
         - in: path
@@ -140,7 +140,7 @@ paths:
       summary: Adding specialties for ugsn
       parameters:
         - in: path
-          name: code
+          name: ugsnCode
           schema:
             type: string
             pattern: '^\d{2}\.0{2}\.0{2}$'
@@ -174,7 +174,7 @@ paths:
     get:
       tags:
         - education
-      operationId: getSpecialty
+      operationId: getSpecificSpecialty
       summary: Returns specialty with such code.
       parameters:
         - in: path
@@ -208,8 +208,8 @@ paths:
     get:
       tags:
         - education
-      operationId: getSpecialty
-      summary: Returns specialty with such code.
+      operationId: getPrograms
+      summary: Returns programs with such specialty code.
       parameters:
         - in: path
           name: specialtyCode
@@ -244,14 +244,14 @@ paths:
       summary: Adding program for specialty
       parameters:
         - in: path
-          name: code
+          name: specialtyCode
           schema:
             type: string
             pattern: '^\d{2}\.\d{2}\.\d{2}$'
           required: true
           description: code specialty.
       requestBody:
-        description: program items with such code ugsn.
+        description: program items with such code specialty.
         required: true
         content:
           application/json:
