@@ -78,7 +78,7 @@ func setDefaults() {
 	viper.SetDefault("logger.level", defaultLoggerLevel)
 }
 
-func Parse(pathToConfigs string) (*Config, error) {
+func ParseFrom(path string) (*Config, error) {
 	setDefaults()
 
 	appEnv := os.Getenv("APP_ENV")
@@ -87,7 +87,7 @@ func Parse(pathToConfigs string) (*Config, error) {
 		appEnv = LocalEnv
 	}
 
-	if err := parseConfig(pathToConfigs, appEnv); err != nil {
+	if err := parseConfig(path, appEnv); err != nil {
 		return nil, err
 	}
 

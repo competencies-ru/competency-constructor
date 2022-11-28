@@ -54,7 +54,7 @@ func New(path string) *Runner {
 func (r *Runner) initConfig(path string) {
 	log.Println("init config to path: " + path)
 
-	cfg, err := config.Parse(path)
+	cfg, err := config.ParseFrom(path)
 	if err != nil {
 		log.Fatalf("config parsing error: %v", err)
 	}
