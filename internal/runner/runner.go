@@ -7,6 +7,10 @@ import (
 	"net/http"
 	"sync"
 
+	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
+	v1 "github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest/v1"
+	"github.com/competencies-ru/competency-constructor/internal/core/app"
+
 	zapAdapter "github.com/competencies-ru/competency-constructor/internal/core/adapter/driven/logger/zap"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 
@@ -38,6 +42,7 @@ type Runner struct {
 	logger service.Logger
 	config *config.Config
 	server *server.Server
+	app    *app.Application
 }
 
 func New(path string) *Runner {
@@ -47,6 +52,7 @@ func New(path string) *Runner {
 	r.initLogger()
 	r.initServer()
 	r.initPersistent()
+	r.initApplication()
 
 	return r
 }
@@ -81,7 +87,19 @@ func (r *Runner) initLogger() {
 func (r *Runner) initServer() {
 	r.logger.Info("start init server")
 
-	r.server = server.NewServer(r.config.HTTP, nil)
+	r.server = server.NewServer(r.config.HTTP, rest.NewHandler(rest.Params{
+		Middlewares: rest.Middlewares(r.config.HTTP.AllowedOrigins),
+		Routes: []rest.Route{
+			{
+				Pattern: "/competency-constructor/api/v1",
+				Handler: v1.NewHandler(r.app, r.logger),
+			},
+		},
+	}))
+}
+
+func (r *Runner) initApplication() {
+	r.app = &app.Application{}
 }
 
 func (r *Runner) postgres() *pgxpool.Pool {

@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/deepmap/oapi-codegen v1.12.3
 	github.com/go-chi/chi/v5 v5.0.7
+	github.com/go-chi/cors v1.2.1
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jackc/pgx/v5 v5.0.4
 	github.com/pkg/errors v0.9.1

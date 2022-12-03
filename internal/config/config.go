@@ -41,6 +41,7 @@ type (
 		ReadTimeout     time.Duration
 		WriteTimeout    time.Duration
 		ShutdownTimeout time.Duration
+		AllowedOrigins  []string
 	}
 
 	Postgres struct {
@@ -62,6 +63,7 @@ const (
 	defaultHTTTPort             = "8080"
 	defaultHTTPReadWriteTimeout = 10 * time.Second
 	defaultHTTPShutdown         = 10 * time.Second
+	defaultAllowedOrigins       = "*"
 )
 
 const (
@@ -76,6 +78,7 @@ func setDefaults() {
 	viper.SetDefault("http.shutdownTimeout", defaultHTTPShutdown)
 	viper.SetDefault("logger.lib", defaultLoggerLib)
 	viper.SetDefault("logger.level", defaultLoggerLevel)
+	viper.SetDefault("http.allowedOrigins", defaultAllowedOrigins)
 }
 
 func ParseFrom(path string) (*Config, error) {
