@@ -354,18 +354,23 @@ components:
       required:
         - id
         - title
+        - specialtyCode
       properties:
         id:
           type: string
           format: uuid
         title:
           type: string
+        specialtyCode:
+          type: string
+          pattern: '^\d{2}\.\d{2}\.\d{2}$'
 
     SpecificSpecialtyResponse:
       type: object
       required:
         - code
         - title
+        - ugsnCode
         - program
       properties:
         code:
@@ -373,6 +378,9 @@ components:
           pattern: '^\d{2}\.\d{2}\.\d{2}$'
         title:
           type: string
+        ugsnCode:
+          type: string
+          pattern: '^\d{2}\.0{2}\.0{2}$'
         program:
           items:
             $ref: "#/components/schemas/ProgramResponse"

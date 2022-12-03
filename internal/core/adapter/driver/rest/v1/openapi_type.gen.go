@@ -23,8 +23,9 @@ type ErrorSlug string
 
 // ProgramResponse defines model for ProgramResponse.
 type ProgramResponse struct {
-	Id    openapi_types.UUID `json:"id"`
-	Title string             `json:"title"`
+	Id            openapi_types.UUID `json:"id"`
+	SpecialtyCode string             `json:"specialtyCode"`
+	Title         string             `json:"title"`
 }
 
 // SpecialtiesRequest defines model for SpecialtiesRequest.
@@ -42,9 +43,10 @@ type SpecialtiesResponse struct {
 
 // SpecificSpecialtyResponse defines model for SpecificSpecialtyResponse.
 type SpecificSpecialtyResponse struct {
-	Code    string      `json:"code"`
-	Program interface{} `json:"program"`
-	Title   string      `json:"title"`
+	Code     string      `json:"code"`
+	Program  interface{} `json:"program"`
+	Title    string      `json:"title"`
+	UgsnCode string      `json:"ugsnCode"`
 }
 
 // SpecificUgsnResponse defines model for SpecificUgsnResponse.
