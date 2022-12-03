@@ -31,6 +31,10 @@ func newUgsnCode(code string) (ugsnCode, error) {
 }
 
 func newSpecialityCode(code string) (specialityCode, error) {
+	if ok := match(`^\d{2}.0{2}.0{2}$`, code); ok {
+		return "", ErrSpecialityParseCode
+	}
+
 	if ok := match(`^\d{2}.\d{2}.\d{2}$`, code); !ok {
 		return "", ErrSpecialityParseCode
 	}
