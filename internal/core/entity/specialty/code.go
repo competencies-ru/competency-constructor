@@ -19,11 +19,7 @@ type (
 )
 
 func newUgsnCode(code string) (ugsnCode, error) {
-	if ok := match(`^\d{2}.0{2}.0{2}$`, code); !ok {
-		return "", ErrUgsnCodeParseCode
-	}
-
-	if err := isPrefixTwoZero(code); err != nil {
+	if err := IsValidUgsnCode(code); err != nil {
 		return "", err
 	}
 
@@ -31,15 +27,7 @@ func newUgsnCode(code string) (ugsnCode, error) {
 }
 
 func newSpecialityCode(code string) (specialityCode, error) {
-	if ok := match(`^\d{2}.0{2}.0{2}$`, code); ok {
-		return "", ErrSpecialityParseCode
-	}
-
-	if ok := match(`^\d{2}.\d{2}.\d{2}$`, code); !ok {
-		return "", ErrSpecialityParseCode
-	}
-
-	if err := isPrefixTwoZero(code); err != nil {
+	if err := IsValidSpecialtyCode(code); err != nil {
 		return "", err
 	}
 
@@ -55,9 +43,29 @@ func match(patter, code string) bool {
 	return ok
 }
 
-func isPrefixTwoZero(code string) error {
-	if strings.HasPrefix(code, "00") {
+func isPrefixTwoZero(code string) bool {
+	return strings.HasPrefix(code, "00")
+}
+
+func IsValidUgsnCode(code string) error {
+	if isPrefixTwoZero(code) {
 		return ErrCodeIsPrefixTwoZero
+	}
+
+	if !match(`^\d{2}.0{2}.0{2}$`, code) {
+		return ErrUgsnCodeParseCode
+	}
+
+	return nil
+}
+
+func IsValidSpecialtyCode(code string) error {
+	if isPrefixTwoZero(code) {
+		return ErrCodeIsPrefixTwoZero
+	}
+
+	if match(`^\d{2}.0{2}.0{2}$`, code) || !match(`^\d{2}.\d{2}.\d{2}$`, code) {
+		return ErrSpecialityParseCode
 	}
 
 	return nil
