@@ -4,7 +4,7 @@ info:
   description: The service is designed to create and fill a bank of competencies
   version: 0.0.1
 servers:
-  - url: "https://{hostname}/v1"
+  - url: "https://{hostname}/competency-constructor/api/v1"
 paths:
   /ugsn:
     get:
