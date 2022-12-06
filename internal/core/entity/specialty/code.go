@@ -70,3 +70,11 @@ func IsValidSpecialtyCode(code string) error {
 
 	return nil
 }
+
+func (s specialityCode) String() string {
+	return string(s)
+}
+
+func (u ugsnCode) String() string {
+	return string(u)
+}
