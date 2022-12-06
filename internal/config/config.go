@@ -156,7 +156,7 @@ func replaceEnvConfig() error {
 		viper.Set(k, value)
 	}
 
-	return nil
+	return result
 }
 
 func getValueEnv(key string) (string, error) {
