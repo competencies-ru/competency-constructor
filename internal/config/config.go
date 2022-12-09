@@ -5,9 +5,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pkg/errors"
+	"go.uber.org/multierr"
 
-	"github.com/hashicorp/go-multierror"
+	"github.com/pkg/errors"
 
 	"github.com/spf13/viper"
 )
@@ -148,7 +148,7 @@ func replaceEnvConfig() error {
 		if strings.HasPrefix(value, "${") && strings.HasSuffix(value, "}") {
 			// обрезаем подстроку ${}
 			envValut, err := getValueEnv(value[len("${") : len(value)-len("}")])
-			result = multierror.Append(result, err)
+			result = multierr.Append(result, err)
 
 			value = envValut
 		}
