@@ -22,6 +22,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/competencies-ru/competency-constructor/internal/config"
+	repo "github.com/competencies-ru/competency-constructor/internal/core/adapter/driven/persistence/postgres"
 	"github.com/competencies-ru/competency-constructor/internal/server"
 )
 
@@ -35,14 +36,20 @@ type singletonZapLogger struct {
 	logger *zap.Logger
 }
 
+type persistenceContext struct {
+	ugsnRepo      service.UgsnRepository
+	specialtyRepo service.SpecialtyRepository
+}
+
 type Runner struct {
 	singletonZapLogger
 	singletonPostgres
 
-	logger service.Logger
-	config *config.Config
-	server *server.Server
-	app    *app.Application
+	logger  service.Logger
+	config  *config.Config
+	server  *server.Server
+	app     *app.Application
+	pcontex persistenceContext
 }
 
 func New(path string) *Runner {
@@ -50,9 +57,9 @@ func New(path string) *Runner {
 
 	r.initConfig(path)
 	r.initLogger()
-	r.initServer()
 	r.initPersistent()
 	r.initApplication()
+	r.initServer()
 
 	return r
 }
@@ -69,7 +76,9 @@ func (r *Runner) initConfig(path string) {
 }
 
 func (r *Runner) initPersistent() {
-	_ = r.postgres()
+	db := r.postgres()
+
+	r.pcontex.ugsnRepo = repo.NewRepository(db)
 }
 
 func (r *Runner) initLogger() {
@@ -99,7 +108,11 @@ func (r *Runner) initServer() {
 }
 
 func (r *Runner) initApplication() {
-	r.app = &app.Application{}
+	r.app = &app.Application{
+		Services: app.Services{
+			UgsnService: service.NewUgsnHandler(r.pcontex.ugsnRepo),
+		},
+	}
 }
 
 func (r *Runner) postgres() *pgxpool.Pool {
