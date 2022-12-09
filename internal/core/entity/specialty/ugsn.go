@@ -6,7 +6,10 @@ var (
 	ErrUgsnTitleIsEmpty       = errors.New("ugsn: title is empty")
 	ErrUgsnCodeIsEmpty        = errors.New("ugsn: code is empty")
 	ErrUgsnSpecialityNotFound = errors.New("ugsn: specialty not found")
+	ErrUgsnTitleMaxLenTitle   = errors.New("ugsn: title is more max len or empty")
 )
+
+const MaxLenTitle = 1000
 
 type (
 
@@ -60,13 +63,13 @@ func (e *Ugsn) Title() string {
 }
 
 func (e *Ugsn) Code() string {
-	return string(e.code)
+	return e.code.String()
 }
 
 func (e *Ugsn) AddSpeciality(s SpecialityParams) error {
 	speciality, err := NewSpeciality(s)
 	if err != nil {
-		return err
+		return errors.Wrapf(err, "adding specialty by code: %s", s.Code)
 	}
 
 	if _, ok := e.specialities[speciality.code]; !ok {
@@ -85,7 +88,9 @@ func (e *Ugsn) Speciality(code string) (*Speciality, error) {
 	s, ok := e.specialities[scode]
 
 	if !ok {
-		return nil, errors.Wrap(ErrUgsnSpecialityNotFound, code)
+		return nil, errors.Wrapf(
+			ErrUgsnSpecialityNotFound,
+			"get specialty by code: %s", scode.String())
 	}
 
 	return s, nil
@@ -98,4 +103,25 @@ func (e *Ugsn) Specialities() []*Speciality {
 	}
 
 	return specialities
+}
+
+func (e *Ugsn) Rename(newTitle string) error {
+	if newTitle == "" || len(newTitle) > MaxLenTitle {
+		return ErrUgsnTitleMaxLenTitle
+	}
+
+	e.title = newTitle
+
+	return nil
+}
+
+func (e *Ugsn) DeleteSpecialty(code string) error {
+	scode, err := newSpecialityCode(code)
+	if err != nil {
+		return errors.Wrapf(err, "delete specialty by code: %s", code)
+	}
+
+	delete(e.specialities, scode)
+
+	return nil
 }
