@@ -15,7 +15,14 @@ func (h handler) AddedProgram(w http.ResponseWriter, r *http.Request, specialtyC
 }
 
 func (h handler) GetUgsn(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusNotImplemented)
+	ugsn, err := h.app.Services.UgsnService.GetAllUgsn(r.Context())
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+
+		return
+	}
+
+	renderUgsnResponse(w, r, ugsn)
 }
 
 func (h handler) CreateUgsn(w http.ResponseWriter, r *http.Request) {
