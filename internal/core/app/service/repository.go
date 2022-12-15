@@ -21,8 +21,8 @@ type (
 		GetUgsn(ctx context.Context, code string) (*specialty.Ugsn, error)
 		GetAllUgsn(ctx context.Context) ([]*specialty.Ugsn, error)
 		AddUgsn(ctx context.Context, ugsn *specialty.Ugsn) error
-		Exist(ctx context.Context, code string) bool
-		FindUgsn(ctx context.Context, code string) (SpecificUgsn, error)
+		Exist(ctx context.Context, code string) (bool, error)
+		FindUgsn(ctx context.Context, code string) (*SpecificUgsn, error)
 		UpdateUgsn(ctx context.Context, code string, u UgsnUpdater) error
 	}
 

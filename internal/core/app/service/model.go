@@ -1,21 +1,23 @@
 package service
 
+import "github.com/google/uuid"
+
 type (
 	SpecificUgsn struct {
 		Code              string
 		Title             string
-		SpecificSpecialty []SpecificSpecialty
+		SpecificSpecialty []*SpecificSpecialty
 	}
 
 	SpecificSpecialty struct {
 		Code     string
 		Title    string
 		UgsnCode string
-		Programs []Program
+		Programs []*Program
 	}
 
 	Program struct {
-		ID            string
+		ID            uuid.UUID
 		Title         string
 		SpecialtyCode string
 	}

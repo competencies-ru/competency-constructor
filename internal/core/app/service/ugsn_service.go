@@ -25,7 +25,7 @@ type (
 type UgsnHandler interface {
 	Create(ctx context.Context, create UgsnCreate) error
 	GetAllUgsn(ctx context.Context) ([]*specialty.Ugsn, error)
-	GetSpecificUgsn(ctx context.Context, code string) (SpecificUgsn, error)
+	GetSpecificUgsn(ctx context.Context, code string) (*SpecificUgsn, error)
 	Update(ctx context.Context, code string, u UgsnUpdate) error
 }
 
@@ -52,10 +52,6 @@ func (u ugsnHandler) Create(ctx context.Context, create UgsnCreate) error {
 		return err
 	}
 
-	if u.ugsnRepo.Exist(ctx, ugsn.Code()) {
-		return ErrUgsnAlreadyExists
-	}
-
 	return u.ugsnRepo.AddUgsn(ctx, ugsn)
 }
 
@@ -63,9 +59,9 @@ func (u ugsnHandler) GetAllUgsn(ctx context.Context) ([]*specialty.Ugsn, error) 
 	return u.ugsnRepo.GetAllUgsn(ctx)
 }
 
-func (u ugsnHandler) GetSpecificUgsn(ctx context.Context, code string) (SpecificUgsn, error) {
+func (u ugsnHandler) GetSpecificUgsn(ctx context.Context, code string) (*SpecificUgsn, error) {
 	if err := specialty.IsValidUgsnCode(code); err != nil {
-		return SpecificUgsn{}, err
+		return nil, err
 	}
 
 	return u.ugsnRepo.FindUgsn(ctx, code)
