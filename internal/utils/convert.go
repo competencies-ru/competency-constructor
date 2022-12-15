@@ -11,6 +11,7 @@ func ConvertMap[T comparable, K any](m map[T]K) []K {
 
 func ConvertMapPointer[K comparable, V any, R any](m map[K]*V, mapper PointerMapperFunc[V, R]) []*R {
 	values := make([]*R, 0, len(m))
+
 	for _, value := range m {
 		tmp := value
 		values = append(values, mapper(tmp))

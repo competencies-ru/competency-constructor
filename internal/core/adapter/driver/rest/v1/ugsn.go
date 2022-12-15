@@ -30,6 +30,7 @@ func (h handler) CreateUgsn(w http.ResponseWriter, r *http.Request) {
 	err := h.app.Services.UgsnService.Create(r.Context(), uc)
 	if err == nil {
 		w.WriteHeader(http.StatusCreated)
+
 		return
 	}
 

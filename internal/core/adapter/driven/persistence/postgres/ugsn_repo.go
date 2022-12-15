@@ -80,7 +80,7 @@ func (u UgsnRepository) FindUgsn(ctx context.Context, code string) (*service.Spe
 		return nil, err
 	}
 
-	isFirst := true
+	first := true
 
 	for query.Next() {
 		var (
@@ -92,12 +92,14 @@ func (u UgsnRepository) FindUgsn(ctx context.Context, code string) (*service.Spe
 			pspecialty sql.NullString
 		)
 
-		if isFirst {
+		if first {
 			err := query.Scan(&su.Code, &su.Title, &scode, &stitle, &sugsn, &pid, &ptitle, &pspecialty)
 			if err != nil {
 				return nil, err
 			}
-			isFirst = false
+
+			first = false
+
 			unmarshallingSpecificUgsn(su, scode, stitle, sugsn, pid, ptitle, pspecialty)
 
 			continue
@@ -109,7 +111,6 @@ func (u UgsnRepository) FindUgsn(ctx context.Context, code string) (*service.Spe
 		}
 
 		unmarshallingSpecificUgsn(su, scode, stitle, sugsn, pid, ptitle, pspecialty)
-
 	}
 
 	return marshallingSpecificUgsn(su), err
