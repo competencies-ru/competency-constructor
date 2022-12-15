@@ -9,6 +9,14 @@ var (
 	ErrUgsnTitleMaxLenTitle   = errors.New("ugsn: title is more max len or empty")
 )
 
+func IsInvalidUgsnParametersError(err error) bool {
+	return errors.Is(err, ErrUgsnTitleIsEmpty) ||
+		errors.Is(err, ErrUgsnCodeIsEmpty) ||
+		errors.Is(err, ErrUgsnSpecialityNotFound) ||
+		errors.Is(err, ErrUgsnTitleMaxLenTitle) ||
+		isInvalidCodeError(err)
+}
+
 const MaxLenTitle = 1000
 
 type (
