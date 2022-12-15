@@ -38,7 +38,7 @@ stop-test-db:
 
 #migrate
 
-create-migrate:
+create-migration:
 	goose -dir=migrations create ${FILE_NAME} ${TYPE}
 
 dev-up:
