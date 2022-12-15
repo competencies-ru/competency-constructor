@@ -78,3 +78,9 @@ func (s specialityCode) String() string {
 func (u ugsnCode) String() string {
 	return string(u)
 }
+
+func isInvalidCodeError(err error) bool {
+	return errors.Is(err, ErrCodeIsPrefixTwoZero) ||
+		errors.Is(err, ErrUgsnCodeParseCode) ||
+		errors.Is(err, ErrSpecialityParseCode)
+}
