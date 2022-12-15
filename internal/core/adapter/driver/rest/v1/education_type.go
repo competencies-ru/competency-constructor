@@ -41,7 +41,6 @@ func unmarshallingCreateUgsn(w http.ResponseWriter, r *http.Request) (uc service
 }
 
 func renderSpecificUgsn(w http.ResponseWriter, r *http.Request, ugsn *service.SpecificUgsn) {
-
 	specialties := unmarshallingSpecialties(ugsn.SpecificSpecialty)
 
 	response := SpecificUgsnResponse{
@@ -75,7 +74,6 @@ func unmarshallingSpecialty(s *service.SpecificSpecialty) SpecificSpecialtyRespo
 }
 
 func unmarshallingPrograms(p []*service.Program) []ProgramResponse {
-
 	pr := make([]ProgramResponse, 0, len(p))
 
 	for _, v := range p {

@@ -1,10 +1,11 @@
 package v1
 
 import (
+	"net/http"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/specialty"
 	"github.com/pkg/errors"
-	"net/http"
 
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
 )

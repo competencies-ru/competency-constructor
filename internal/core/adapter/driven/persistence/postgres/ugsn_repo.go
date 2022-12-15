@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/specialty"
 	"github.com/georgysavva/scany/v2/pgxscan"
@@ -72,7 +73,7 @@ func (u UgsnRepository) Exist(ctx context.Context, code string) (bool, error) {
 }
 
 func (u UgsnRepository) FindUgsn(ctx context.Context, code string) (*service.SpecificUgsn, error) {
-	var su = &specificUgsn{Specialties: make(map[string]*specificSpecialty)}
+	su := &specificUgsn{Specialties: make(map[string]*specificSpecialty)}
 
 	query, err := u.db.Query(ctx, findUgns, code)
 	if err != nil {

@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"database/sql"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/specialty"
 	"github.com/competencies-ru/competency-constructor/internal/utils"
@@ -102,7 +103,6 @@ func marshallingSpecificUgsn(s *specificUgsn) *service.SpecificUgsn {
 
 func mapS(s *specificSpecialty) *service.SpecificSpecialty {
 	mapper := func(t *program) *service.Program {
-
 		id, _ := uuid.Parse(t.ID)
 
 		return &service.Program{
