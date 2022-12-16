@@ -31,12 +31,12 @@ type (
 		// where XX is any two number.
 		//
 		// example: 01.00.00, 11.00.00, etc
-		code  ugsnCode
+		code  string
 		title string
 
 		// Key specialityCode.
 		// Value pointer Speciality
-		specialities map[specialityCode]*Speciality
+		specialities map[string]*Speciality
 	}
 
 	UgsnParams struct {
@@ -54,15 +54,14 @@ func NewUgsn(param UgsnParams) (*Ugsn, error) {
 		return nil, ErrUgsnCodeIsEmpty
 	}
 
-	ucode, err := newUgsnCode(param.Code)
-	if err != nil {
+	if err := IsValidUgsnCode(param.Code); err != nil {
 		return nil, err
 	}
 
 	return &Ugsn{
 		title:        param.Title,
-		code:         ucode,
-		specialities: make(map[specialityCode]*Speciality),
+		code:         param.Code,
+		specialities: make(map[string]*Speciality),
 	}, nil
 }
 
@@ -71,7 +70,7 @@ func (e *Ugsn) Title() string {
 }
 
 func (e *Ugsn) Code() string {
-	return e.code.String()
+	return e.code
 }
 
 func (e *Ugsn) AddSpeciality(s SpecialityParams) error {
@@ -88,17 +87,11 @@ func (e *Ugsn) AddSpeciality(s SpecialityParams) error {
 }
 
 func (e *Ugsn) Speciality(code string) (*Speciality, error) {
-	scode, err := newSpecialityCode(code)
-	if err != nil {
-		return nil, ErrSpecialityParseCode
-	}
-
-	s, ok := e.specialities[scode]
-
+	s, ok := e.specialities[code]
 	if !ok {
 		return nil, errors.Wrapf(
 			ErrUgsnSpecialityNotFound,
-			"get education by code: %s", scode.String())
+			"get education by code: %s", code)
 	}
 
 	return s, nil
@@ -124,12 +117,13 @@ func (e *Ugsn) Rename(newTitle string) error {
 }
 
 func (e *Ugsn) DeleteSpecialty(code string) error {
-	scode, err := newSpecialityCode(code)
-	if err != nil {
-		return errors.Wrapf(err, "delete education by code: %s", code)
+	if _, ok := e.specialities[code]; !ok {
+		return errors.Wrapf(
+			ErrUgsnSpecialityNotFound,
+			"get education by code: %s", code)
 	}
 
-	delete(e.specialities, scode)
+	delete(e.specialities, code)
 
 	return nil
 }

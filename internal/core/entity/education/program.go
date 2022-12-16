@@ -15,7 +15,7 @@ type (
 	Program struct {
 		id             string
 		title          string
-		specialityCode specialityCode
+		specialityCode string
 	}
 
 	ProgramParams struct {
@@ -38,12 +38,11 @@ func NewProgram(param ProgramParams) (*Program, error) {
 		return nil, ErrProgramSpecialtyCodeIsEmpty
 	}
 
-	scode, err := newSpecialityCode(param.SpecialtyCode)
-	if err != nil {
+	if err := IsValidSpecialtyCode(param.SpecialtyCode); err != nil {
 		return nil, err
 	}
 
-	return &Program{id: param.ID, title: param.Title, specialityCode: scode}, nil
+	return &Program{id: param.ID, title: param.Title, specialityCode: param.SpecialtyCode}, nil
 }
 
 func (p *Program) Title() string {
@@ -55,7 +54,7 @@ func (p *Program) ID() string {
 }
 
 func (p *Program) SpecialityCode() string {
-	return string(p.specialityCode)
+	return p.specialityCode
 }
 
 func (p *Program) Rename(title string) error {

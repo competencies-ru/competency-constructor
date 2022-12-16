@@ -13,27 +13,6 @@ var (
 	ErrCodeIsPrefixTwoZero = errors.New("code starts with two zeros")
 )
 
-type (
-	ugsnCode       string
-	specialityCode string
-)
-
-func newUgsnCode(code string) (ugsnCode, error) {
-	if err := IsValidUgsnCode(code); err != nil {
-		return "", err
-	}
-
-	return ugsnCode(code), nil
-}
-
-func newSpecialityCode(code string) (specialityCode, error) {
-	if err := IsValidSpecialtyCode(code); err != nil {
-		return "", err
-	}
-
-	return specialityCode(code), nil
-}
-
 func match(patter, code string) bool {
 	ok, err := regexp.MatchString(patter, code)
 	if err != nil {
@@ -69,14 +48,6 @@ func IsValidSpecialtyCode(code string) error {
 	}
 
 	return nil
-}
-
-func (s specialityCode) String() string {
-	return string(s)
-}
-
-func (u ugsnCode) String() string {
-	return string(u)
 }
 
 func isInvalidCodeError(err error) bool {

@@ -16,9 +16,9 @@ var (
 
 type (
 	Speciality struct {
-		code     specialityCode
+		code     string
 		title    string
-		ugsnCode ugsnCode
+		ugsnCode string
 
 		// key programID, value pointer Program
 		programs map[string]*Program
@@ -40,8 +40,7 @@ func NewSpeciality(param SpecialityParams) (*Speciality, error) {
 		return nil, ErrSpecialityCodeIsEmpty
 	}
 
-	scode, err := newSpecialityCode(param.Code)
-	if err != nil {
+	if err := IsValidSpecialtyCode(param.Code); err != nil {
 		return nil, err
 	}
 
@@ -49,19 +48,18 @@ func NewSpeciality(param SpecialityParams) (*Speciality, error) {
 		return nil, ErrSpecialityUgsnCodeIsEmpty
 	}
 
-	ucode, err := newUgsnCode(param.UgsnCode)
-	if err != nil {
+	if err := IsValidUgsnCode(param.UgsnCode); err != nil {
 		return nil, err
 	}
 
-	if !validateCodes(scode, ucode) {
+	if !validateCodes(param.Code, param.UgsnCode) {
 		return nil, ErrSpecialityNotMatchCode
 	}
 
 	return &Speciality{
 		title:    param.Title,
-		code:     scode,
-		ugsnCode: ucode,
+		code:     param.Code,
+		ugsnCode: param.UgsnCode,
 		programs: make(map[string]*Program),
 	}, nil
 }
@@ -71,11 +69,11 @@ func (s *Speciality) Title() string {
 }
 
 func (s *Speciality) Code() string {
-	return string(s.code)
+	return s.code
 }
 
 func (s *Speciality) UgsnCode() string {
-	return string(s.ugsnCode)
+	return s.ugsnCode
 }
 
 func (s *Speciality) AddProgram(p ProgramParams) error {
@@ -91,8 +89,8 @@ func (s *Speciality) AddProgram(p ProgramParams) error {
 	return nil
 }
 
-func validateCodes(scode specialityCode, ucode ugsnCode) bool {
-	return strings.Contains(string(scode)[:2], string(ucode)[:2])
+func validateCodes(scode string, ucode string) bool {
+	return strings.Contains(scode[:2], ucode[:2])
 }
 
 func (s *Speciality) Program(id string) (*Program, error) {

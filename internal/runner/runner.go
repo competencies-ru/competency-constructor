@@ -37,8 +37,7 @@ type singletonZapLogger struct {
 }
 
 type persistenceContext struct {
-	ugsnRepo      service.UgsnRepository
-	specialtyRepo service.SpecialtyRepository
+	ugsnRepo service.UgsnRepository
 }
 
 type Runner struct {
