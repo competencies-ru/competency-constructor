@@ -31,9 +31,9 @@ const (
 
 type (
 	Config struct {
-		HTTP     HTTP
-		Postgres Postgres
-		Logger   Logger
+		HTTP    HTTP
+		Mongodb Mongo
+		Logger  Logger
 	}
 
 	HTTP struct {
@@ -44,13 +44,12 @@ type (
 		AllowedOrigins  []string
 	}
 
-	Postgres struct {
-		Host         string
-		Port         string
-		UserName     string
-		Password     string
-		DataBaseName string
-		SslMode      bool
+	Mongo struct {
+		URI               string
+		DatabaseName      string
+		Username          string
+		Password          string
+		DisconnectTimeout time.Duration
 	}
 
 	Logger struct {
@@ -129,7 +128,7 @@ func unmarshall(cfg *Config) error {
 		return err
 	}
 
-	if err := viper.UnmarshalKey("postgres", &cfg.Postgres); err != nil {
+	if err := viper.UnmarshalKey("mongo", &cfg.Mongodb); err != nil {
 		return err
 	}
 

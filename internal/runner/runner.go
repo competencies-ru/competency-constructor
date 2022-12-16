@@ -7,6 +7,10 @@ import (
 	"net/http"
 	"sync"
 
+	"github.com/competencies-ru/competency-constructor/pkg/database/mongodb"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.uber.org/multierr"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
 	v1 "github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest/v1"
 	"github.com/competencies-ru/competency-constructor/internal/core/app"
@@ -18,17 +22,13 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/competencies-ru/competency-constructor/pkg/database/postgres"
-	"github.com/jackc/pgx/v5/pgxpool"
-
 	"github.com/competencies-ru/competency-constructor/internal/config"
-	repo "github.com/competencies-ru/competency-constructor/internal/core/adapter/driven/persistence/postgres"
 	"github.com/competencies-ru/competency-constructor/internal/server"
 )
 
-type singletonPostgres struct {
-	db  *pgxpool.Pool
+type singletonMongodb struct {
 	one sync.Once
+	db  *mongo.Database
 }
 
 type singletonZapLogger struct {
@@ -43,7 +43,7 @@ type persistenceContext struct {
 
 type Runner struct {
 	singletonZapLogger
-	singletonPostgres
+	singletonMongodb
 
 	logger  service.Logger
 	config  *config.Config
@@ -76,9 +76,7 @@ func (r *Runner) initConfig(path string) {
 }
 
 func (r *Runner) initPersistent() {
-	db := r.postgres()
-
-	r.pcontex.ugsnRepo = repo.NewRepository(db)
+	_ = r.mongo()
 }
 
 func (r *Runner) initLogger() {
@@ -115,17 +113,21 @@ func (r *Runner) initApplication() {
 	}
 }
 
-func (r *Runner) postgres() *pgxpool.Pool {
-	r.singletonPostgres.one.Do(func() {
-		client, err := postgres.NewClient(r.config.Postgres)
+func (r *Runner) mongo() *mongo.Database {
+	r.singletonMongodb.one.Do(func() {
+		client, err := mongodb.NewClient(
+			r.config.Mongodb.URI,
+			r.config.Mongodb.Username,
+			r.config.Mongodb.Password,
+		)
 		if err != nil {
 			r.logger.Fatal("failed to connect to database", err)
 		}
 
-		r.singletonPostgres.db = client
+		r.singletonMongodb.db = client.Database(r.config.Mongodb.DatabaseName)
 	})
 
-	return r.singletonPostgres.db
+	return r.singletonMongodb.db
 }
 
 func (r *Runner) zap() *zap.Logger {
@@ -151,23 +153,32 @@ func (r *Runner) StartServer() {
 }
 
 func (r *Runner) Stop() {
-	r.shutdownServer()
-	r.disconnectPostgres()
+	err := multierr.Append(
+		r.shutdownServer(),
+		r.disconnectMongo(),
+	)
+	if err != nil {
+		r.logger.Fatal("Runner stopped with an error", err)
+	}
 }
 
-func (r *Runner) shutdownServer() {
+func (r *Runner) shutdownServer() error {
 	r.logger.Info("Start shutdown server...")
 
 	ctx, stop := context.WithTimeout(context.Background(), r.config.HTTP.ShutdownTimeout)
 	defer stop()
 
-	if err := r.server.Shutdown(ctx); err != nil {
-		r.logger.Fatal("error shutdown server", err)
-	}
+	return r.server.Shutdown(ctx)
 }
 
-func (r *Runner) disconnectPostgres() {
-	r.singletonPostgres.db.Close()
+func (r *Runner) disconnectMongo() error {
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		r.config.Mongodb.DisconnectTimeout,
+	)
+	defer cancel()
+
+	return r.mongo().Client().Disconnect(ctx)
 }
 
 func (r *Runner) levelLogger() zapcore.Level {
