@@ -1,11 +1,11 @@
-package specialty
+package education
 
 import "github.com/pkg/errors"
 
 var (
 	ErrUgsnTitleIsEmpty       = errors.New("ugsn: title is empty")
 	ErrUgsnCodeIsEmpty        = errors.New("ugsn: code is empty")
-	ErrUgsnSpecialityNotFound = errors.New("ugsn: specialty not found")
+	ErrUgsnSpecialityNotFound = errors.New("ugsn: education not found")
 	ErrUgsnTitleMaxLenTitle   = errors.New("ugsn: title is more max len or empty")
 )
 
@@ -77,7 +77,7 @@ func (e *Ugsn) Code() string {
 func (e *Ugsn) AddSpeciality(s SpecialityParams) error {
 	speciality, err := NewSpeciality(s)
 	if err != nil {
-		return errors.Wrapf(err, "adding specialty by code: %s", s.Code)
+		return errors.Wrapf(err, "adding education by code: %s", s.Code)
 	}
 
 	if _, ok := e.specialities[speciality.code]; !ok {
@@ -98,7 +98,7 @@ func (e *Ugsn) Speciality(code string) (*Speciality, error) {
 	if !ok {
 		return nil, errors.Wrapf(
 			ErrUgsnSpecialityNotFound,
-			"get specialty by code: %s", scode.String())
+			"get education by code: %s", scode.String())
 	}
 
 	return s, nil
@@ -126,7 +126,7 @@ func (e *Ugsn) Rename(newTitle string) error {
 func (e *Ugsn) DeleteSpecialty(code string) error {
 	scode, err := newSpecialityCode(code)
 	if err != nil {
-		return errors.Wrapf(err, "delete specialty by code: %s", code)
+		return errors.Wrapf(err, "delete education by code: %s", code)
 	}
 
 	delete(e.specialities, scode)

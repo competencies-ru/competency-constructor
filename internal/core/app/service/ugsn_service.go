@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"go.uber.org/multierr"
 
-	"github.com/competencies-ru/competency-constructor/internal/core/entity/specialty"
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 )
 
 type (
@@ -24,7 +24,7 @@ type (
 
 type UgsnHandler interface {
 	Create(ctx context.Context, create UgsnCreate) error
-	GetAllUgsn(ctx context.Context) ([]*specialty.Ugsn, error)
+	GetAllUgsn(ctx context.Context) ([]*education.Ugsn, error)
 	GetSpecificUgsn(ctx context.Context, code string) (*SpecificUgsn, error)
 	Update(ctx context.Context, code string, u UgsnUpdate) error
 }
@@ -44,7 +44,7 @@ func NewUgsnHandler(ugsnRepo UgsnRepository) UgsnHandler {
 }
 
 func (u ugsnHandler) Create(ctx context.Context, create UgsnCreate) error {
-	ugsn, err := specialty.NewUgsn(specialty.UgsnParams{
+	ugsn, err := education.NewUgsn(education.UgsnParams{
 		Code:  create.Code,
 		Title: create.Title,
 	})
@@ -55,12 +55,12 @@ func (u ugsnHandler) Create(ctx context.Context, create UgsnCreate) error {
 	return u.ugsnRepo.AddUgsn(ctx, ugsn)
 }
 
-func (u ugsnHandler) GetAllUgsn(ctx context.Context) ([]*specialty.Ugsn, error) {
+func (u ugsnHandler) GetAllUgsn(ctx context.Context) ([]*education.Ugsn, error) {
 	return u.ugsnRepo.GetAllUgsn(ctx)
 }
 
 func (u ugsnHandler) GetSpecificUgsn(ctx context.Context, code string) (*SpecificUgsn, error) {
-	if err := specialty.IsValidUgsnCode(code); err != nil {
+	if err := education.IsValidUgsnCode(code); err != nil {
 		return nil, err
 	}
 
@@ -76,7 +76,7 @@ func (u ugsnHandler) Update(ctx context.Context, code string, update UgsnUpdate)
 }
 
 func updateUgsn(u UgsnUpdate) UgsnUpdater {
-	return func(ctx context.Context, ugns *specialty.Ugsn) (*specialty.Ugsn, error) {
+	return func(ctx context.Context, ugns *education.Ugsn) (*education.Ugsn, error) {
 		if err := ugns.Rename(u.Title); err != nil {
 			return nil, err
 		}
@@ -90,7 +90,7 @@ func updateUgsn(u UgsnUpdate) UgsnUpdater {
 		}
 
 		for _, s := range u.NewSpecialty {
-			err := ugns.AddSpeciality(specialty.SpecialityParams{
+			err := ugns.AddSpeciality(education.SpecialityParams{
 				Code:     s.Code,
 				Title:    s.Title,
 				UgsnCode: ugns.Code(),

@@ -1,4 +1,4 @@
-package specialty
+package education
 
 import "github.com/pkg/errors"
 

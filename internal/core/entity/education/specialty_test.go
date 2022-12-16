@@ -1,9 +1,9 @@
-package specialty_test
+package education_test
 
 import (
 	"testing"
 
-	"github.com/competencies-ru/competency-constructor/internal/core/entity/specialty"
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 	"github.com/stretchr/testify/require"
 )
 
@@ -12,15 +12,15 @@ func TestNewSpeciality(t *testing.T) {
 
 	testCases := []struct {
 		Name        string
-		Params      specialty.SpecialityParams
+		Params      education.SpecialityParams
 		ShouldBeErr bool
 		ExpectedErr error
 	}{
 		{
 			Name: "without_error",
-			Params: specialty.SpecialityParams{
+			Params: education.SpecialityParams{
 				Code:     "01.01.01",
-				Title:    "Test specialty",
+				Title:    "Test education",
 				UgsnCode: "01.00.00",
 			},
 			ShouldBeErr: false,
@@ -28,83 +28,83 @@ func TestNewSpeciality(t *testing.T) {
 		},
 		{
 			Name: "specialty_code_empty",
-			Params: specialty.SpecialityParams{
+			Params: education.SpecialityParams{
 				Code:     "",
-				Title:    "Test specialty",
+				Title:    "Test education",
 				UgsnCode: "01.00.00",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrSpecialityCodeIsEmpty,
+			ExpectedErr: education.ErrSpecialityCodeIsEmpty,
 		},
 		{
 			Name: "specialty_title_empty",
-			Params: specialty.SpecialityParams{
+			Params: education.SpecialityParams{
 				Code:     "01.01.01",
 				Title:    "",
 				UgsnCode: "01.00.00",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrSpecialityTitleIsEmpty,
+			ExpectedErr: education.ErrSpecialityTitleIsEmpty,
 		},
 		{
 			Name: "specialty_code_parse_err",
-			Params: specialty.SpecialityParams{
+			Params: education.SpecialityParams{
 				Code:     "010101",
-				Title:    "Test specialty",
+				Title:    "Test education",
 				UgsnCode: "01.00.00",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrSpecialityParseCode,
+			ExpectedErr: education.ErrSpecialityParseCode,
 		},
 		{
 			Name: "ugsn_code_parse_err",
-			Params: specialty.SpecialityParams{
+			Params: education.SpecialityParams{
 				Code:     "01.01.01",
-				Title:    "Test specialty",
+				Title:    "Test education",
 				UgsnCode: "0100.00",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrUgsnCodeParseCode,
+			ExpectedErr: education.ErrUgsnCodeParseCode,
 		},
 		{
 			Name: "ugsn_code_is_empty",
-			Params: specialty.SpecialityParams{
+			Params: education.SpecialityParams{
 				Code:     "01.01.01",
-				Title:    "Test specialty",
+				Title:    "Test education",
 				UgsnCode: "",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrSpecialityUgsnCodeIsEmpty,
+			ExpectedErr: education.ErrSpecialityUgsnCodeIsEmpty,
 		},
 		{
 			Name: "code_is_not_match",
-			Params: specialty.SpecialityParams{
+			Params: education.SpecialityParams{
 				Code:     "01.01.01",
-				Title:    "Test specialty",
+				Title:    "Test education",
 				UgsnCode: "02.00.00",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrSpecialityNotMatchCode,
+			ExpectedErr: education.ErrSpecialityNotMatchCode,
 		},
 		{
 			Name: "code_code_starts_with_two_zeros",
-			Params: specialty.SpecialityParams{
+			Params: education.SpecialityParams{
 				Code:     "00.01.01",
-				Title:    "Test specialty",
+				Title:    "Test education",
 				UgsnCode: "02.00.00",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrCodeIsPrefixTwoZero,
+			ExpectedErr: education.ErrCodeIsPrefixTwoZero,
 		},
 		{
 			Name: "ugsn_code_code_starts_with_two_zeros",
-			Params: specialty.SpecialityParams{
+			Params: education.SpecialityParams{
 				Code:     "01.01.01",
-				Title:    "Test specialty",
+				Title:    "Test education",
 				UgsnCode: "00.00.00",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrCodeIsPrefixTwoZero,
+			ExpectedErr: education.ErrCodeIsPrefixTwoZero,
 		},
 	}
 
@@ -114,7 +114,7 @@ func TestNewSpeciality(t *testing.T) {
 		t.Run(t.Name(), func(t *testing.T) {
 			t.Parallel()
 
-			s, err := specialty.NewSpeciality(c.Params)
+			s, err := education.NewSpeciality(c.Params)
 
 			if c.ShouldBeErr {
 				t.Run("err_is", func(t *testing.T) {

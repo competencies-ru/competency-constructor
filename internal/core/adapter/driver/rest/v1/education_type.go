@@ -5,14 +5,14 @@ import (
 
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 
-	"github.com/competencies-ru/competency-constructor/internal/core/entity/specialty"
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 	"github.com/go-chi/render"
 )
 
 func renderUgsnResponse(
 	w http.ResponseWriter,
 	r *http.Request,
-	ugsn []*specialty.Ugsn,
+	ugsn []*education.Ugsn,
 ) {
 	response := make([]UgsnResponse, 0, len(ugsn))
 	for _, v := range ugsn {
@@ -22,7 +22,7 @@ func renderUgsnResponse(
 	render.Respond(w, r, response)
 }
 
-func marshalUgsnTo(ugsn specialty.Ugsn) UgsnResponse {
+func marshalUgsnTo(ugsn education.Ugsn) UgsnResponse {
 	return UgsnResponse{
 		Code:  ugsn.Code(),
 		Title: ugsn.Title(),

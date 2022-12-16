@@ -1,9 +1,9 @@
-package specialty_test
+package education_test
 
 import (
 	"testing"
 
-	"github.com/competencies-ru/competency-constructor/internal/core/entity/specialty"
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 	"github.com/stretchr/testify/require"
 )
 
@@ -12,13 +12,13 @@ func TestNewUgsn(t *testing.T) {
 
 	testCases := []struct {
 		Name        string
-		Params      specialty.UgsnParams
+		Params      education.UgsnParams
 		ShouldBeErr bool
 		ExpectedErr error
 	}{
 		{
 			Name: "without_error",
-			Params: specialty.UgsnParams{
+			Params: education.UgsnParams{
 				Code:  "01.00.00",
 				Title: "Test Ugsn",
 			},
@@ -27,39 +27,39 @@ func TestNewUgsn(t *testing.T) {
 		},
 		{
 			Name: "ugsn_code_empty",
-			Params: specialty.UgsnParams{
+			Params: education.UgsnParams{
 				Code:  "",
 				Title: "Test Ugsn",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrUgsnCodeIsEmpty,
+			ExpectedErr: education.ErrUgsnCodeIsEmpty,
 		},
 		{
 			Name: "ugsn_title_empty",
-			Params: specialty.UgsnParams{
+			Params: education.UgsnParams{
 				Code:  "01.00.00",
 				Title: "",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrUgsnTitleIsEmpty,
+			ExpectedErr: education.ErrUgsnTitleIsEmpty,
 		},
 		{
 			Name: "ugsn_code_parse_err",
-			Params: specialty.UgsnParams{
+			Params: education.UgsnParams{
 				Code:  "010000",
 				Title: "Test Ugsn",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrUgsnCodeParseCode,
+			ExpectedErr: education.ErrUgsnCodeParseCode,
 		},
 		{
 			Name: "ugsn_code_code_starts_with_two_zeros",
-			Params: specialty.UgsnParams{
+			Params: education.UgsnParams{
 				Code:  "00.00.00",
 				Title: "Test Ugsn",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrCodeIsPrefixTwoZero,
+			ExpectedErr: education.ErrCodeIsPrefixTwoZero,
 		},
 	}
 
@@ -69,7 +69,7 @@ func TestNewUgsn(t *testing.T) {
 		t.Run(t.Name(), func(t *testing.T) {
 			t.Parallel()
 
-			s, err := specialty.NewUgsn(c.Params)
+			s, err := education.NewUgsn(c.Params)
 
 			if c.ShouldBeErr {
 				t.Run("err_is", func(t *testing.T) {

@@ -1,9 +1,9 @@
-package specialty_test
+package education_test
 
 import (
 	"testing"
 
-	"github.com/competencies-ru/competency-constructor/internal/core/entity/specialty"
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )
@@ -13,13 +13,13 @@ func TestNewProgram(t *testing.T) {
 
 	testCases := []struct {
 		Name        string
-		Params      specialty.ProgramParams
+		Params      education.ProgramParams
 		ShouldBeErr bool
 		ExpectedErr error
 	}{
 		{
 			Name: "without_error",
-			Params: specialty.ProgramParams{
+			Params: education.ProgramParams{
 				ID:            uuid.NewString(),
 				Title:         "Test Program",
 				SpecialtyCode: "01.10.10",
@@ -29,53 +29,53 @@ func TestNewProgram(t *testing.T) {
 		},
 		{
 			Name: "id_is_empty",
-			Params: specialty.ProgramParams{
+			Params: education.ProgramParams{
 				ID:            "",
 				Title:         "Test Program",
 				SpecialtyCode: "01.10.10",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrProgramIDIsEmpty,
+			ExpectedErr: education.ErrProgramIDIsEmpty,
 		},
 		{
 			Name: "title_is_empty",
-			Params: specialty.ProgramParams{
+			Params: education.ProgramParams{
 				ID:            uuid.NewString(),
 				Title:         "",
 				SpecialtyCode: "01.10.10",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrProgramTitleIsEmpty,
+			ExpectedErr: education.ErrProgramTitleIsEmpty,
 		},
 		{
 			Name: "specialty_code_is_empty",
-			Params: specialty.ProgramParams{
+			Params: education.ProgramParams{
 				ID:            uuid.NewString(),
 				Title:         "test",
 				SpecialtyCode: "",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrProgramSpecialtyCodeIsEmpty,
+			ExpectedErr: education.ErrProgramSpecialtyCodeIsEmpty,
 		},
 		{
 			Name: "specialty_code_parse_error",
-			Params: specialty.ProgramParams{
+			Params: education.ProgramParams{
 				ID:            uuid.NewString(),
 				Title:         "test",
 				SpecialtyCode: "01.00.00",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrSpecialityParseCode,
+			ExpectedErr: education.ErrSpecialityParseCode,
 		},
 		{
 			Name: "specialty_code_is_two_zero",
-			Params: specialty.ProgramParams{
+			Params: education.ProgramParams{
 				ID:            uuid.NewString(),
 				Title:         "test",
 				SpecialtyCode: "00.10.00",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: specialty.ErrCodeIsPrefixTwoZero,
+			ExpectedErr: education.ErrCodeIsPrefixTwoZero,
 		},
 	}
 
@@ -85,7 +85,7 @@ func TestNewProgram(t *testing.T) {
 		t.Run(t.Name(), func(t *testing.T) {
 			t.Parallel()
 
-			s, err := specialty.NewProgram(c.Params)
+			s, err := education.NewProgram(c.Params)
 
 			if c.ShouldBeErr {
 				t.Run("err_is", func(t *testing.T) {

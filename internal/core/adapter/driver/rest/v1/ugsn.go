@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
-	"github.com/competencies-ru/competency-constructor/internal/core/entity/specialty"
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 	"github.com/pkg/errors"
 
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
@@ -40,7 +40,7 @@ func (h handler) CreateUgsn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if specialty.IsInvalidUgsnParametersError(err) {
+	if education.IsInvalidUgsnParametersError(err) {
 		rest.UnprocessableEntity("unsupported-entity", err, w, r)
 
 		return
@@ -58,7 +58,7 @@ func (h handler) GetSpecificUgsn(w http.ResponseWriter, r *http.Request, ugsnCod
 		return
 	}
 
-	if specialty.IsInvalidUgsnParametersError(err) {
+	if education.IsInvalidUgsnParametersError(err) {
 		rest.UnprocessableEntity("unsupported-entity", err, w, r)
 
 		return
