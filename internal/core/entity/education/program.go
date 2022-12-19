@@ -13,20 +13,20 @@ var (
 
 type (
 	Program struct {
-		id             string
+		code           string
 		title          string
 		specialityCode string
 	}
 
 	ProgramParams struct {
-		ID            string
+		Code          string
 		Title         string
 		SpecialtyCode string
 	}
 )
 
 func NewProgram(param ProgramParams) (*Program, error) {
-	if param.ID == "" {
+	if param.Code == "" {
 		return nil, ErrProgramIDIsEmpty
 	}
 
@@ -42,15 +42,19 @@ func NewProgram(param ProgramParams) (*Program, error) {
 		return nil, err
 	}
 
-	return &Program{id: param.ID, title: param.Title, specialityCode: param.SpecialtyCode}, nil
+	if err := IsValidProgramCode(param.Code); err != nil {
+		return nil, err
+	}
+
+	return &Program{code: param.Code, title: param.Title, specialityCode: param.SpecialtyCode}, nil
 }
 
 func (p *Program) Title() string {
 	return p.title
 }
 
-func (p *Program) ID() string {
-	return p.id
+func (p *Program) Code() string {
+	return p.code
 }
 
 func (p *Program) SpecialityCode() string {

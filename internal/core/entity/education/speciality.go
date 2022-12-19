@@ -82,8 +82,8 @@ func (s *Speciality) AddProgram(p ProgramParams) error {
 		return err
 	}
 
-	if _, ok := s.programs[program.id]; !ok {
-		s.programs[program.id] = program
+	if _, ok := s.programs[program.code]; !ok {
+		s.programs[program.code] = program
 	}
 
 	return nil

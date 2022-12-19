@@ -10,6 +10,7 @@ import (
 var (
 	ErrUgsnCodeParseCode   = errors.New("ugsn: error parse code")
 	ErrSpecialityParseCode = errors.New("speciality: error parse code")
+	ErrProgramParseCode    = errors.New("program: error parse code")
 	ErrCodeIsPrefixTwoZero = errors.New("code starts with two zeros")
 )
 
@@ -45,6 +46,18 @@ func IsValidSpecialtyCode(code string) error {
 
 	if match(`^\d{2}.0{2}.0{2}$`, code) || !match(`^\d{2}.\d{2}.\d{2}$`, code) {
 		return ErrSpecialityParseCode
+	}
+
+	return nil
+}
+
+func IsValidProgramCode(code string) error {
+	if isPrefixTwoZero(code) {
+		return ErrCodeIsPrefixTwoZero
+	}
+
+	if match(`^\d{2}.0{2}.0{2}$`, code) || !match(`^\d{2}\.\d{2}\.\d{2}-\d{2}$`, code) {
+		return ErrProgramParseCode
 	}
 
 	return nil

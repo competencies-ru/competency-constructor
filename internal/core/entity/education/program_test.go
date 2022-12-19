@@ -20,9 +20,9 @@ func TestNewProgram(t *testing.T) {
 		{
 			Name: "without_error",
 			Params: education.ProgramParams{
-				ID:            uuid.NewString(),
+				Code:          "29.40.31-25",
 				Title:         "Test Program",
-				SpecialtyCode: "01.10.10",
+				SpecialtyCode: "29.40.31",
 			},
 			ShouldBeErr: false,
 			ExpectedErr: nil,
@@ -30,7 +30,7 @@ func TestNewProgram(t *testing.T) {
 		{
 			Name: "id_is_empty",
 			Params: education.ProgramParams{
-				ID:            "",
+				Code:          "",
 				Title:         "Test Program",
 				SpecialtyCode: "01.10.10",
 			},
@@ -40,7 +40,7 @@ func TestNewProgram(t *testing.T) {
 		{
 			Name: "title_is_empty",
 			Params: education.ProgramParams{
-				ID:            uuid.NewString(),
+				Code:          uuid.NewString(),
 				Title:         "",
 				SpecialtyCode: "01.10.10",
 			},
@@ -50,7 +50,7 @@ func TestNewProgram(t *testing.T) {
 		{
 			Name: "specialty_code_is_empty",
 			Params: education.ProgramParams{
-				ID:            uuid.NewString(),
+				Code:          uuid.NewString(),
 				Title:         "test",
 				SpecialtyCode: "",
 			},
@@ -60,7 +60,7 @@ func TestNewProgram(t *testing.T) {
 		{
 			Name: "specialty_code_parse_error",
 			Params: education.ProgramParams{
-				ID:            uuid.NewString(),
+				Code:          uuid.NewString(),
 				Title:         "test",
 				SpecialtyCode: "01.00.00",
 			},
@@ -70,7 +70,7 @@ func TestNewProgram(t *testing.T) {
 		{
 			Name: "specialty_code_is_two_zero",
 			Params: education.ProgramParams{
-				ID:            uuid.NewString(),
+				Code:          uuid.NewString(),
 				Title:         "test",
 				SpecialtyCode: "00.10.00",
 			},
@@ -99,7 +99,7 @@ func TestNewProgram(t *testing.T) {
 				require.NoError(t, err)
 
 				t.Run("code", func(t *testing.T) {
-					require.Equal(t, c.Params.ID, s.ID())
+					require.Equal(t, c.Params.Code, s.Code())
 				})
 
 				t.Run("title", func(t *testing.T) {
