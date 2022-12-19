@@ -9,8 +9,34 @@ import (
 
 // Defines values for ErrorSlug.
 const (
-	BadRequest ErrorSlug = "bad-request"
+	LevelNotFound     ErrorSlug = "level-not-found"
+	ProgramNotFound   ErrorSlug = "program-not-found"
+	SpecialtyNotFound ErrorSlug = "specialty-not-found"
+	UgsnNotFound      ErrorSlug = "ugsn-not-found"
 )
+
+// CreateLevelRequest defines model for CreateLevelRequest.
+type CreateLevelRequest struct {
+	Title string `json:"title"`
+}
+
+// CreateProgramRequest defines model for CreateProgramRequest.
+type CreateProgramRequest struct {
+	Code  string `json:"code"`
+	Title string `json:"title"`
+}
+
+// CreateSpecialtyRequest defines model for CreateSpecialtyRequest.
+type CreateSpecialtyRequest struct {
+	Code  string `json:"code"`
+	Title string `json:"title"`
+}
+
+// CreateUgsnRequest defines model for CreateUgsnRequest.
+type CreateUgsnRequest struct {
+	Code  string `json:"code"`
+	Title string `json:"title"`
+}
 
 // Error defines model for Error.
 type Error struct {
@@ -21,45 +47,43 @@ type Error struct {
 // ErrorSlug defines model for ErrorSlug.
 type ErrorSlug string
 
-// ProgramResponse defines model for ProgramResponse.
-type ProgramResponse struct {
-	Id            openapi_types.UUID `json:"id"`
-	SpecialtyCode string             `json:"specialtyCode"`
-	Title         string             `json:"title"`
+// LevelResponse defines model for LevelResponse.
+type LevelResponse struct {
+	Id    openapi_types.UUID `json:"id"`
+	Title string             `json:"title"`
 }
 
-// SpecialtiesRequest defines model for SpecialtiesRequest.
-type SpecialtiesRequest struct {
+// ProgramResponse defines model for ProgramResponse.
+type ProgramResponse struct {
 	Code  string `json:"code"`
 	Title string `json:"title"`
 }
 
-// SpecialtiesResponse defines model for SpecialtiesResponse.
-type SpecialtiesResponse struct {
-	Code     string `json:"code"`
-	Title    string `json:"title"`
-	UgsnCode string `json:"ugsnCode"`
+// SpecialtyResponse defines model for SpecialtyResponse.
+type SpecialtyResponse struct {
+	Code  string `json:"code"`
+	Title string `json:"title"`
+}
+
+// SpecificLevelResponse defines model for SpecificLevelResponse.
+type SpecificLevelResponse struct {
+	Id    openapi_types.UUID     `json:"id"`
+	Title string                 `json:"title"`
+	Ugsn  []SpecificUgsnResponse `json:"ugsn"`
 }
 
 // SpecificSpecialtyResponse defines model for SpecificSpecialtyResponse.
 type SpecificSpecialtyResponse struct {
-	Code     string      `json:"code"`
-	Program  interface{} `json:"program"`
-	Title    string      `json:"title"`
-	UgsnCode string      `json:"ugsnCode"`
+	Code    string            `json:"code"`
+	Program []ProgramResponse `json:"program"`
+	Title   string            `json:"title"`
 }
 
 // SpecificUgsnResponse defines model for SpecificUgsnResponse.
 type SpecificUgsnResponse struct {
-	Code      string      `json:"code"`
-	Specialty interface{} `json:"specialty"`
-	Title     string      `json:"title"`
-}
-
-// UgsnRequest defines model for UgsnRequest.
-type UgsnRequest struct {
-	Code  string `json:"code"`
-	Title string `json:"title"`
+	Code      string                      `json:"code"`
+	Specialty []SpecificSpecialtyResponse `json:"specialty"`
+	Title     string                      `json:"title"`
 }
 
 // UgsnResponse defines model for UgsnResponse.
@@ -68,17 +92,23 @@ type UgsnResponse struct {
 	Title string `json:"title"`
 }
 
-// AddedProgramJSONBody defines parameters for AddedProgram.
-type AddedProgramJSONBody = []string
+// AddProgramsJSONBody defines parameters for AddPrograms.
+type AddProgramsJSONBody = interface{}
 
-// AddedSpecialtiesJSONBody defines parameters for AddedSpecialties.
-type AddedSpecialtiesJSONBody = interface{}
+// AddUgsnJSONBody defines parameters for AddUgsn.
+type AddUgsnJSONBody = interface{}
 
-// AddedProgramJSONRequestBody defines body for AddedProgram for application/json ContentType.
-type AddedProgramJSONRequestBody = AddedProgramJSONBody
+// AddSpecialtiesJSONBody defines parameters for AddSpecialties.
+type AddSpecialtiesJSONBody = interface{}
 
-// CreateUgsnJSONRequestBody defines body for CreateUgsn for application/json ContentType.
-type CreateUgsnJSONRequestBody = UgsnRequest
+// AddProgramsJSONRequestBody defines body for AddPrograms for application/json ContentType.
+type AddProgramsJSONRequestBody = AddProgramsJSONBody
 
-// AddedSpecialtiesJSONRequestBody defines body for AddedSpecialties for application/json ContentType.
-type AddedSpecialtiesJSONRequestBody = AddedSpecialtiesJSONBody
+// CreateLevelEducationJSONRequestBody defines body for CreateLevelEducation for application/json ContentType.
+type CreateLevelEducationJSONRequestBody = CreateLevelRequest
+
+// AddUgsnJSONRequestBody defines body for AddUgsn for application/json ContentType.
+type AddUgsnJSONRequestBody = AddUgsnJSONBody
+
+// AddSpecialtiesJSONRequestBody defines body for AddSpecialties for application/json ContentType.
+type AddSpecialtiesJSONRequestBody = AddSpecialtiesJSONBody
