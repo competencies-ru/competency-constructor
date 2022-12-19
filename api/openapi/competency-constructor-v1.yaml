@@ -6,50 +6,128 @@ info:
 servers:
   - url: "https://{hostname}/competency-constructor/api/v1"
 paths:
-  /ugsn:
+  /levels:
     get:
       tags:
-        - education
-      operationId: getUgsn
-      summary: Returns ugsn.
+        - levels
+      operationId: getLevelEducation
+      summary: Returns level of the educational program.
       responses:
         200:
-          description: Found ugsn.
+          description: Found previously created level educational.
           content:
             application/json:
               schema:
                 items:
-                  $ref: "#/components/schemas/UgsnResponse"
-        403:
-          description: User does not have access.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
+                  $ref: "#/components/schemas/LevelResponse"
     post:
       tags:
-        - education
-      operationId: createUgsn
-      summary: create ugsn
+        - levels
+      operationId: createLevelEducation
+      summary: Create the level of the educational program
       requestBody:
-        description: Ugsn create.
+        description: Level to create.
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UgsnRequest"
+              $ref: "#/components/schemas/CreateLevelRequest"
       responses:
         201:
-          description: ugsn is created.
+          description: Test campaign is created.
+          headers:
+            Location:
+              description: Created test campaign URI.
+              schema:
+                type: string
         400:
           description: Bad request.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        403:
-          description: User does not have access.
+
+  /levels/{levelId}:
+    get:
+      tags:
+        - levels
+      operationId: getLevel
+      summary: Returns level with such ID.
+      parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: Level ID to return
+      responses:
+        200:
+          description: Found previously created level.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpecificLevelResponse"
+        404:
+          description: Level with such ID not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /levels/{levelId}/ugsn:
+    get:
+      tags:
+        - ugsn
+      operationId: getUgsn
+      summary: return ugsn by level id
+      parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: Return ugsn by level id
+      responses:
+        200:
+          description: Found previously created level.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UgsnResponse"
+        404:
+          description: Level with such ID not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - ugsn
+      operationId: addUgsn
+      summary: addedUgsn by level id
+      parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: Return ugsn by level id
+      requestBody:
+        description: Added ugsn to level.
+        required: true
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: "#/components/schemas/CreateUgsnRequest"
+      responses:
+        200:
+          description: Added new ugsn to level.
+        404:
+          description: Level with such ID not found.
           content:
             application/json:
               schema:
@@ -57,77 +135,102 @@ paths:
 
 
 
-  /ugsn/{ugsnCode}:
+  /levels/{levelId}/ugsn/{ugsnCode}:
     get:
       tags:
-        - education
+        - ugsn
       operationId: getSpecificUgsn
-      summary: Returns ugsn with such code.
+      summary: return specific ugsn by level id
       parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: level id
         - in: path
           name: ugsnCode
           schema:
             type: string
             pattern: '^\d{2}\.0{2}\.0{2}$'
           required: true
-          description: code ugsn.
+          description: ugsn code
       responses:
         200:
-          description: Found previously added ugsn.
+          description: Found previously created ugsn.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SpecificUgsnResponse"
         404:
-          description: Ugsn not found with such code.
+          description: Entity not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        403:
-          description: User does not have access.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-
-  /ugsn/{ugsnCode}/specialties:
-    get:
+    delete:
       tags:
-        - education
-      operationId: getSpecialties
-      summary: Returns specialties with such code ugsn.
+        - ugsn
+      operationId: deleteUgsn
+      summary: return specific ugsn by level id
       parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: Return ugsn by level id
         - in: path
           name: ugsnCode
           schema:
             type: string
             pattern: '^\d{2}\.0{2}\.0{2}$'
           required: true
-          description: code ugsn.
+          description: ugsn code
       responses:
         200:
-          description: Found previously added ugsn.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SpecialtiesResponse"
-        400:
-          description: Bad request.
+          description: Delete ugsn by code.
+        404:
+          description: Ugsn not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
 
-        404:
-          description: Ugsn not found with such code.
+  /levels/{levelId}/ugsn/{ugsnCode}/specialties:
+    get:
+      tags:
+        - specialties
+      operationId: getSpecialties
+      summary: return specific ugsn by level id
+      parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: level id
+        - in: path
+          name: ugsnCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.0{2}\.0{2}$'
+          required: true
+          description: ugsn code
+      responses:
+        200:
+          description: Found previously created level.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        403:
-          description: User does not have access.
+                type: array
+                items:
+                  $ref: "#/components/schemas/SpecialtyResponse"
+        404:
+          description: Entity not found.
           content:
             application/json:
               schema:
@@ -135,145 +238,255 @@ paths:
 
     post:
       tags:
-        - education
-      operationId: addedSpecialties
-      summary: Adding specialties for ugsn
+        - specialties
+      operationId: addSpecialties
+      summary: add specialties by level id and ugsn code
       parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: level id
         - in: path
           name: ugsnCode
           schema:
             type: string
             pattern: '^\d{2}\.0{2}\.0{2}$'
           required: true
-          description: code ugsn.
+          description: ugsn code
       requestBody:
-        description: specialties items with such code ugsn.
+        description: Added ugsn to level.
         required: true
         content:
           application/json:
             schema:
               items:
-                $ref: "#/components/schemas/SpecialtiesRequest"
+                $ref: "#/components/schemas/CreateSpecialtyRequest"
       responses:
-        201:
-          description: Added specialty for ugsn.
+        200:
+          description: Added new specialty to ugsn.
         404:
-          description: Ugsn not found with such code.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        403:
-          description: User does not have access.
+          description: Level with such ID not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /specialties/{specialtyCode}:
+  /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}:
     get:
       tags:
-        - education
+        - specialties
       operationId: getSpecificSpecialty
-      summary: Returns specialty with such code.
+      summary: return specific ugsn by level id
       parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: level id
+        - in: path
+          name: ugsnCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.0{2}\.0{2}$'
+          required: true
+          description: ugsn code
         - in: path
           name: specialtyCode
           schema:
             type: string
             pattern: '^\d{2}\.\d{2}\.\d{2}$'
           required: true
-          description: code specialty.
+          description: specialty code
+
       responses:
         200:
-          description: Found previously added specialty.
+          description: Found previously created level.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SpecificSpecialtyResponse"
         404:
-          description: Specialty not found with such code.
+          description: Entity not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        403:
-          description: User does not have access.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /specialties/{specialtyCode}/program:
-    get:
+    delete:
       tags:
-        - education
-      operationId: getPrograms
-      summary: Returns programs with such specialty code.
+        - specialties
+      operationId: deleteSpecialty
+      summary: delete specialty by code ugsn and level id
       parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: level id
+        - in: path
+          name: ugsnCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.0{2}\.0{2}$'
+          required: true
+          description: ugsn code
         - in: path
           name: specialtyCode
           schema:
             type: string
             pattern: '^\d{2}\.\d{2}\.\d{2}$'
           required: true
-          description: code specialty.
+          description: specialty code
       responses:
         200:
-          description: Found previously added specialty.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProgramResponse"
+          description: Delete ugsn by code.
         404:
-          description: Specialty not found with such code.
+          description: Ugsn not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        403:
-          description: User does not have access.
+
+  /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs:
+    get:
+      tags:
+        - programs
+      operationId: getPrograms
+      summary: return programs
+      parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: level id
+        - in: path
+          name: ugsnCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.0{2}\.0{2}$'
+          required: true
+          description: ugsn code
+        - in: path
+          name: specialtyCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.\d{2}\.\d{2}$'
+          required: true
+          description: specialty code
+
+      responses:
+        200:
+          description: Return programs by level and ugsn code and specialty code.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProgramResponse"
+        404:
+          description: Entity not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
       tags:
-        - education
-      operationId: addedProgram
-      summary: Adding program for specialty
+        - programs
+      operationId: addPrograms
+      summary: create programs
       parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: level id
+        - in: path
+          name: ugsnCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.0{2}\.0{2}$'
+          required: true
+          description: ugsn code
         - in: path
           name: specialtyCode
           schema:
             type: string
             pattern: '^\d{2}\.\d{2}\.\d{2}$'
           required: true
-          description: code specialty.
+          description: specialty code
       requestBody:
-        description: program items with such code specialty.
+        description: Added ugsn to level.
         required: true
         content:
           application/json:
             schema:
-              type: array
               items:
-                type: string
+                $ref: "#/components/schemas/CreateProgramRequest"
       responses:
-        201:
-          description: Added programs for specialty.
+        200:
+          description: Added program.
         404:
-          description: Specialty not found with such code.
+          description: Entity not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        403:
-          description: User does not have access.
+
+  /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs/{programCode}:
+    delete:
+      tags:
+        - programs
+      operationId: deleteProgram
+      summary: delete specialty by code ugsn and level id
+      parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            pattern: uuid
+          required: true
+          description: level id
+        - in: path
+          name: ugsnCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.0{2}\.0{2}$'
+          required: true
+          description: ugsn code
+        - in: path
+          name: specialtyCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.\d{2}\.\d{2}$'
+          required: true
+          description: specialty code
+        - in: path
+          name: programCode
+          schema:
+            type: string
+            pattern: '^\d{2}\.\d{2}\.\d{2}-\d{2}$'
+          required: true
+          description: program code
+      responses:
+        200:
+          description: Delete program by code.
+        404:
+          description: Entity not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
 
 
 
@@ -295,82 +508,89 @@ components:
     ErrorSlug:
       type: string
       enum:
-        - bad-request
+        - level-not-found
+        - ugsn-not-found
+        - specialty-not-found
+        - program-not-found
 
-    SpecialtiesResponse:
+    CreateUgsnRequest:
       type: object
       required:
         - code
         - title
-        - ugsnCode
+      properties:
+        code:
+          type: string
+          pattern: '^\d{2}\.0{2}\.0{2}$'
+        title:
+          type: string
+
+    CreateSpecialtyRequest:
+      type: object
+      required:
+        - code
+        - title
       properties:
         code:
           type: string
           pattern: '^\d{2}\.\d{2}\.\d{2}$'
         title:
           type: string
-        ugsnCode:
-          type: string
-          pattern: '^\d{2}\.0{2}\.0{2}$'
 
-    SpecialtiesRequest:
+    CreateLevelRequest:
       type: object
       required:
-        - code
         - title
       properties:
-        code:
-          type: string
-          pattern: '^\d{2}\.\d{2}\.\d{2}$'
         title:
           type: string
 
-    UgsnResponse:
-      type: object
-      required:
-        - code
-        - title
-      properties:
-        code:
-          type: string
-          pattern: '^\d{2}\.0{2}\.0{2}$'
-        title:
-          type: string
-
-    UgsnRequest:
-      type: object
-      required:
-        - code
-        - title
-      properties:
-        code:
-          type: string
-          pattern: '^\d{2}\.0{2}\.0{2}$'
-        title:
-          type: string
-
-    ProgramResponse:
+    LevelResponse:
       type: object
       required:
         - id
         - title
-        - specialtyCode
       properties:
         id:
           type: string
           format: uuid
         title:
           type: string
-        specialtyCode:
+
+    SpecificLevelResponse:
+      type: object
+      required:
+        - id
+        - title
+        - ugsn
+      properties:
+        id:
           type: string
-          pattern: '^\d{2}\.\d{2}\.\d{2}$'
+          format: uuid
+        title:
+          type: string
+        ugsn:
+          type: array
+          items:
+            $ref: "#/components/schemas/SpecificUgsnResponse"
+
+    ProgramResponse:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^\d{2}\.\d{2}\.\d{2}-\d{2}$'
+        title:
+          type: string
 
     SpecificSpecialtyResponse:
       type: object
       required:
         - code
         - title
-        - ugsnCode
         - program
       properties:
         code:
@@ -378,13 +598,10 @@ components:
           pattern: '^\d{2}\.\d{2}\.\d{2}$'
         title:
           type: string
-        ugsnCode:
-          type: string
-          pattern: '^\d{2}\.0{2}\.0{2}$'
         program:
+          type: array
           items:
             $ref: "#/components/schemas/ProgramResponse"
-
 
     SpecificUgsnResponse:
       type: object
@@ -399,8 +616,42 @@ components:
         title:
           type: string
         specialty:
+          type: array
           items:
             $ref: "#/components/schemas/SpecificSpecialtyResponse"
 
+    UgsnResponse:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^\d{2}\.0{2}\.0{2}$'
+        title:
+          type: string
 
+    SpecialtyResponse:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^\d{2}\.\d{2}\.\d{2}$'
+        title:
+          type: string
 
+    CreateProgramRequest:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^\d{2}\.\d{2}\.\d{2}-\d{2}$'
+        title:
+          type: string

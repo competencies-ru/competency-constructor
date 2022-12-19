@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/deepmap/oapi-codegen/pkg/runtime"
-	openapi_types "github.com/deepmap/oapi-codegen/pkg/types"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -16,19 +15,19 @@ import (
 type ServerInterface interface {
 	// delete specialty by code ugsn and level id
 	// (DELETE /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode})
-	DeleteSpecialty(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID, ugsnCode string, specialtyCode string)
+	DeleteSpecialty(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
 	// return specific ugsn by level id
 	// (GET /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode})
-	GetSpecificSpecialty(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID, ugsnCode string, specialtyCode string)
+	GetSpecificSpecialty(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
 	// return programs
 	// (GET /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs)
-	GetPrograms(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID, ugsnCode string, specialtyCode string)
+	GetPrograms(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
 	// create programs
 	// (POST /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs)
-	AddPrograms(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID, ugsnCode string, specialtyCode string)
+	AddPrograms(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
 	// delete specialty by code ugsn and level id
 	// (DELETE /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs/{programCode})
-	DeleteProgram(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID, ugsnCode string, specialtyCode string, programCode string)
+	DeleteProgram(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string, programCode string)
 	// Returns level of the educational program.
 	// (GET /levels)
 	GetLevelEducation(w http.ResponseWriter, r *http.Request)
@@ -37,25 +36,25 @@ type ServerInterface interface {
 	CreateLevelEducation(w http.ResponseWriter, r *http.Request)
 	// Returns level with such ID.
 	// (GET /levels/{levelId})
-	GetLevel(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID)
+	GetLevel(w http.ResponseWriter, r *http.Request, levelId string)
 	// return ugsn by level id
 	// (GET /levels/{levelId}/ugsn)
-	GetUgsn(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID)
+	GetUgsn(w http.ResponseWriter, r *http.Request, levelId string)
 	// addedUgsn by level id
 	// (POST /levels/{levelId}/ugsn)
-	AddUgsn(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID)
+	AddUgsn(w http.ResponseWriter, r *http.Request, levelId string)
 	// return specific ugsn by level id
 	// (DELETE /levels/{levelId}/ugsn/{ugsnCode})
-	DeleteUgsn(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID, ugsnCode string)
+	DeleteUgsn(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string)
 	// return specific ugsn by level id
 	// (GET /levels/{levelId}/ugsn/{ugsnCode})
-	GetSpecificUgsn(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID, ugsnCode string)
+	GetSpecificUgsn(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string)
 	// return specific ugsn by level id
 	// (GET /levels/{levelId}/ugsn/{ugsnCode}/specialties)
-	GetSpecialties(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID, ugsnCode string)
+	GetSpecialties(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string)
 	// add specialties by level id and ugsn code
 	// (POST /levels/{levelId}/ugsn/{ugsnCode}/specialties)
-	AddSpecialties(w http.ResponseWriter, r *http.Request, levelId openapi_types.UUID, ugsnCode string)
+	AddSpecialties(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -74,7 +73,7 @@ func (siw *ServerInterfaceWrapper) DeleteSpecialty(w http.ResponseWriter, r *htt
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
@@ -118,7 +117,7 @@ func (siw *ServerInterfaceWrapper) GetSpecificSpecialty(w http.ResponseWriter, r
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
@@ -162,7 +161,7 @@ func (siw *ServerInterfaceWrapper) GetPrograms(w http.ResponseWriter, r *http.Re
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
@@ -206,7 +205,7 @@ func (siw *ServerInterfaceWrapper) AddPrograms(w http.ResponseWriter, r *http.Re
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
@@ -250,7 +249,7 @@ func (siw *ServerInterfaceWrapper) DeleteProgram(w http.ResponseWriter, r *http.
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
@@ -333,7 +332,7 @@ func (siw *ServerInterfaceWrapper) GetLevel(w http.ResponseWriter, r *http.Reque
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
@@ -359,7 +358,7 @@ func (siw *ServerInterfaceWrapper) GetUgsn(w http.ResponseWriter, r *http.Reques
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
@@ -385,7 +384,7 @@ func (siw *ServerInterfaceWrapper) AddUgsn(w http.ResponseWriter, r *http.Reques
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
@@ -411,7 +410,7 @@ func (siw *ServerInterfaceWrapper) DeleteUgsn(w http.ResponseWriter, r *http.Req
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
@@ -446,7 +445,7 @@ func (siw *ServerInterfaceWrapper) GetSpecificUgsn(w http.ResponseWriter, r *htt
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
@@ -481,7 +480,7 @@ func (siw *ServerInterfaceWrapper) GetSpecialties(w http.ResponseWriter, r *http
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
@@ -516,7 +515,7 @@ func (siw *ServerInterfaceWrapper) AddSpecialties(w http.ResponseWriter, r *http
 	var err error
 
 	// ------------- Path parameter "levelId" -------------
-	var levelId openapi_types.UUID
+	var levelId string
 
 	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
 	if err != nil {
