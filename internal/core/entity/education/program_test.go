@@ -37,7 +37,7 @@ func TestNewProgram(t *testing.T) {
 				SpecialtyCode: "01.10.10",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: education.ErrProgramIDIsEmpty,
+			ExpectedErr: education.ErrProgramCodeIsEmpty,
 		},
 		{
 			Name: "title_is_empty",
@@ -91,7 +91,42 @@ func TestNewProgram(t *testing.T) {
 				SpecialtyCode: "00.10.00",
 			},
 			ShouldBeErr: true,
+			ExpectedErr: education.ErrProgramIDIsEmpty,
+		},
+		{
+			Name: "invalid_code",
+			Params: education.ProgramParams{
+				ID:            uuid.NewString(),
+				Code:          "29.40.31",
+				Title:         "Test Program",
+				SpecialtyCode: "29.40.31",
+			},
+			ShouldBeErr: true,
+			ExpectedErr: education.ErrProgramParseCode,
+		},
+
+		{
+			Name: "invalid_code_prefix_two_zero",
+			Params: education.ProgramParams{
+				ID:            uuid.NewString(),
+				Code:          "00.40.31-01",
+				Title:         "Test Program",
+				SpecialtyCode: "29.40.31",
+			},
+			ShouldBeErr: true,
 			ExpectedErr: education.ErrCodeIsPrefixTwoZero,
+		},
+
+		{
+			Name: "code_is_not_match",
+			Params: education.ProgramParams{
+				ID:            uuid.NewString(),
+				Code:          "29.41.31-01",
+				Title:         "Test Program",
+				SpecialtyCode: "29.40.31",
+			},
+			ShouldBeErr: true,
+			ExpectedErr: education.ErrProgramNotMatchCode,
 		},
 	}
 
