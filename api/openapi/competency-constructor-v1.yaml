@@ -10,7 +10,7 @@ paths:
     get:
       tags:
         - levels
-      operationId: getLevelEducation
+      operationId: getLevels
       summary: Returns level of the educational program.
       responses:
         200:
@@ -23,7 +23,7 @@ paths:
     post:
       tags:
         - levels
-      operationId: createLevelEducation
+      operationId: createLevel
       summary: Create the level of the educational program
       requestBody:
         description: Level to create.
@@ -51,7 +51,7 @@ paths:
     get:
       tags:
         - levels
-      operationId: getLevel
+      operationId: getSpecificLevel
       summary: Returns level with such ID.
       parameters:
         - in: path
@@ -512,6 +512,13 @@ components:
         - ugsn-not-found
         - specialty-not-found
         - program-not-found
+        - invalid-json
+        - bad-request
+        - unexpected-error
+        - empty-bearer-token
+        - unable-to-verify-jwt
+        - unauthorized-user
+        - invalid-level-parameters
 
     CreateUgsnRequest:
       type: object
@@ -553,7 +560,7 @@ components:
       properties:
         id:
           type: string
-          format: uuid
+          pattern: uuid
         title:
           type: string
 
@@ -566,7 +573,7 @@ components:
       properties:
         id:
           type: string
-          format: uuid
+          pattern: uuid
         title:
           type: string
         ugsn:
@@ -577,9 +584,13 @@ components:
     ProgramResponse:
       type: object
       required:
+        - id
         - code
         - title
       properties:
+        id:
+          type: string
+          pattern: uuid
         code:
           type: string
           pattern: '^\d{2}\.\d{2}\.\d{2}-\d{2}$'
@@ -589,10 +600,14 @@ components:
     SpecificSpecialtyResponse:
       type: object
       required:
+        - id
         - code
         - title
         - program
       properties:
+        id:
+          type: string
+          pattern: uuid
         code:
           type: string
           pattern: '^\d{2}\.\d{2}\.\d{2}$'
@@ -606,10 +621,14 @@ components:
     SpecificUgsnResponse:
       type: object
       required:
+        - id
         - code
         - title
         - specialty
       properties:
+        id:
+          type: string
+          pattern: uuid
         code:
           type: string
           pattern: '^\d{2}\.0{2}\.0{2}$'
@@ -623,9 +642,13 @@ components:
     UgsnResponse:
       type: object
       required:
+        - id
         - code
         - title
       properties:
+        id:
+          type: string
+          pattern: uuid
         code:
           type: string
           pattern: '^\d{2}\.0{2}\.0{2}$'
@@ -635,9 +658,13 @@ components:
     SpecialtyResponse:
       type: object
       required:
+        - id
         - code
         - title
       properties:
+        id:
+          type: string
+          pattern: uuid
         code:
           type: string
           pattern: '^\d{2}\.\d{2}\.\d{2}$'

@@ -30,13 +30,13 @@ type ServerInterface interface {
 	DeleteProgram(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string, programCode string)
 	// Returns level of the educational program.
 	// (GET /levels)
-	GetLevelEducation(w http.ResponseWriter, r *http.Request)
+	GetLevels(w http.ResponseWriter, r *http.Request)
 	// Create the level of the educational program
 	// (POST /levels)
-	CreateLevelEducation(w http.ResponseWriter, r *http.Request)
+	CreateLevel(w http.ResponseWriter, r *http.Request)
 	// Returns level with such ID.
 	// (GET /levels/{levelId})
-	GetLevel(w http.ResponseWriter, r *http.Request, levelId string)
+	GetSpecificLevel(w http.ResponseWriter, r *http.Request, levelId string)
 	// return ugsn by level id
 	// (GET /levels/{levelId}/ugsn)
 	GetUgsn(w http.ResponseWriter, r *http.Request, levelId string)
@@ -295,12 +295,12 @@ func (siw *ServerInterfaceWrapper) DeleteProgram(w http.ResponseWriter, r *http.
 	handler.ServeHTTP(w, r.WithContext(ctx))
 }
 
-// GetLevelEducation operation middleware
-func (siw *ServerInterfaceWrapper) GetLevelEducation(w http.ResponseWriter, r *http.Request) {
+// GetLevels operation middleware
+func (siw *ServerInterfaceWrapper) GetLevels(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetLevelEducation(w, r)
+		siw.Handler.GetLevels(w, r)
 	})
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -310,12 +310,12 @@ func (siw *ServerInterfaceWrapper) GetLevelEducation(w http.ResponseWriter, r *h
 	handler.ServeHTTP(w, r.WithContext(ctx))
 }
 
-// CreateLevelEducation operation middleware
-func (siw *ServerInterfaceWrapper) CreateLevelEducation(w http.ResponseWriter, r *http.Request) {
+// CreateLevel operation middleware
+func (siw *ServerInterfaceWrapper) CreateLevel(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.CreateLevelEducation(w, r)
+		siw.Handler.CreateLevel(w, r)
 	})
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -325,8 +325,8 @@ func (siw *ServerInterfaceWrapper) CreateLevelEducation(w http.ResponseWriter, r
 	handler.ServeHTTP(w, r.WithContext(ctx))
 }
 
-// GetLevel operation middleware
-func (siw *ServerInterfaceWrapper) GetLevel(w http.ResponseWriter, r *http.Request) {
+// GetSpecificLevel operation middleware
+func (siw *ServerInterfaceWrapper) GetSpecificLevel(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	var err error
@@ -341,7 +341,7 @@ func (siw *ServerInterfaceWrapper) GetLevel(w http.ResponseWriter, r *http.Reque
 	}
 
 	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetLevel(w, r, levelId)
+		siw.Handler.GetSpecificLevel(w, r, levelId)
 	})
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -672,13 +672,13 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 		r.Delete(options.BaseURL+"/level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs/{programCode}", wrapper.DeleteProgram)
 	})
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/levels", wrapper.GetLevelEducation)
+		r.Get(options.BaseURL+"/levels", wrapper.GetLevels)
 	})
 	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/levels", wrapper.CreateLevelEducation)
+		r.Post(options.BaseURL+"/levels", wrapper.CreateLevel)
 	})
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/levels/{levelId}", wrapper.GetLevel)
+		r.Get(options.BaseURL+"/levels/{levelId}", wrapper.GetSpecificLevel)
 	})
 	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/levels/{levelId}/ugsn", wrapper.GetUgsn)
