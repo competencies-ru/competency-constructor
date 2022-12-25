@@ -68,6 +68,7 @@ func (l *Level) AddUgsn(param UgsnParams) error {
 
 func (l *Level) Ugsn() []*Ugsn {
 	result := make([]*Ugsn, 0, len(l.ugsn))
+
 	for _, ugsn := range l.ugsn {
 		tmp := ugsn
 		result = append(result, tmp)

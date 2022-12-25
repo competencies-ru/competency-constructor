@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	ErrSpecialtyIdIsEmpty        = errors.New("speciality: id is empty")
+	ErrSpecialtyIDIsEmpty        = errors.New("speciality: id is empty")
 	ErrSpecialityTitleIsEmpty    = errors.New("speciality: title is empty")
 	ErrSpecialityCodeIsEmpty     = errors.New("speciality: code is empty")
 	ErrSpecialityUgsnCodeIsEmpty = errors.New("speciality: ugsnCode is empty")
@@ -34,7 +34,7 @@ type (
 
 func NewSpeciality(param SpecialityParams) (*Speciality, error) {
 	if param.ID == "" {
-		return nil, ErrSpecialtyIdIsEmpty
+		return nil, ErrSpecialtyIDIsEmpty
 	}
 
 	if param.Title == "" {

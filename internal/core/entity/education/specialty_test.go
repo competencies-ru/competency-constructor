@@ -125,7 +125,7 @@ func TestNewSpeciality(t *testing.T) {
 				UgsnCode: "00.00.00",
 			},
 			ShouldBeErr: true,
-			ExpectedErr: education.ErrSpecialtyIdIsEmpty,
+			ExpectedErr: education.ErrSpecialtyIDIsEmpty,
 		},
 	}
 
