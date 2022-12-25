@@ -1,8 +1,9 @@
 package education_test
 
 import (
-	"github.com/google/uuid"
 	"testing"
+
+	"github.com/google/uuid"
 
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 	"github.com/stretchr/testify/require"

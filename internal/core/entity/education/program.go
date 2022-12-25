@@ -1,8 +1,9 @@
 package education
 
 import (
-	"github.com/pkg/errors"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 const maxLenTitleProgram = 1000
@@ -83,5 +84,4 @@ func (p *Program) Rename(title string) error {
 
 func isMatchProgramCode(pcode, scode string) bool {
 	return strings.Contains(pcode[:8], scode[:8])
-
 }
