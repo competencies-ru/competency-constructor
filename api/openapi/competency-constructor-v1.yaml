@@ -519,6 +519,9 @@ components:
         - unable-to-verify-jwt
         - unauthorized-user
         - invalid-level-parameters
+        - invalid-ugsn-parameters
+        - invalid-specialties-parameters
+        - invalid-program-parameters
 
     CreateUgsnRequest:
       type: object

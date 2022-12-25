@@ -5,17 +5,20 @@ package v1
 
 // Defines values for ErrorSlug.
 const (
-	BadRequest             ErrorSlug = "bad-request"
-	EmptyBearerToken       ErrorSlug = "empty-bearer-token"
-	InvalidJson            ErrorSlug = "invalid-json"
-	InvalidLevelParameters ErrorSlug = "invalid-level-parameters"
-	LevelNotFound          ErrorSlug = "level-not-found"
-	ProgramNotFound        ErrorSlug = "program-not-found"
-	SpecialtyNotFound      ErrorSlug = "specialty-not-found"
-	UgsnNotFound           ErrorSlug = "ugsn-not-found"
-	UnableToVerifyJwt      ErrorSlug = "unable-to-verify-jwt"
-	UnauthorizedUser       ErrorSlug = "unauthorized-user"
-	UnexpectedError        ErrorSlug = "unexpected-error"
+	BadRequest                   ErrorSlug = "bad-request"
+	EmptyBearerToken             ErrorSlug = "empty-bearer-token"
+	InvalidJson                  ErrorSlug = "invalid-json"
+	InvalidLevelParameters       ErrorSlug = "invalid-level-parameters"
+	InvalidProgramParameters     ErrorSlug = "invalid-program-parameters"
+	InvalidSpecialtiesParameters ErrorSlug = "invalid-specialties-parameters"
+	InvalidUgsnParameters        ErrorSlug = "invalid-ugsn-parameters"
+	LevelNotFound                ErrorSlug = "level-not-found"
+	ProgramNotFound              ErrorSlug = "program-not-found"
+	SpecialtyNotFound            ErrorSlug = "specialty-not-found"
+	UgsnNotFound                 ErrorSlug = "ugsn-not-found"
+	UnableToVerifyJwt            ErrorSlug = "unable-to-verify-jwt"
+	UnauthorizedUser             ErrorSlug = "unauthorized-user"
+	UnexpectedError              ErrorSlug = "unexpected-error"
 )
 
 // CreateLevelRequest defines model for CreateLevelRequest.
