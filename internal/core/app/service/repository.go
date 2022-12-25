@@ -17,5 +17,5 @@ type (
 		UpdateLevel(ctx context.Context, id string, updater LevelUpdate) error
 	}
 
-	LevelUpdate func(ctx context.Context, level *education.Level) error
+	LevelUpdate func(ctx context.Context, level *education.Level) (*education.Level, error)
 )
