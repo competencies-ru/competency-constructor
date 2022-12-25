@@ -47,7 +47,7 @@ func NewProgram(param ProgramParams) (*Program, error) {
 		return nil, err
 	}
 
-	return &Program{code: param.Code, title: param.Title}, nil
+	return &Program{id: param.ID, code: param.Code, title: param.Title}, nil
 }
 
 func (p *Program) Title() string {
