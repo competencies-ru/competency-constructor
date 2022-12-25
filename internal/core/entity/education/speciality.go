@@ -7,6 +7,7 @@ import (
 )
 
 var (
+	ErrSpecialtyIdIsEmpty        = errors.New("speciality: id is empty")
 	ErrSpecialityTitleIsEmpty    = errors.New("speciality: title is empty")
 	ErrSpecialityCodeIsEmpty     = errors.New("speciality: code is empty")
 	ErrSpecialityUgsnCodeIsEmpty = errors.New("speciality: ugsnCode is empty")
@@ -16,15 +17,15 @@ var (
 
 type (
 	Speciality struct {
-		code     string
-		title    string
-		ugsnCode string
-
+		id    string
+		code  string
+		title string
 		// key programID, value pointer Program
 		programs map[string]*Program
 	}
 
 	SpecialityParams struct {
+		ID       string
 		Code     string
 		Title    string
 		UgsnCode string
@@ -32,6 +33,10 @@ type (
 )
 
 func NewSpeciality(param SpecialityParams) (*Speciality, error) {
+	if param.ID == "" {
+		return nil, ErrSpecialtyIdIsEmpty
+	}
+
 	if param.Title == "" {
 		return nil, ErrSpecialityTitleIsEmpty
 	}
@@ -57,11 +62,15 @@ func NewSpeciality(param SpecialityParams) (*Speciality, error) {
 	}
 
 	return &Speciality{
+		id:       param.ID,
 		title:    param.Title,
 		code:     param.Code,
-		ugsnCode: param.UgsnCode,
 		programs: make(map[string]*Program),
 	}, nil
+}
+
+func (s *Speciality) ID() string {
+	return s.id
 }
 
 func (s *Speciality) Title() string {
@@ -70,10 +79,6 @@ func (s *Speciality) Title() string {
 
 func (s *Speciality) Code() string {
 	return s.code
-}
-
-func (s *Speciality) UgsnCode() string {
-	return s.ugsnCode
 }
 
 func (s *Speciality) AddProgram(p ProgramParams) error {

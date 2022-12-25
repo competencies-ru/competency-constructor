@@ -1,6 +1,7 @@
 package education_test
 
 import (
+	"github.com/google/uuid"
 	"testing"
 
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
@@ -19,6 +20,7 @@ func TestNewSpeciality(t *testing.T) {
 		{
 			Name: "without_error",
 			Params: education.SpecialityParams{
+				ID:       uuid.NewString(),
 				Code:     "01.01.01",
 				Title:    "Test education",
 				UgsnCode: "01.00.00",
@@ -29,6 +31,7 @@ func TestNewSpeciality(t *testing.T) {
 		{
 			Name: "specialty_code_empty",
 			Params: education.SpecialityParams{
+				ID:       uuid.NewString(),
 				Code:     "",
 				Title:    "Test education",
 				UgsnCode: "01.00.00",
@@ -39,6 +42,7 @@ func TestNewSpeciality(t *testing.T) {
 		{
 			Name: "specialty_title_empty",
 			Params: education.SpecialityParams{
+				ID:       uuid.NewString(),
 				Code:     "01.01.01",
 				Title:    "",
 				UgsnCode: "01.00.00",
@@ -49,6 +53,7 @@ func TestNewSpeciality(t *testing.T) {
 		{
 			Name: "specialty_code_parse_err",
 			Params: education.SpecialityParams{
+				ID:       uuid.NewString(),
 				Code:     "010101",
 				Title:    "Test education",
 				UgsnCode: "01.00.00",
@@ -59,6 +64,7 @@ func TestNewSpeciality(t *testing.T) {
 		{
 			Name: "ugsn_code_parse_err",
 			Params: education.SpecialityParams{
+				ID:       uuid.NewString(),
 				Code:     "01.01.01",
 				Title:    "Test education",
 				UgsnCode: "0100.00",
@@ -69,6 +75,7 @@ func TestNewSpeciality(t *testing.T) {
 		{
 			Name: "ugsn_code_is_empty",
 			Params: education.SpecialityParams{
+				ID:       uuid.NewString(),
 				Code:     "01.01.01",
 				Title:    "Test education",
 				UgsnCode: "",
@@ -79,6 +86,7 @@ func TestNewSpeciality(t *testing.T) {
 		{
 			Name: "code_is_not_match",
 			Params: education.SpecialityParams{
+				ID:       uuid.NewString(),
 				Code:     "01.01.01",
 				Title:    "Test education",
 				UgsnCode: "02.00.00",
@@ -89,6 +97,7 @@ func TestNewSpeciality(t *testing.T) {
 		{
 			Name: "code_code_starts_with_two_zeros",
 			Params: education.SpecialityParams{
+				ID:       uuid.NewString(),
 				Code:     "00.01.01",
 				Title:    "Test education",
 				UgsnCode: "02.00.00",
@@ -99,12 +108,23 @@ func TestNewSpeciality(t *testing.T) {
 		{
 			Name: "ugsn_code_code_starts_with_two_zeros",
 			Params: education.SpecialityParams{
+				ID:       uuid.NewString(),
 				Code:     "01.01.01",
 				Title:    "Test education",
 				UgsnCode: "00.00.00",
 			},
 			ShouldBeErr: true,
 			ExpectedErr: education.ErrCodeIsPrefixTwoZero,
+		},
+		{
+			Name: "id_is_empty",
+			Params: education.SpecialityParams{
+				Code:     "01.01.01",
+				Title:    "Test education",
+				UgsnCode: "00.00.00",
+			},
+			ShouldBeErr: true,
+			ExpectedErr: education.ErrSpecialtyIdIsEmpty,
 		},
 	}
 
@@ -133,10 +153,6 @@ func TestNewSpeciality(t *testing.T) {
 
 				t.Run("title", func(t *testing.T) {
 					require.Equal(t, c.Params.Title, s.Title())
-				})
-
-				t.Run("ugsnCode", func(t *testing.T) {
-					require.Equal(t, c.Params.UgsnCode, s.UgsnCode())
 				})
 
 				t.Run("specialities", func(t *testing.T) {

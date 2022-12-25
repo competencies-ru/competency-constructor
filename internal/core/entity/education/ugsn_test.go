@@ -1,6 +1,7 @@
 package education_test
 
 import (
+	"github.com/google/uuid"
 	"testing"
 
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
@@ -19,6 +20,7 @@ func TestNewUgsn(t *testing.T) {
 		{
 			Name: "without_error",
 			Params: education.UgsnParams{
+				ID:    uuid.NewString(),
 				Code:  "01.00.00",
 				Title: "Test Ugsn",
 			},
@@ -28,6 +30,7 @@ func TestNewUgsn(t *testing.T) {
 		{
 			Name: "ugsn_code_empty",
 			Params: education.UgsnParams{
+				ID:    uuid.NewString(),
 				Code:  "",
 				Title: "Test Ugsn",
 			},
@@ -37,6 +40,7 @@ func TestNewUgsn(t *testing.T) {
 		{
 			Name: "ugsn_title_empty",
 			Params: education.UgsnParams{
+				ID:    uuid.NewString(),
 				Code:  "01.00.00",
 				Title: "",
 			},
@@ -46,6 +50,7 @@ func TestNewUgsn(t *testing.T) {
 		{
 			Name: "ugsn_code_parse_err",
 			Params: education.UgsnParams{
+				ID:    uuid.NewString(),
 				Code:  "010000",
 				Title: "Test Ugsn",
 			},
@@ -55,11 +60,21 @@ func TestNewUgsn(t *testing.T) {
 		{
 			Name: "ugsn_code_code_starts_with_two_zeros",
 			Params: education.UgsnParams{
+				ID:    uuid.NewString(),
 				Code:  "00.00.00",
 				Title: "Test Ugsn",
 			},
 			ShouldBeErr: true,
 			ExpectedErr: education.ErrCodeIsPrefixTwoZero,
+		},
+		{
+			Name: "ugsn_code_code_starts_with_two_zeros",
+			Params: education.UgsnParams{
+				Code:  "00.00.00",
+				Title: "Test Ugsn",
+			},
+			ShouldBeErr: true,
+			ExpectedErr: education.ErrUgsnIDIsEmpty,
 		},
 	}
 

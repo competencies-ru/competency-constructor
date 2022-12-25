@@ -20,6 +20,7 @@ func TestNewProgram(t *testing.T) {
 		{
 			Name: "without_error",
 			Params: education.ProgramParams{
+				ID:            uuid.NewString(),
 				Code:          "29.40.31-25",
 				Title:         "Test Program",
 				SpecialtyCode: "29.40.31",
@@ -28,8 +29,9 @@ func TestNewProgram(t *testing.T) {
 			ExpectedErr: nil,
 		},
 		{
-			Name: "id_is_empty",
+			Name: "code_is_empty",
 			Params: education.ProgramParams{
+				ID:            uuid.NewString(),
 				Code:          "",
 				Title:         "Test Program",
 				SpecialtyCode: "01.10.10",
@@ -40,7 +42,8 @@ func TestNewProgram(t *testing.T) {
 		{
 			Name: "title_is_empty",
 			Params: education.ProgramParams{
-				Code:          uuid.NewString(),
+				ID:            uuid.NewString(),
+				Code:          "01.10.10-01",
 				Title:         "",
 				SpecialtyCode: "01.10.10",
 			},
@@ -50,7 +53,8 @@ func TestNewProgram(t *testing.T) {
 		{
 			Name: "specialty_code_is_empty",
 			Params: education.ProgramParams{
-				Code:          uuid.NewString(),
+				ID:            uuid.NewString(),
+				Code:          "01.10.10-01",
 				Title:         "test",
 				SpecialtyCode: "",
 			},
@@ -60,7 +64,8 @@ func TestNewProgram(t *testing.T) {
 		{
 			Name: "specialty_code_parse_error",
 			Params: education.ProgramParams{
-				Code:          uuid.NewString(),
+				ID:            uuid.NewString(),
+				Code:          "01.10.10-01",
 				Title:         "test",
 				SpecialtyCode: "01.00.00",
 			},
@@ -70,7 +75,18 @@ func TestNewProgram(t *testing.T) {
 		{
 			Name: "specialty_code_is_two_zero",
 			Params: education.ProgramParams{
-				Code:          uuid.NewString(),
+				ID:            uuid.NewString(),
+				Code:          "01.10.10-01",
+				Title:         "test",
+				SpecialtyCode: "00.10.00",
+			},
+			ShouldBeErr: true,
+			ExpectedErr: education.ErrCodeIsPrefixTwoZero,
+		},
+		{
+			Name: "id_is_empty",
+			Params: education.ProgramParams{
+				Code:          "01.10.10-01",
 				Title:         "test",
 				SpecialtyCode: "00.10.00",
 			},
@@ -104,10 +120,6 @@ func TestNewProgram(t *testing.T) {
 
 				t.Run("title", func(t *testing.T) {
 					require.Equal(t, c.Params.Title, s.Title())
-				})
-
-				t.Run("ugsnCode", func(t *testing.T) {
-					require.Equal(t, c.Params.SpecialtyCode, s.SpecialityCode())
 				})
 			})
 		})

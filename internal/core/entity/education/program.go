@@ -13,12 +13,13 @@ var (
 
 type (
 	Program struct {
-		code           string
-		title          string
-		specialityCode string
+		id    string
+		code  string
+		title string
 	}
 
 	ProgramParams struct {
+		ID            string
 		Code          string
 		Title         string
 		SpecialtyCode string
@@ -46,7 +47,7 @@ func NewProgram(param ProgramParams) (*Program, error) {
 		return nil, err
 	}
 
-	return &Program{code: param.Code, title: param.Title, specialityCode: param.SpecialtyCode}, nil
+	return &Program{code: param.Code, title: param.Title}, nil
 }
 
 func (p *Program) Title() string {
@@ -55,10 +56,6 @@ func (p *Program) Title() string {
 
 func (p *Program) Code() string {
 	return p.code
-}
-
-func (p *Program) SpecialityCode() string {
-	return p.specialityCode
 }
 
 func (p *Program) Rename(title string) error {

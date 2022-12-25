@@ -4,6 +4,7 @@ import "github.com/pkg/errors"
 
 var (
 	ErrUgsnTitleIsEmpty       = errors.New("ugsn: title is empty")
+	ErrUgsnIDIsEmpty          = errors.New("ugsn: id is empty")
 	ErrUgsnCodeIsEmpty        = errors.New("ugsn: code is empty")
 	ErrUgsnSpecialityNotFound = errors.New("ugsn: education not found")
 	ErrUgsnTitleMaxLenTitle   = errors.New("ugsn: title is more max len or empty")
@@ -27,6 +28,8 @@ type (
 	// Example: 09.00.00
 	// Информатика и вычислительная техника.
 	Ugsn struct {
+		id string
+
 		// code is a unique key having the format ХХ.00.00
 		// where XX is any two number.
 		//
@@ -40,12 +43,17 @@ type (
 	}
 
 	UgsnParams struct {
+		ID    string
 		Code  string
 		Title string
 	}
 )
 
 func NewUgsn(param UgsnParams) (*Ugsn, error) {
+	if param.ID == "" {
+		return nil, ErrUgsnIDIsEmpty
+	}
+
 	if param.Title == "" {
 		return nil, ErrUgsnTitleIsEmpty
 	}
@@ -59,6 +67,7 @@ func NewUgsn(param UgsnParams) (*Ugsn, error) {
 	}
 
 	return &Ugsn{
+		id:           param.ID,
 		title:        param.Title,
 		code:         param.Code,
 		specialities: make(map[string]*Speciality),

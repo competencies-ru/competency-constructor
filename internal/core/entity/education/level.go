@@ -7,6 +7,11 @@ var (
 	ErrLevelTitleIsEmpty = errors.New("level: title is empty")
 )
 
+func IsInvalidLevelParametersError(err error) bool {
+	return errors.Is(err, ErrLevelIDIsEmpty) ||
+		errors.Is(err, ErrLevelTitleIsEmpty)
+}
+
 type (
 	// Level represents the level of the educational program.
 	Level struct {
@@ -59,4 +64,15 @@ func (l *Level) AddUgsn(param UgsnParams) error {
 	l.ugsn[ugsn.Code()] = ugsn
 
 	return nil
+}
+
+func (l *Level) Ugsn() []*Ugsn {
+
+	result := make([]*Ugsn, 0, len(l.ugsn))
+	for _, ugsn := range l.ugsn {
+		tmp := ugsn
+		result = append(result, tmp)
+	}
+
+	return result
 }
