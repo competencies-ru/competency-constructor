@@ -64,6 +64,10 @@ func NewProgram(param ProgramParams) (*Program, error) {
 	return &Program{id: param.ID, code: param.Code, title: param.Title}, nil
 }
 
+func (p *Program) ID() string {
+	return p.id
+}
+
 func (p *Program) Title() string {
 	return p.title
 }

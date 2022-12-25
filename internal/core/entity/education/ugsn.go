@@ -82,6 +82,10 @@ func (e *Ugsn) Code() string {
 	return e.code
 }
 
+func (e *Ugsn) ID() string {
+	return e.id
+}
+
 func (e *Ugsn) AddSpeciality(s SpecialityParams) error {
 	speciality, err := NewSpeciality(s)
 	if err != nil {
