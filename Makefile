@@ -25,7 +25,7 @@ export TEST_DB_NAME=test
 export TEST_DB_CONTAINER_NAME=test-db
 
 run-test-db:
-	docker run --rm -d -p 27019:27017 --name $$TEST_DB_CONTAINER_NAME -e MONGODB_DATABASE=$$TEST_DB_NAME mongo:4.4-bionic
+	docker run --rm -d -p 27019:27017 --name $$TEST_DB_CONTAINER_NAME -e MONGODB_DATABASE=$$TEST_DB_NAME mongo:latest
 
 stop-test-db:
 	docker stop $$TEST_DB_CONTAINER_NAME
