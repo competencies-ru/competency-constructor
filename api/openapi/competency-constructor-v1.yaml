@@ -277,7 +277,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}:
+  /levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}:
     get:
       tags:
         - specialties
@@ -356,7 +356,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs:
+  /levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs:
     get:
       tags:
         - programs
@@ -446,7 +446,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs/{programCode}:
+  /levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs/{programCode}:
     delete:
       tags:
         - programs

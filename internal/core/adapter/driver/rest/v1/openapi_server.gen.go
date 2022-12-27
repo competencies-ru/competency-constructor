@@ -13,21 +13,6 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// delete specialty by code ugsn and level id
-	// (DELETE /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode})
-	DeleteSpecialty(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
-	// return specific ugsn by level id
-	// (GET /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode})
-	GetSpecificSpecialty(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
-	// return programs
-	// (GET /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs)
-	GetPrograms(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
-	// create programs
-	// (POST /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs)
-	AddPrograms(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
-	// delete specialty by code ugsn and level id
-	// (DELETE /level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs/{programCode})
-	DeleteProgram(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string, programCode string)
 	// Returns level of the educational program.
 	// (GET /levels)
 	GetLevels(w http.ResponseWriter, r *http.Request)
@@ -55,6 +40,21 @@ type ServerInterface interface {
 	// add specialties by level id and ugsn code
 	// (POST /levels/{levelId}/ugsn/{ugsnCode}/specialties)
 	AddSpecialties(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string)
+	// delete specialty by code ugsn and level id
+	// (DELETE /levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode})
+	DeleteSpecialty(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
+	// return specific ugsn by level id
+	// (GET /levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode})
+	GetSpecificSpecialty(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
+	// return programs
+	// (GET /levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs)
+	GetPrograms(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
+	// create programs
+	// (POST /levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs)
+	AddPrograms(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string)
+	// delete specialty by code ugsn and level id
+	// (DELETE /levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs/{programCode})
+	DeleteProgram(w http.ResponseWriter, r *http.Request, levelId string, ugsnCode string, specialtyCode string, programCode string)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -65,235 +65,6 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
-
-// DeleteSpecialty operation middleware
-func (siw *ServerInterfaceWrapper) DeleteSpecialty(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-
-	var err error
-
-	// ------------- Path parameter "levelId" -------------
-	var levelId string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "levelId", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "ugsnCode" -------------
-	var ugsnCode string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "ugsnCode", runtime.ParamLocationPath, chi.URLParam(r, "ugsnCode"), &ugsnCode)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ugsnCode", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "specialtyCode" -------------
-	var specialtyCode string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "specialtyCode", runtime.ParamLocationPath, chi.URLParam(r, "specialtyCode"), &specialtyCode)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "specialtyCode", Err: err})
-		return
-	}
-
-	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.DeleteSpecialty(w, r, levelId, ugsnCode, specialtyCode)
-	})
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r.WithContext(ctx))
-}
-
-// GetSpecificSpecialty operation middleware
-func (siw *ServerInterfaceWrapper) GetSpecificSpecialty(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-
-	var err error
-
-	// ------------- Path parameter "levelId" -------------
-	var levelId string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "levelId", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "ugsnCode" -------------
-	var ugsnCode string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "ugsnCode", runtime.ParamLocationPath, chi.URLParam(r, "ugsnCode"), &ugsnCode)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ugsnCode", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "specialtyCode" -------------
-	var specialtyCode string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "specialtyCode", runtime.ParamLocationPath, chi.URLParam(r, "specialtyCode"), &specialtyCode)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "specialtyCode", Err: err})
-		return
-	}
-
-	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetSpecificSpecialty(w, r, levelId, ugsnCode, specialtyCode)
-	})
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r.WithContext(ctx))
-}
-
-// GetPrograms operation middleware
-func (siw *ServerInterfaceWrapper) GetPrograms(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-
-	var err error
-
-	// ------------- Path parameter "levelId" -------------
-	var levelId string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "levelId", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "ugsnCode" -------------
-	var ugsnCode string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "ugsnCode", runtime.ParamLocationPath, chi.URLParam(r, "ugsnCode"), &ugsnCode)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ugsnCode", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "specialtyCode" -------------
-	var specialtyCode string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "specialtyCode", runtime.ParamLocationPath, chi.URLParam(r, "specialtyCode"), &specialtyCode)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "specialtyCode", Err: err})
-		return
-	}
-
-	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetPrograms(w, r, levelId, ugsnCode, specialtyCode)
-	})
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r.WithContext(ctx))
-}
-
-// AddPrograms operation middleware
-func (siw *ServerInterfaceWrapper) AddPrograms(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-
-	var err error
-
-	// ------------- Path parameter "levelId" -------------
-	var levelId string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "levelId", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "ugsnCode" -------------
-	var ugsnCode string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "ugsnCode", runtime.ParamLocationPath, chi.URLParam(r, "ugsnCode"), &ugsnCode)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ugsnCode", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "specialtyCode" -------------
-	var specialtyCode string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "specialtyCode", runtime.ParamLocationPath, chi.URLParam(r, "specialtyCode"), &specialtyCode)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "specialtyCode", Err: err})
-		return
-	}
-
-	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.AddPrograms(w, r, levelId, ugsnCode, specialtyCode)
-	})
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r.WithContext(ctx))
-}
-
-// DeleteProgram operation middleware
-func (siw *ServerInterfaceWrapper) DeleteProgram(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-
-	var err error
-
-	// ------------- Path parameter "levelId" -------------
-	var levelId string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "levelId", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "ugsnCode" -------------
-	var ugsnCode string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "ugsnCode", runtime.ParamLocationPath, chi.URLParam(r, "ugsnCode"), &ugsnCode)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ugsnCode", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "specialtyCode" -------------
-	var specialtyCode string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "specialtyCode", runtime.ParamLocationPath, chi.URLParam(r, "specialtyCode"), &specialtyCode)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "specialtyCode", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "programCode" -------------
-	var programCode string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "programCode", runtime.ParamLocationPath, chi.URLParam(r, "programCode"), &programCode)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "programCode", Err: err})
-		return
-	}
-
-	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.DeleteProgram(w, r, levelId, ugsnCode, specialtyCode, programCode)
-	})
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r.WithContext(ctx))
-}
 
 // GetLevels operation middleware
 func (siw *ServerInterfaceWrapper) GetLevels(w http.ResponseWriter, r *http.Request) {
@@ -543,6 +314,235 @@ func (siw *ServerInterfaceWrapper) AddSpecialties(w http.ResponseWriter, r *http
 	handler.ServeHTTP(w, r.WithContext(ctx))
 }
 
+// DeleteSpecialty operation middleware
+func (siw *ServerInterfaceWrapper) DeleteSpecialty(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "levelId" -------------
+	var levelId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "levelId", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "ugsnCode" -------------
+	var ugsnCode string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "ugsnCode", runtime.ParamLocationPath, chi.URLParam(r, "ugsnCode"), &ugsnCode)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ugsnCode", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "specialtyCode" -------------
+	var specialtyCode string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "specialtyCode", runtime.ParamLocationPath, chi.URLParam(r, "specialtyCode"), &specialtyCode)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "specialtyCode", Err: err})
+		return
+	}
+
+	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteSpecialty(w, r, levelId, ugsnCode, specialtyCode)
+	})
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
+
+// GetSpecificSpecialty operation middleware
+func (siw *ServerInterfaceWrapper) GetSpecificSpecialty(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "levelId" -------------
+	var levelId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "levelId", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "ugsnCode" -------------
+	var ugsnCode string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "ugsnCode", runtime.ParamLocationPath, chi.URLParam(r, "ugsnCode"), &ugsnCode)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ugsnCode", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "specialtyCode" -------------
+	var specialtyCode string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "specialtyCode", runtime.ParamLocationPath, chi.URLParam(r, "specialtyCode"), &specialtyCode)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "specialtyCode", Err: err})
+		return
+	}
+
+	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetSpecificSpecialty(w, r, levelId, ugsnCode, specialtyCode)
+	})
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
+
+// GetPrograms operation middleware
+func (siw *ServerInterfaceWrapper) GetPrograms(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "levelId" -------------
+	var levelId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "levelId", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "ugsnCode" -------------
+	var ugsnCode string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "ugsnCode", runtime.ParamLocationPath, chi.URLParam(r, "ugsnCode"), &ugsnCode)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ugsnCode", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "specialtyCode" -------------
+	var specialtyCode string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "specialtyCode", runtime.ParamLocationPath, chi.URLParam(r, "specialtyCode"), &specialtyCode)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "specialtyCode", Err: err})
+		return
+	}
+
+	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetPrograms(w, r, levelId, ugsnCode, specialtyCode)
+	})
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
+
+// AddPrograms operation middleware
+func (siw *ServerInterfaceWrapper) AddPrograms(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "levelId" -------------
+	var levelId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "levelId", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "ugsnCode" -------------
+	var ugsnCode string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "ugsnCode", runtime.ParamLocationPath, chi.URLParam(r, "ugsnCode"), &ugsnCode)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ugsnCode", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "specialtyCode" -------------
+	var specialtyCode string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "specialtyCode", runtime.ParamLocationPath, chi.URLParam(r, "specialtyCode"), &specialtyCode)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "specialtyCode", Err: err})
+		return
+	}
+
+	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.AddPrograms(w, r, levelId, ugsnCode, specialtyCode)
+	})
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
+
+// DeleteProgram operation middleware
+func (siw *ServerInterfaceWrapper) DeleteProgram(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "levelId" -------------
+	var levelId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "levelId", runtime.ParamLocationPath, chi.URLParam(r, "levelId"), &levelId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "levelId", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "ugsnCode" -------------
+	var ugsnCode string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "ugsnCode", runtime.ParamLocationPath, chi.URLParam(r, "ugsnCode"), &ugsnCode)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ugsnCode", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "specialtyCode" -------------
+	var specialtyCode string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "specialtyCode", runtime.ParamLocationPath, chi.URLParam(r, "specialtyCode"), &specialtyCode)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "specialtyCode", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "programCode" -------------
+	var programCode string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "programCode", runtime.ParamLocationPath, chi.URLParam(r, "programCode"), &programCode)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "programCode", Err: err})
+		return
+	}
+
+	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteProgram(w, r, levelId, ugsnCode, specialtyCode, programCode)
+	})
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
+
 type UnescapedCookieParamError struct {
 	ParamName string
 	Err       error
@@ -657,21 +657,6 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	}
 
 	r.Group(func(r chi.Router) {
-		r.Delete(options.BaseURL+"/level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}", wrapper.DeleteSpecialty)
-	})
-	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}", wrapper.GetSpecificSpecialty)
-	})
-	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs", wrapper.GetPrograms)
-	})
-	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs", wrapper.AddPrograms)
-	})
-	r.Group(func(r chi.Router) {
-		r.Delete(options.BaseURL+"/level/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs/{programCode}", wrapper.DeleteProgram)
-	})
-	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/levels", wrapper.GetLevels)
 	})
 	r.Group(func(r chi.Router) {
@@ -697,6 +682,21 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/levels/{levelId}/ugsn/{ugsnCode}/specialties", wrapper.AddSpecialties)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}", wrapper.DeleteSpecialty)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}", wrapper.GetSpecificSpecialty)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs", wrapper.GetPrograms)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs", wrapper.AddPrograms)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs/{programCode}", wrapper.DeleteProgram)
 	})
 
 	return r

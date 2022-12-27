@@ -103,17 +103,14 @@ type UgsnResponse struct {
 	Title string `json:"title"`
 }
 
-// AddProgramsJSONBody defines parameters for AddPrograms.
-type AddProgramsJSONBody = []CreateProgramRequest
-
 // AddUgsnJSONBody defines parameters for AddUgsn.
 type AddUgsnJSONBody = []CreateUgsnRequest
 
 // AddSpecialtiesJSONBody defines parameters for AddSpecialties.
 type AddSpecialtiesJSONBody = []CreateSpecialtyRequest
 
-// AddProgramsJSONRequestBody defines body for AddPrograms for application/json ContentType.
-type AddProgramsJSONRequestBody = AddProgramsJSONBody
+// AddProgramsJSONBody defines parameters for AddPrograms.
+type AddProgramsJSONBody = []CreateProgramRequest
 
 // CreateLevelJSONRequestBody defines body for CreateLevel for application/json ContentType.
 type CreateLevelJSONRequestBody = CreateLevelRequest
@@ -123,3 +120,6 @@ type AddUgsnJSONRequestBody = AddUgsnJSONBody
 
 // AddSpecialtiesJSONRequestBody defines body for AddSpecialties for application/json ContentType.
 type AddSpecialtiesJSONRequestBody = AddSpecialtiesJSONBody
+
+// AddProgramsJSONRequestBody defines body for AddPrograms for application/json ContentType.
+type AddProgramsJSONRequestBody = AddProgramsJSONBody
