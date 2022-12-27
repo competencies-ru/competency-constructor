@@ -102,7 +102,7 @@ func (l *Level) AllUgsn() []*Ugsn {
 	return result
 }
 
-// Specialty methods
+// Specialty methods.
 func (l *Level) Specialty(ucode, scode string) (*Speciality, error) {
 	ugsn, err := l.Ugsn(ucode)
 	if err != nil {
@@ -130,7 +130,7 @@ func (l *Level) DeleteSpecialty(ucode, scode string) error {
 	return ugsn.deleteSpecialty(scode)
 }
 
-// Program methods
+// Program methods.
 func (l *Level) Program(ucode, scode, pcode string) (*Program, error) {
 	specialty, err := l.Specialty(ucode, scode)
 	if err != nil {

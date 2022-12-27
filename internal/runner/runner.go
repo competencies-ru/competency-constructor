@@ -7,6 +7,10 @@ import (
 	"net/http"
 	"sync"
 
+	mongoRepo "github.com/competencies-ru/competency-constructor/internal/core/adapter/driven/persistence/mongodb"
+	"github.com/competencies-ru/competency-constructor/internal/core/app/command"
+	"github.com/competencies-ru/competency-constructor/internal/core/app/query"
+
 	"github.com/competencies-ru/competency-constructor/pkg/database/mongodb"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/multierr"
@@ -37,18 +41,20 @@ type singletonZapLogger struct {
 }
 
 type persistenceContext struct {
-	ugsnRepo service.UgsnRepository
+	levelRepo              service.LevelRepository
+	levelsReadModel        query.LevelReadModels
+	specificLevelReadModel query.SpecificLevelReadModel
 }
 
 type Runner struct {
 	singletonZapLogger
 	singletonMongodb
 
-	logger  service.Logger
-	config  *config.Config
-	server  *server.Server
-	app     *app.Application
-	pcontex persistenceContext
+	logger      service.Logger
+	config      *config.Config
+	server      *server.Server
+	app         *app.Application
+	persistence persistenceContext
 }
 
 func New(path string) *Runner {
@@ -75,7 +81,19 @@ func (r *Runner) initConfig(path string) {
 }
 
 func (r *Runner) initPersistent() {
-	_ = r.mongo()
+	database := r.mongo()
+	args := []interface{}{"db", "mongo"}
+
+	levelRepo := mongoRepo.NewLevelRepository(database)
+
+	r.persistence.levelRepo = levelRepo
+	r.logger.Info("Level repository initialization completed", args...)
+
+	r.persistence.levelsReadModel = levelRepo
+	r.logger.Info("Levels read model repository initialization completed", args...)
+
+	r.persistence.specificLevelReadModel = levelRepo
+	r.logger.Info("Level specific model repository initialization completed", args...)
 }
 
 func (r *Runner) initLogger() {
@@ -106,8 +124,15 @@ func (r *Runner) initServer() {
 
 func (r *Runner) initApplication() {
 	r.app = &app.Application{
-		Services: app.Services{
-			UgsnService: service.NewUgsnHandler(r.pcontex.ugsnRepo),
+		Commands: app.Commands{
+			CreateLevel:    command.NewCreateLevelHandler(r.persistence.levelRepo),
+			AddUgsn:        command.NewAddUgsnHandler(r.persistence.levelRepo),
+			AddSpecialties: command.NewAddSpecialtiesHandler(r.persistence.levelRepo),
+			AddPrograms:    command.NewAddProgramsHandler(r.persistence.levelRepo),
+		},
+		Queries: app.Queries{
+			FindLevels:        query.NewFindLevelsHandler(r.persistence.levelsReadModel),
+			GetSpecificLevels: query.NewSpecificLevelHandler(r.persistence.specificLevelReadModel),
 		},
 	}
 }

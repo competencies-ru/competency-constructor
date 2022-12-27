@@ -19,3 +19,10 @@ type (
 
 	LevelUpdate func(ctx context.Context, level *education.Level) (*education.Level, error)
 )
+
+func IsNotFoundLevelEntities(err error) bool {
+	return errors.Is(err, ErrLevelNotFound) ||
+		errors.Is(err, education.ErrLevelUgsnNotFound) ||
+		errors.Is(err, education.ErrUgsnSpecialityNotFound) ||
+		errors.Is(err, education.ErrSpecialityProgramNotFound)
+}
