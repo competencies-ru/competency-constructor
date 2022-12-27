@@ -6,7 +6,7 @@ var (
 	ErrUgsnTitleIsEmpty       = errors.New("ugsn: title is empty")
 	ErrUgsnIDIsEmpty          = errors.New("ugsn: id is empty")
 	ErrUgsnCodeIsEmpty        = errors.New("ugsn: code is empty")
-	ErrUgsnSpecialityNotFound = errors.New("ugsn: education not found")
+	ErrUgsnSpecialityNotFound = errors.New("specialty not found")
 	ErrUgsnTitleMaxLenTitle   = errors.New("ugsn: title is more max len or empty")
 )
 
@@ -86,7 +86,7 @@ func (e *Ugsn) ID() string {
 	return e.id
 }
 
-func (e *Ugsn) AddSpeciality(s SpecialityParams) error {
+func (e *Ugsn) addSpeciality(s SpecialityParams) error {
 	speciality, err := NewSpeciality(s)
 	if err != nil {
 		return errors.Wrapf(err, "adding education by code: %s", s.Code)
@@ -99,7 +99,7 @@ func (e *Ugsn) AddSpeciality(s SpecialityParams) error {
 	return nil
 }
 
-func (e *Ugsn) Speciality(code string) (*Speciality, error) {
+func (e *Ugsn) speciality(code string) (*Speciality, error) {
 	s, ok := e.specialities[code]
 	if !ok {
 		return nil, errors.Wrapf(
@@ -129,11 +129,11 @@ func (e *Ugsn) Rename(newTitle string) error {
 	return nil
 }
 
-func (e *Ugsn) DeleteSpecialty(code string) error {
+func (e *Ugsn) deleteSpecialty(code string) error {
 	if _, ok := e.specialities[code]; !ok {
 		return errors.Wrapf(
 			ErrUgsnSpecialityNotFound,
-			"get education by code: %s", code)
+			"get specialties by code: %s", code)
 	}
 
 	delete(e.specialities, code)

@@ -15,12 +15,21 @@ var (
 	ErrSpecialityProgramNotFound = errors.New("speciality: program not found")
 )
 
+func IsInvalidSpecialtyParametersError(err error) bool {
+	return errors.Is(err, ErrSpecialtyIDIsEmpty) ||
+		errors.Is(err, ErrSpecialityTitleIsEmpty) ||
+		errors.Is(err, ErrSpecialityCodeIsEmpty) ||
+		errors.Is(err, ErrSpecialityUgsnCodeIsEmpty) ||
+		errors.Is(err, ErrSpecialityNotMatchCode) ||
+		isInvalidCodeError(err)
+}
+
 type (
 	Speciality struct {
 		id    string
 		code  string
 		title string
-		// key programID, value pointer Program
+		// key programCode, value pointer Program
 		programs map[string]*Program
 	}
 
@@ -81,7 +90,7 @@ func (s *Speciality) Code() string {
 	return s.code
 }
 
-func (s *Speciality) AddProgram(p ProgramParams) error {
+func (s *Speciality) addProgram(p ProgramParams) error {
 	program, err := NewProgram(p)
 	if err != nil {
 		return err
@@ -94,15 +103,27 @@ func (s *Speciality) AddProgram(p ProgramParams) error {
 	return nil
 }
 
+func (s *Speciality) deleteProgram(pcode string) error {
+	if _, ok := s.programs[pcode]; !ok {
+		return errors.Wrapf(
+			ErrUgsnSpecialityNotFound,
+			"get program by code: %s", pcode)
+	}
+
+	delete(s.programs, pcode)
+
+	return nil
+}
+
 func validateCodes(scode string, ucode string) bool {
 	return strings.Contains(scode[:2], ucode[:2])
 }
 
-func (s *Speciality) Program(id string) (*Program, error) {
-	p, ok := s.programs[id]
+func (s *Speciality) program(code string) (*Program, error) {
+	p, ok := s.programs[code]
 
 	if !ok {
-		return nil, errors.Wrap(ErrSpecialityProgramNotFound, id)
+		return nil, errors.Wrapf(ErrSpecialityProgramNotFound, "get program by code %s", code)
 	}
 
 	return p, nil
