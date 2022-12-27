@@ -51,6 +51,30 @@ func addUgsn(level *education.Level, document []ugsnDocument) {
 			Code:  v.Code,
 			Title: v.Title,
 		})
+
+		addSpecialty(level, v.Code, v.Specialties)
+	}
+}
+
+func addSpecialty(level *education.Level, ucode string, documents []specialtiesDocument) {
+	for _, v := range documents {
+		_ = level.AddSpecialty(ucode, education.SpecialityParams{
+			ID:    v.ID,
+			Code:  v.Code,
+			Title: v.Title,
+		})
+
+		addProgram(level, ucode, v.Code, v.Programs)
+	}
+}
+
+func addProgram(level *education.Level, ucode string, scode string, documents []programsDocument) {
+	for _, v := range documents {
+		_ = level.AddProgram(ucode, scode, education.ProgramParams{
+			ID:    v.ID,
+			Code:  v.Code,
+			Title: v.Title,
+		})
 	}
 }
 
