@@ -104,13 +104,13 @@ type UgsnResponse struct {
 }
 
 // AddProgramsJSONBody defines parameters for AddPrograms.
-type AddProgramsJSONBody = interface{}
+type AddProgramsJSONBody = []CreateProgramRequest
 
 // AddUgsnJSONBody defines parameters for AddUgsn.
-type AddUgsnJSONBody = interface{}
+type AddUgsnJSONBody = []CreateUgsnRequest
 
 // AddSpecialtiesJSONBody defines parameters for AddSpecialties.
-type AddSpecialtiesJSONBody = interface{}
+type AddSpecialtiesJSONBody = []CreateSpecialtyRequest
 
 // AddProgramsJSONRequestBody defines body for AddPrograms for application/json ContentType.
 type AddProgramsJSONRequestBody = AddProgramsJSONBody

@@ -18,6 +18,7 @@ paths:
           content:
             application/json:
               schema:
+                type: array
                 items:
                   $ref: "#/components/schemas/LevelResponse"
     post:
@@ -121,6 +122,7 @@ paths:
         content:
           application/json:
             schema:
+              type: array
               items:
                 $ref: "#/components/schemas/CreateUgsnRequest"
       responses:
@@ -262,6 +264,7 @@ paths:
         content:
           application/json:
             schema:
+              type: array
               items:
                 $ref: "#/components/schemas/CreateSpecialtyRequest"
       responses:
@@ -430,6 +433,7 @@ paths:
         content:
           application/json:
             schema:
+              type: array
               items:
                 $ref: "#/components/schemas/CreateProgramRequest"
       responses:
