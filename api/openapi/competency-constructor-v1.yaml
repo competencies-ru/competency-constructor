@@ -96,7 +96,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UgsnResponse"
+                type: array
+                items:
+                  $ref: "#/components/schemas/UgsnResponse"
         404:
           description: Level with such ID not found.
           content:
