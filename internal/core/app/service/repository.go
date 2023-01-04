@@ -8,7 +8,11 @@ import (
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 )
 
-var ErrLevelNotFound = errors.New("level not found")
+var (
+	ErrLevelNotFound       = errors.New("level not found")
+	ErrUgsnNotFound        = errors.New("ugsn not found")
+	ErrSpecialtiesNotFound = errors.New("specialties not found")
+)
 
 type (
 	LevelRepository interface {
@@ -22,7 +26,6 @@ type (
 
 func IsNotFoundLevelEntities(err error) bool {
 	return errors.Is(err, ErrLevelNotFound) ||
-		errors.Is(err, education.ErrLevelUgsnNotFound) ||
-		errors.Is(err, education.ErrUgsnSpecialityNotFound) ||
-		errors.Is(err, education.ErrSpecialityProgramNotFound)
+		errors.Is(err, ErrUgsnNotFound) ||
+		errors.Is(err, ErrSpecialtiesNotFound)
 }
