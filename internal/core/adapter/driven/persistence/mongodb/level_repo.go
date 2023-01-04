@@ -125,3 +125,66 @@ func (r *LevelRepository) getLevelDocument(
 
 	return document, nil
 }
+
+func (r *LevelRepository) FindAllUgsn(ctx context.Context, levelID string) ([]query.UgsnModel, error) {
+	var document levelDocument
+
+	filter := makeFilterUgsn(levelID)
+
+	cursor, err := r.level.Aggregate(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	if !cursor.Next(ctx) {
+		return nil, service.ErrLevelNotFound
+	}
+
+	if err := cursor.Decode(&document); err != nil {
+		return nil, err
+	}
+
+	return newUgsnModelView(document.Ugsn), nil
+}
+
+func (r *LevelRepository) FindAllSpecialties(ctx context.Context, uid string) ([]query.SpecialtyModel, error) {
+	var document ugsnDocument
+
+	filter := makeFilterSpecialties(uid)
+
+	cursor, err := r.level.Aggregate(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	if !cursor.Next(ctx) {
+		return nil, service.ErrUgsnNotFound
+	}
+
+	if err := cursor.Decode(&document); err != nil {
+		return nil, err
+	}
+
+	return newSpecialtiesModelViewWithDocuments(document.Specialties), nil
+}
+
+func (r *LevelRepository) FindAllPrograms(ctx context.Context, sid string) ([]query.ProgramModel, error) {
+	var document specialtiesDocument
+
+	filter := makeFilterPrograms(sid)
+
+	cursor, err := r.level.Aggregate(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	if !cursor.Next(ctx) {
+		return nil, service.ErrSpecialtiesNotFound
+	}
+
+	if err := cursor.Decode(&document); err != nil {
+		return nil, err
+	}
+
+	return newProgramModelViewWithDocuments(document.Programs), nil
+}

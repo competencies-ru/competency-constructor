@@ -59,9 +59,10 @@ func addUgsn(level *education.Level, document []ugsnDocument) {
 func addSpecialty(level *education.Level, ucode string, documents []specialtiesDocument) {
 	for _, v := range documents {
 		_ = level.AddSpecialty(ucode, education.SpecialityParams{
-			ID:    v.ID,
-			Code:  v.Code,
-			Title: v.Title,
+			ID:       v.ID,
+			Code:     v.Code,
+			Title:    v.Title,
+			UgsnCode: ucode,
 		})
 
 		addProgram(level, ucode, v.Code, v.Programs)
@@ -71,9 +72,10 @@ func addSpecialty(level *education.Level, ucode string, documents []specialtiesD
 func addProgram(level *education.Level, ucode string, scode string, documents []programsDocument) {
 	for _, v := range documents {
 		_ = level.AddProgram(ucode, scode, education.ProgramParams{
-			ID:    v.ID,
-			Code:  v.Code,
-			Title: v.Title,
+			ID:            v.ID,
+			Code:          v.Code,
+			Title:         v.Title,
+			SpecialtyCode: scode,
 		})
 	}
 }
@@ -142,6 +144,48 @@ func newLevelModelView(documents []levelDocument) []query.LevelModel {
 	for _, document := range documents {
 		result = append(result, query.LevelModel{
 			ID:    document.ID,
+			Title: document.Title,
+		})
+	}
+
+	return result
+}
+
+func newUgsnModelView(documents []ugsnDocument) []query.UgsnModel {
+	result := make([]query.UgsnModel, 0, len(documents))
+
+	for _, document := range documents {
+		result = append(result, query.UgsnModel{
+			ID:    document.ID,
+			Code:  document.Code,
+			Title: document.Title,
+		})
+	}
+
+	return result
+}
+
+func newProgramModelViewWithDocuments(programs []programsDocument) []query.ProgramModel {
+	result := make([]query.ProgramModel, 0, len(programs))
+
+	for _, program := range programs {
+		result = append(result, query.ProgramModel{
+			ID:    program.ID,
+			Code:  program.Code,
+			Title: program.Title,
+		})
+	}
+
+	return result
+}
+
+func newSpecialtiesModelViewWithDocuments(documents []specialtiesDocument) []query.SpecialtyModel {
+	result := make([]query.SpecialtyModel, 0, len(documents))
+
+	for _, document := range documents {
+		result = append(result, query.SpecialtyModel{
+			ID:    document.ID,
+			Code:  document.Code,
 			Title: document.Title,
 		})
 	}
