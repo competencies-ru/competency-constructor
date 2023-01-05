@@ -1,8 +1,6 @@
 package education
 
 import (
-	"strings"
-
 	"github.com/pkg/errors"
 )
 
@@ -14,14 +12,14 @@ var (
 	ErrProgramTitleIsEmpty         = errors.New("program: title is empty")
 	ErrProgramSpecialtyCodeIsEmpty = errors.New("program: specialityCode is empty")
 	ErrProgramMaxLenTitle          = errors.New("program: title is is more max len")
-	ErrProgramNotMatchCode         = errors.New("program: code does not match specialty code")
 )
 
 type (
 	Program struct {
-		id    string
-		code  string
-		title string
+		id          string
+		code        string
+		title       string
+		specialtyID string
 	}
 
 	ProgramParams struct {
@@ -29,6 +27,7 @@ type (
 		Code          string
 		Title         string
 		SpecialtyCode string
+		SpecialtyID   string
 	}
 )
 
@@ -45,23 +44,19 @@ func NewProgram(param ProgramParams) (*Program, error) {
 		return nil, ErrProgramTitleIsEmpty
 	}
 
-	if param.SpecialtyCode == "" {
-		return nil, ErrProgramSpecialtyCodeIsEmpty
+	if SpecialtyCodeValidate(param.SpecialtyCode) {
+		return nil, ErrSpecialityParseCode
 	}
 
-	if err := IsValidSpecialtyCode(param.SpecialtyCode); err != nil {
-		return nil, err
+	if ProgramCodeValidate(param.Code) {
+		return nil, ErrProgramParseCode
 	}
 
-	if err := IsValidProgramCode(param.Code); err != nil {
-		return nil, err
-	}
-
-	if !isMatchProgramCode(param.Code, param.SpecialtyCode) {
+	if !matchProgramCode(param.Code, param.SpecialtyCode) {
 		return nil, ErrProgramNotMatchCode
 	}
 
-	return &Program{id: param.ID, code: param.Code, title: param.Title}, nil
+	return &Program{id: param.ID, code: param.Code, title: param.Title, specialtyID: param.SpecialtyID}, nil
 }
 
 func (p *Program) ID() string {
@@ -76,6 +71,10 @@ func (p *Program) Code() string {
 	return p.code
 }
 
+func (p *Program) SpecialtyID() string {
+	return p.specialtyID
+}
+
 func (p *Program) Rename(title string) error {
 	if len(title) > maxLenTitleProgram {
 		return ErrProgramMaxLenTitle
@@ -84,8 +83,4 @@ func (p *Program) Rename(title string) error {
 	p.title = title
 
 	return nil
-}
-
-func isMatchProgramCode(pcode, scode string) bool {
-	return strings.Contains(pcode[:8], scode[:8])
 }
