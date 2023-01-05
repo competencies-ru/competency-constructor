@@ -1,6 +1,7 @@
 package mongodb
 
 import (
+	"github.com/competencies-ru/competency-constructor/internal/core/app/query"
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 )
 
@@ -35,4 +36,21 @@ func newLevelDocument(level *education.Level) levelDocument {
 		ID:    level.ID(),
 		Title: level.Title(),
 	}
+}
+
+func newLevelModel(document levelDocument) query.LevelModel {
+	return query.LevelModel{
+		ID:    document.ID,
+		Title: document.Title,
+	}
+}
+
+func newLevelModels(documents []levelDocument) []query.LevelModel {
+	levels := make([]query.LevelModel, 0, len(documents))
+
+	for _, document := range documents {
+		levels = append(levels, newLevelModel(document))
+	}
+
+	return levels
 }

@@ -41,19 +41,14 @@ func (r *LevelRepository) AddLevel(ctx context.Context, level *education.Level) 
 }
 
 func (r *LevelRepository) GetLevel(ctx context.Context, id string) (*education.Level, error) {
-	// TODO implement me
-	panic("implement me")
-}
+	filter := bson.M{"id": id}
 
-func (r *LevelRepository) FindLevel(ctx context.Context, id string) (query.SpecificLevelModel, error) {
-	filter := bson.M{"_id": id}
-
-	document, err := r.getLevelDocument(ctx, filter, nil)
+	document, err := r.getLevelDocument(ctx, filter)
 	if err != nil {
-		return query.SpecificLevelModel{}, err
+		return nil, err
 	}
 
-	return newSpecificLevelView(document), nil
+	return newLevel(document), nil
 }
 
 func (r *LevelRepository) FindLevels(ctx context.Context) ([]query.LevelModel, error) {
@@ -70,7 +65,7 @@ func (r *LevelRepository) FindLevels(ctx context.Context) ([]query.LevelModel, e
 		return []query.LevelModel{}, err
 	}
 
-	return newLevelModelView(documents), err
+	return newLevelModels(documents), err
 }
 
 func (r *LevelRepository) UpdateLevel(ctx context.Context, id string, updater service.LevelUpdate) error {
@@ -124,67 +119,4 @@ func (r *LevelRepository) getLevelDocument(
 	}
 
 	return document, nil
-}
-
-func (r *LevelRepository) FindAllUgsn(ctx context.Context, levelID string) ([]query.UgsnModel, error) {
-	var document levelDocument
-
-	filter := makeFilterUgsn(levelID)
-
-	cursor, err := r.level.Aggregate(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-
-	if !cursor.Next(ctx) {
-		return nil, service.ErrLevelNotFound
-	}
-
-	if err := cursor.Decode(&document); err != nil {
-		return nil, err
-	}
-
-	return newUgsnModelView(document.Ugsn), nil
-}
-
-func (r *LevelRepository) FindAllSpecialties(ctx context.Context, uid string) ([]query.SpecialtyModel, error) {
-	var document ugsnDocument
-
-	filter := makeFilterSpecialties(uid)
-
-	cursor, err := r.level.Aggregate(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-
-	if !cursor.Next(ctx) {
-		return nil, service.ErrUgsnNotFound
-	}
-
-	if err := cursor.Decode(&document); err != nil {
-		return nil, err
-	}
-
-	return newSpecialtiesModelViewWithDocuments(document.Specialties), nil
-}
-
-func (r *LevelRepository) FindAllPrograms(ctx context.Context, sid string) ([]query.ProgramModel, error) {
-	var document specialtiesDocument
-
-	filter := makeFilterPrograms(sid)
-
-	cursor, err := r.level.Aggregate(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-
-	if !cursor.Next(ctx) {
-		return nil, service.ErrSpecialtiesNotFound
-	}
-
-	if err := cursor.Decode(&document); err != nil {
-		return nil, err
-	}
-
-	return newProgramModelViewWithDocuments(document.Programs), nil
 }
