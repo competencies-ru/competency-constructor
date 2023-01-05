@@ -81,16 +81,6 @@ func (l *Level) AddUgsn(param UgsnParams) error {
 	return nil
 }
 
-func (l *Level) DeleteUgsn(ucode string) error {
-	if _, err := l.Ugsn(ucode); err != nil {
-		return err
-	}
-
-	delete(l.ugsn, ucode)
-
-	return nil
-}
-
 func (l *Level) AllUgsn() []*Ugsn {
 	result := make([]*Ugsn, 0, len(l.ugsn))
 
@@ -100,60 +90,4 @@ func (l *Level) AllUgsn() []*Ugsn {
 	}
 
 	return result
-}
-
-// Specialty methods.
-func (l *Level) Specialty(ucode, scode string) (*Speciality, error) {
-	ugsn, err := l.Ugsn(ucode)
-	if err != nil {
-		return nil, err
-	}
-
-	return ugsn.speciality(scode)
-}
-
-func (l *Level) AddSpecialty(ucode string, param SpecialityParams) error {
-	ugsn, err := l.Ugsn(ucode)
-	if err != nil {
-		return err
-	}
-
-	return ugsn.addSpeciality(param)
-}
-
-func (l *Level) DeleteSpecialty(ucode, scode string) error {
-	ugsn, err := l.Ugsn(ucode)
-	if err != nil {
-		return err
-	}
-
-	return ugsn.deleteSpecialty(scode)
-}
-
-// Program methods.
-func (l *Level) Program(ucode, scode, pcode string) (*Program, error) {
-	specialty, err := l.Specialty(ucode, scode)
-	if err != nil {
-		return nil, err
-	}
-
-	return specialty.program(pcode)
-}
-
-func (l *Level) AddProgram(ucode, scode string, param ProgramParams) error {
-	specialty, err := l.Specialty(ucode, scode)
-	if err != nil {
-		return err
-	}
-
-	return specialty.addProgram(param)
-}
-
-func (l *Level) DeleteProgram(ucode, scode, pcode string) error {
-	specialty, err := l.Specialty(ucode, scode)
-	if err != nil {
-		return err
-	}
-
-	return specialty.deleteProgram(pcode)
 }
