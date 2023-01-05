@@ -6,6 +6,20 @@ type (
 		Title string
 	}
 
+	UgsnModel struct {
+		ID      string
+		Code    string
+		Title   string
+		LevelID string
+	}
+
+	SpecialtyModel struct {
+		ID     string
+		Code   string
+		Title  string
+		UgsnID string
+	}
+
 	SpecificLevelModel struct {
 		ID    string
 		Title string
@@ -22,9 +36,10 @@ type (
 	}
 
 	ProgramModel struct {
-		ID    string
-		Code  string
-		Title string
+		ID          string
+		Code        string
+		Title       string
+		SpecialtyID string
 	}
 )
 
