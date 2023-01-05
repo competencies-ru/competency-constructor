@@ -48,10 +48,10 @@ func isInvalidCodeError(err error) bool {
 		errors.Is(err, ErrSpecialityParseCode)
 }
 
-func matchProgramCode(pcode, scode string) bool {
+func MatchProgramCode(pcode, scode string) bool {
 	return strings.Contains(pcode[:8], scode[:8])
 }
 
-func matchSpecialtyCode(scode, ucode string) bool {
+func MatchSpecialtyCode(scode, ucode string) bool {
 	return strings.Contains(scode[:2], ucode[:2])
 }

@@ -2,12 +2,12 @@ package v1
 
 import "net/http"
 
-func (h handler) GetUgsn(w http.ResponseWriter, r *http.Request, levelId string) {
+func (h handler) GetUgsn(w http.ResponseWriter, r *http.Request, levelID string) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (h handler) AddUgsn(w http.ResponseWriter, r *http.Request, levelId string) {
+func (h handler) AddUgsn(w http.ResponseWriter, r *http.Request, levelID string) {
 	//TODO implement me
 	panic("implement me")
 }

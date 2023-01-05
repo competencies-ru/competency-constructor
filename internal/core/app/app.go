@@ -19,7 +19,10 @@ type (
 	}
 
 	Queries struct {
-		FindLevels        query.FindLevelsHandler
-		GetSpecificLevels query.SpecificLevelHandler
+		FindLevels         query.FindLevelsHandler
+		GetSpecificLevels  query.SpecificLevelHandler
+		FindAllUgsn        query.FindUgsnHandler
+		FindAllSpecialties query.FindSpecialtiesHandler
+		FindAllPrograms    query.FindProgramsHandler
 	}
 )

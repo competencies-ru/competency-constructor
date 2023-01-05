@@ -6,8 +6,9 @@ var (
 	ErrUgsnTitleIsEmpty       = errors.New("ugsn: title is empty")
 	ErrUgsnIDIsEmpty          = errors.New("ugsn: id is empty")
 	ErrUgsnCodeIsEmpty        = errors.New("ugsn: code is empty")
-	ErrUgsnSpecialityNotFound = errors.New("specialty not found")
+	ErrUgsnSpecialityNotFound = errors.New("ugsn: specialty not found")
 	ErrUgsnTitleMaxLenTitle   = errors.New("ugsn: title is more max len or empty")
+	ErrUgsnLevelIDEmpty       = errors.New("ugsn: level id is empty")
 )
 
 func IsInvalidUgsnParametersError(err error) bool {
@@ -34,8 +35,9 @@ type (
 		// where XX is any two number.
 		//
 		// example: 01.00.00, 11.00.00, etc
-		code  string
-		title string
+		code    string
+		title   string
+		levelID string
 
 		// Key specialityCode.
 		// Value pointer Speciality
@@ -43,9 +45,10 @@ type (
 	}
 
 	UgsnParams struct {
-		ID    string
-		Code  string
-		Title string
+		ID      string
+		Code    string
+		Title   string
+		LevelID string
 	}
 )
 
@@ -58,18 +61,19 @@ func NewUgsn(param UgsnParams) (*Ugsn, error) {
 		return nil, ErrUgsnTitleIsEmpty
 	}
 
-	if param.Code == "" {
-		return nil, ErrUgsnCodeIsEmpty
+	if UgsnCodeValidate(param.Code) {
+		return nil, ErrUgsnParseCode
 	}
 
-	if err := IsValidUgsnCode(param.Code); err != nil {
-		return nil, err
+	if param.LevelID == "" {
+		return nil, ErrUgsnLevelIDEmpty
 	}
 
 	return &Ugsn{
 		id:           param.ID,
 		title:        param.Title,
 		code:         param.Code,
+		levelID:      param.LevelID,
 		specialities: make(map[string]*Speciality),
 	}, nil
 }
@@ -86,7 +90,11 @@ func (e *Ugsn) ID() string {
 	return e.id
 }
 
-func (e *Ugsn) addSpeciality(s SpecialityParams) error {
+func (e *Ugsn) LeveID() string {
+	return e.levelID
+}
+
+func (e *Ugsn) AddSpeciality(s SpecialityParams) error {
 	speciality, err := NewSpeciality(s)
 	if err != nil {
 		return errors.Wrapf(err, "adding education by code: %s", s.Code)
@@ -99,15 +107,15 @@ func (e *Ugsn) addSpeciality(s SpecialityParams) error {
 	return nil
 }
 
-func (e *Ugsn) speciality(code string) (*Speciality, error) {
+func (e *Ugsn) SpecialityByCode(code string) (Speciality, error) {
 	s, ok := e.specialities[code]
 	if !ok {
-		return nil, errors.Wrapf(
+		return Speciality{}, errors.Wrapf(
 			ErrUgsnSpecialityNotFound,
 			"get education by code: %s", code)
 	}
 
-	return s, nil
+	return *s, nil
 }
 
 func (e *Ugsn) Specialities() []*Speciality {
@@ -125,18 +133,6 @@ func (e *Ugsn) Rename(newTitle string) error {
 	}
 
 	e.title = newTitle
-
-	return nil
-}
-
-func (e *Ugsn) deleteSpecialty(code string) error {
-	if _, ok := e.specialities[code]; !ok {
-		return errors.Wrapf(
-			ErrUgsnSpecialityNotFound,
-			"get specialties by code: %s", code)
-	}
-
-	delete(e.specialities, code)
 
 	return nil
 }

@@ -44,6 +44,9 @@ type persistenceContext struct {
 	levelRepo              service.LevelRepository
 	levelsReadModel        query.LevelReadModels
 	specificLevelReadModel query.SpecificLevelReadModel
+	ugsnReadModel          query.UgsnReadModels
+	programReadModel       query.ProgramsReadModels
+	specialtiesReadModel   query.SpecialtiesReadModels
 }
 
 type Runner struct {
@@ -91,9 +94,6 @@ func (r *Runner) initPersistent() {
 
 	r.persistence.levelsReadModel = levelRepo
 	r.logger.Info("Levels read model repository initialization completed", args...)
-
-	r.persistence.specificLevelReadModel = levelRepo
-	r.logger.Info("Level specific model repository initialization completed", args...)
 }
 
 func (r *Runner) initLogger() {
@@ -125,14 +125,10 @@ func (r *Runner) initServer() {
 func (r *Runner) initApplication() {
 	r.app = &app.Application{
 		Commands: app.Commands{
-			CreateLevel:    command.NewCreateLevelHandler(r.persistence.levelRepo),
-			AddUgsn:        command.NewAddUgsnHandler(r.persistence.levelRepo),
-			AddSpecialties: command.NewAddSpecialtiesHandler(r.persistence.levelRepo),
-			AddPrograms:    command.NewAddProgramsHandler(r.persistence.levelRepo),
+			CreateLevel: command.NewCreateLevelHandler(r.persistence.levelRepo),
 		},
 		Queries: app.Queries{
-			FindLevels:        query.NewFindLevelsHandler(r.persistence.levelsReadModel),
-			GetSpecificLevels: query.NewSpecificLevelHandler(r.persistence.specificLevelReadModel),
+			FindLevels: query.NewFindLevelsHandler(r.persistence.levelsReadModel),
 		},
 	}
 }

@@ -23,11 +23,10 @@ type (
 	}
 
 	ProgramParams struct {
-		ID            string
-		Code          string
-		Title         string
-		SpecialtyCode string
-		SpecialtyID   string
+		ID          string
+		Code        string
+		Title       string
+		SpecialtyID string
 	}
 )
 
@@ -44,16 +43,8 @@ func NewProgram(param ProgramParams) (*Program, error) {
 		return nil, ErrProgramTitleIsEmpty
 	}
 
-	if SpecialtyCodeValidate(param.SpecialtyCode) {
-		return nil, ErrSpecialityParseCode
-	}
-
 	if ProgramCodeValidate(param.Code) {
 		return nil, ErrProgramParseCode
-	}
-
-	if !matchProgramCode(param.Code, param.SpecialtyCode) {
-		return nil, ErrProgramNotMatchCode
 	}
 
 	return &Program{id: param.ID, code: param.Code, title: param.Title, specialtyID: param.SpecialtyID}, nil
