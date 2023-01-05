@@ -8,10 +8,11 @@ import (
 )
 
 var (
-	ErrUgsnCodeParseCode   = errors.New("ugsn: error parse code")
-	ErrSpecialityParseCode = errors.New("speciality: error parse code")
-	ErrProgramParseCode    = errors.New("program: error parse code")
-	ErrCodeIsPrefixTwoZero = errors.New("code starts with two zeros")
+	ErrUgsnParseCode          = errors.New("ugsn: error parse code")
+	ErrSpecialityParseCode    = errors.New("speciality: error parse code")
+	ErrProgramParseCode       = errors.New("program: error parse code")
+	ErrSpecialityNotMatchCode = errors.New("speciality: code does not match ugsnCode")
+	ErrProgramNotMatchCode    = errors.New("program: code does not match specialty code")
 )
 
 func match(patter, code string) bool {
@@ -23,48 +24,34 @@ func match(patter, code string) bool {
 	return ok
 }
 
-func isPrefixTwoZero(code string) bool {
-	return strings.HasPrefix(code, "00")
+func UgsnCodeValidate(code string) bool {
+	return match(`^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.00\.00$`, code)
 }
 
-func IsValidUgsnCode(code string) error {
-	if isPrefixTwoZero(code) {
-		return ErrCodeIsPrefixTwoZero
-	}
-
-	if !match(`^\d{2}.0{2}.0{2}$`, code) {
-		return ErrUgsnCodeParseCode
-	}
-
-	return nil
+func SpecialtyCodeValidate(code string) bool {
+	return match(
+		`^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})$`,
+		code,
+	)
 }
 
-func IsValidSpecialtyCode(code string) error {
-	if isPrefixTwoZero(code) {
-		return ErrCodeIsPrefixTwoZero
-	}
-
-	if match(`^\d{2}.0{2}.0{2}$`, code) || !match(`^\d{2}.\d{2}.\d{2}$`, code) {
-		return ErrSpecialityParseCode
-	}
-
-	return nil
-}
-
-func IsValidProgramCode(code string) error {
-	if isPrefixTwoZero(code) {
-		return ErrCodeIsPrefixTwoZero
-	}
-
-	if match(`^\d{2}.0{2}.0{2}$`, code) || !match(`^\d{2}\.\d{2}\.\d{2}-\d{2}$`, code) {
-		return ErrProgramParseCode
-	}
-
-	return nil
+func ProgramCodeValidate(code string) bool {
+	return match(
+		`^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})-(0[1-9]{1}|[1-9]{1}[0-9]{1})$`,
+		code,
+	)
 }
 
 func isInvalidCodeError(err error) bool {
-	return errors.Is(err, ErrCodeIsPrefixTwoZero) ||
-		errors.Is(err, ErrUgsnCodeParseCode) ||
+	return errors.Is(err, ErrProgramParseCode) ||
+		errors.Is(err, ErrUgsnParseCode) ||
 		errors.Is(err, ErrSpecialityParseCode)
+}
+
+func matchProgramCode(pcode, scode string) bool {
+	return strings.Contains(pcode[:8], scode[:8])
+}
+
+func matchSpecialtyCode(scode, ucode string) bool {
+	return strings.Contains(scode[:2], ucode[:2])
 }
