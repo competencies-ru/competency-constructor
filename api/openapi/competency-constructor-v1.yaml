@@ -124,7 +124,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateUgsnRequest"
+              type: array
+              items:
+                $ref: "#/components/schemas/CreateUgsnRequest"
       responses:
         200:
           description: Added new ugsn to level.
@@ -235,7 +237,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateSpecialtyRequest"
+              type: array
+              items:
+                $ref: "#/components/schemas/CreateSpecialtyRequest"
       responses:
         200:
           description: Added new specialty to ugsn.
@@ -266,7 +270,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SpecificSpecialtyResponse"
+                type: array
+                items:
+                  $ref: "#/components/schemas/SpecificSpecialtyResponse"
         404:
           description: Entity not found.
           content:
@@ -316,7 +322,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProgramResponse"
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProgramResponse"
         404:
           description: Entity not found.
           content:
@@ -342,7 +350,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateProgramRequest"
+              type: array
+              items:
+                $ref: "#/components/schemas/CreateProgramRequest"
       responses:
         200:
           description: Added program.
@@ -421,7 +431,7 @@ components:
       properties:
         code:
           type: string
-          pattern: '^\d{2}\.0{2}\.0{2}$'
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.00\.00$'
         title:
           type: string
 
@@ -433,7 +443,7 @@ components:
       properties:
         code:
           type: string
-          pattern: '^\d{2}\.\d{2}\.\d{2}$'
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
         title:
           type: string
 
@@ -480,15 +490,19 @@ components:
         - id
         - code
         - title
+        - specialtyId
       properties:
         id:
           type: string
           pattern: uuid
         code:
           type: string
-          pattern: '^\d{2}\.\d{2}\.\d{2}-\d{2}$'
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})-(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
         title:
           type: string
+        specialtyId:
+          type: string
+          pattern: uuid
 
     SpecificSpecialtyResponse:
       type: object
@@ -503,7 +517,7 @@ components:
           pattern: uuid
         code:
           type: string
-          pattern: '^\d{2}\.\d{2}\.\d{2}$'
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
         title:
           type: string
         program:
@@ -524,7 +538,7 @@ components:
           pattern: uuid
         code:
           type: string
-          pattern: '^\d{2}\.0{2}\.0{2}$'
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.00\.00$'
         title:
           type: string
         specialty:
@@ -538,15 +552,19 @@ components:
         - id
         - code
         - title
+        - levelId
       properties:
         id:
           type: string
           pattern: uuid
         code:
           type: string
-          pattern: '^\d{2}\.0{2}\.0{2}$'
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.00\.00$'
         title:
           type: string
+        levelId:
+          type: string
+          pattern: uuid
 
     SpecialtyResponse:
       type: object
@@ -554,15 +572,19 @@ components:
         - id
         - code
         - title
+        - ugsnId
       properties:
         id:
           type: string
           pattern: uuid
         code:
           type: string
-          pattern: '^\d{2}\.\d{2}\.\d{2}$'
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
         title:
           type: string
+        ugsnId:
+          type: string
+          pattern: uuid
 
     CreateProgramRequest:
       type: object
@@ -572,6 +594,6 @@ components:
       properties:
         code:
           type: string
-          pattern: '^\d{2}\.\d{2}\.\d{2}-\d{2}$'
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})-(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
         title:
           type: string

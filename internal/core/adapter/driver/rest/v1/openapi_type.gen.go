@@ -61,16 +61,18 @@ type LevelResponse struct {
 
 // ProgramResponse defines model for ProgramResponse.
 type ProgramResponse struct {
-	Code  string `json:"code"`
-	Id    string `json:"id"`
-	Title string `json:"title"`
+	Code        string `json:"code"`
+	Id          string `json:"id"`
+	SpecialtyId string `json:"specialtyId"`
+	Title       string `json:"title"`
 }
 
 // SpecialtyResponse defines model for SpecialtyResponse.
 type SpecialtyResponse struct {
-	Code  string `json:"code"`
-	Id    string `json:"id"`
-	Title string `json:"title"`
+	Code   string `json:"code"`
+	Id     string `json:"id"`
+	Title  string `json:"title"`
+	UgsnId string `json:"ugsnId"`
 }
 
 // SpecificLevelResponse defines model for SpecificLevelResponse.
@@ -98,19 +100,29 @@ type SpecificUgsnResponse struct {
 
 // UgsnResponse defines model for UgsnResponse.
 type UgsnResponse struct {
-	Code  string `json:"code"`
-	Id    string `json:"id"`
-	Title string `json:"title"`
+	Code    string `json:"code"`
+	Id      string `json:"id"`
+	LevelId string `json:"levelId"`
+	Title   string `json:"title"`
 }
+
+// AddUgsnJSONBody defines parameters for AddUgsn.
+type AddUgsnJSONBody = []CreateUgsnRequest
+
+// AddProgramsJSONBody defines parameters for AddPrograms.
+type AddProgramsJSONBody = []CreateProgramRequest
+
+// AddSpecialtiesJSONBody defines parameters for AddSpecialties.
+type AddSpecialtiesJSONBody = []CreateSpecialtyRequest
 
 // CreateLevelJSONRequestBody defines body for CreateLevel for application/json ContentType.
 type CreateLevelJSONRequestBody = CreateLevelRequest
 
 // AddUgsnJSONRequestBody defines body for AddUgsn for application/json ContentType.
-type AddUgsnJSONRequestBody = CreateUgsnRequest
+type AddUgsnJSONRequestBody = AddUgsnJSONBody
 
 // AddProgramsJSONRequestBody defines body for AddPrograms for application/json ContentType.
-type AddProgramsJSONRequestBody = CreateProgramRequest
+type AddProgramsJSONRequestBody = AddProgramsJSONBody
 
 // AddSpecialtiesJSONRequestBody defines body for AddSpecialties for application/json ContentType.
-type AddSpecialtiesJSONRequestBody = CreateSpecialtyRequest
+type AddSpecialtiesJSONRequestBody = AddSpecialtiesJSONBody
