@@ -15,7 +15,7 @@ type (
 )
 
 type CreateLevelHandler interface {
-	Handle(ctx context.Context, cl CreateLevel) (string, error)
+	Handle(ctx context.Context, cmd CreateLevel) (string, error)
 }
 
 type createLevelHandler struct {
@@ -30,12 +30,12 @@ func NewCreateLevelHandler(repo service.LevelRepository) CreateLevelHandler {
 	return createLevelHandler{levelRepo: repo}
 }
 
-func (h createLevelHandler) Handle(ctx context.Context, cl CreateLevel) (string, error) {
+func (h createLevelHandler) Handle(ctx context.Context, cmd CreateLevel) (string, error) {
 	id := uuid.NewString()
 
 	level, err := education.NewLevel(education.LevelParam{
 		ID:    id,
-		Title: cl.Title,
+		Title: cmd.Title,
 	})
 	if err != nil {
 		return "", err

@@ -15,6 +15,7 @@ var (
 	ErrProgramAlreadyExists   = errors.New("program already exists")
 	ErrSpecialtyAlreadyExists = errors.New("specialty already exists")
 	ErrUgsnAlreadyExists      = errors.New("ugsn already exists")
+	ErrLevelAlreadyExists     = errors.New("level already exists")
 )
 
 type (
