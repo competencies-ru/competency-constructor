@@ -9,9 +9,11 @@ import (
 )
 
 var (
-	ErrLevelNotFound       = errors.New("level not found")
-	ErrUgsnNotFound        = errors.New("ugsn not found")
-	ErrSpecialtiesNotFound = errors.New("specialties not found")
+	ErrLevelNotFound          = errors.New("level not found")
+	ErrUgsnNotFound           = errors.New("ugsn not found")
+	ErrSpecialtyNotFound      = errors.New("specialty not found")
+	ErrProgramAlreadyExists   = errors.New("program already exists")
+	ErrSpecialtyAlreadyExists = errors.New("specialty already exists")
 )
 
 type (
@@ -24,8 +26,23 @@ type (
 	LevelUpdate func(ctx context.Context, level *education.Level) (*education.Level, error)
 )
 
-func IsNotFoundLevelEntities(err error) bool {
-	return errors.Is(err, ErrLevelNotFound) ||
-		errors.Is(err, ErrUgsnNotFound) ||
-		errors.Is(err, ErrSpecialtiesNotFound)
-}
+type (
+	UgsnRepository interface {
+		AddUgsn(ctx context.Context, level *education.Level) error
+		GetUgsn(ctx context.Context, id string) (*education.Level, error)
+	}
+)
+
+type (
+	SpecialtyRepository interface {
+		AddSpecialty(ctx context.Context, level *education.Level) error
+		GetSpecialty(ctx context.Context, id string) (*education.Level, error)
+	}
+)
+
+type (
+	ProgramRepository interface {
+		AddProgram(ctx context.Context, level *education.Level) error
+		GetProgram(ctx context.Context, id string) (*education.Level, error)
+	}
+)
