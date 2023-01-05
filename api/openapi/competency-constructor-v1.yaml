@@ -139,7 +139,7 @@ paths:
 
 
 
-  /levels/{levelId}/ugsn/{ugsnCode}:
+  /ugsn/{id}:
     get:
       tags:
         - ugsn
@@ -147,17 +147,10 @@ paths:
       summary: return specific ugsn by level id
       parameters:
         - in: path
-          name: levelId
+          name: id
           schema:
             type: string
             pattern: uuid
-          required: true
-          description: level id
-        - in: path
-          name: ugsnCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.0{2}\.0{2}$'
           required: true
           description: ugsn code
       responses:
@@ -177,22 +170,15 @@ paths:
       tags:
         - ugsn
       operationId: deleteUgsn
-      summary: return specific ugsn by level id
+      summary: delete ugsn by id
       parameters:
         - in: path
-          name: levelId
+          name: id
           schema:
             type: string
             pattern: uuid
           required: true
-          description: Return ugsn by level id
-        - in: path
-          name: ugsnCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.0{2}\.0{2}$'
-          required: true
-          description: ugsn code
+          description: level id
       responses:
         200:
           description: Delete ugsn by code.
@@ -203,30 +189,23 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /levels/{levelId}/ugsn/{ugsnCode}/specialties:
+  /ugsn/{id}/specialties:
     get:
       tags:
         - specialties
       operationId: getSpecialties
-      summary: return specific ugsn by level id
+      summary: return specialties by ugsn id
       parameters:
         - in: path
-          name: levelId
+          name: id
           schema:
             type: string
             pattern: uuid
           required: true
-          description: level id
-        - in: path
-          name: ugsnCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.0{2}\.0{2}$'
-          required: true
-          description: ugsn code
+          description: id
       responses:
         200:
-          description: Found previously created level.
+          description: Found previously created specialties.
           content:
             application/json:
               schema:
@@ -239,7 +218,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
     post:
       tags:
         - specialties
@@ -247,21 +225,14 @@ paths:
       summary: add specialties by level id and ugsn code
       parameters:
         - in: path
-          name: levelId
+          name: id
           schema:
             type: string
             pattern: uuid
           required: true
-          description: level id
-        - in: path
-          name: ugsnCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.0{2}\.0{2}$'
-          required: true
-          description: ugsn code
+          description: ugsn id
       requestBody:
-        description: Added ugsn to level.
+        description: Added specialties to ugsn.
         required: true
         content:
           application/json:
@@ -273,13 +244,13 @@ paths:
         200:
           description: Added new specialty to ugsn.
         404:
-          description: Level with such ID not found.
+          description: ugsn with such ID not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}:
+  /specialty/{id}:
     get:
       tags:
         - specialties
@@ -287,34 +258,21 @@ paths:
       summary: return specific ugsn by level id
       parameters:
         - in: path
-          name: levelId
+          name: id
           schema:
             type: string
             pattern: uuid
           required: true
-          description: level id
-        - in: path
-          name: ugsnCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.0{2}\.0{2}$'
-          required: true
-          description: ugsn code
-        - in: path
-          name: specialtyCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.\d{2}\.\d{2}$'
-          required: true
-          description: specialty code
-
+          description: specialty id
       responses:
         200:
           description: Found previously created level.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SpecificSpecialtyResponse"
+                type: array
+                items:
+                  $ref: "#/components/schemas/SpecificSpecialtyResponse"
         404:
           description: Entity not found.
           content:
@@ -328,26 +286,12 @@ paths:
       summary: delete specialty by code ugsn and level id
       parameters:
         - in: path
-          name: levelId
+          name: id
           schema:
             type: string
             pattern: uuid
           required: true
           description: level id
-        - in: path
-          name: ugsnCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.0{2}\.0{2}$'
-          required: true
-          description: ugsn code
-        - in: path
-          name: specialtyCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.\d{2}\.\d{2}$'
-          required: true
-          description: specialty code
       responses:
         200:
           description: Delete ugsn by code.
@@ -358,7 +302,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs:
+  /specialty/{id}/programs:
     get:
       tags:
         - programs
@@ -366,27 +310,12 @@ paths:
       summary: return programs
       parameters:
         - in: path
-          name: levelId
+          name: id
           schema:
             type: string
             pattern: uuid
           required: true
-          description: level id
-        - in: path
-          name: ugsnCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.0{2}\.0{2}$'
-          required: true
-          description: ugsn code
-        - in: path
-          name: specialtyCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.\d{2}\.\d{2}$'
-          required: true
-          description: specialty code
-
+          description: specialty id
       responses:
         200:
           description: Return programs by level and ugsn code and specialty code.
@@ -409,28 +338,14 @@ paths:
       summary: create programs
       parameters:
         - in: path
-          name: levelId
+          name: id
           schema:
             type: string
             pattern: uuid
           required: true
-          description: level id
-        - in: path
-          name: ugsnCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.0{2}\.0{2}$'
-          required: true
-          description: ugsn code
-        - in: path
-          name: specialtyCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.\d{2}\.\d{2}$'
-          required: true
-          description: specialty code
+          description: specialty id
       requestBody:
-        description: Added ugsn to level.
+        description: Added program to specialties.
         required: true
         content:
           application/json:
@@ -448,41 +363,20 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /levels/{levelId}/ugsn/{ugsnCode}/specialty/{specialtyCode}/programs/{programCode}:
+  /programs/{id}:
     delete:
       tags:
         - programs
       operationId: deleteProgram
-      summary: delete specialty by code ugsn and level id
+      summary: delete program by id
       parameters:
         - in: path
-          name: levelId
+          name: id
           schema:
             type: string
             pattern: uuid
           required: true
-          description: level id
-        - in: path
-          name: ugsnCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.0{2}\.0{2}$'
-          required: true
-          description: ugsn code
-        - in: path
-          name: specialtyCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.\d{2}\.\d{2}$'
-          required: true
-          description: specialty code
-        - in: path
-          name: programCode
-          schema:
-            type: string
-            pattern: '^\d{2}\.\d{2}\.\d{2}-\d{2}$'
-          required: true
-          description: program code
+          description: program id
       responses:
         200:
           description: Delete program by code.
