@@ -1,14 +1,15 @@
 package v1
 
 import (
+	"net/http"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 	"github.com/pkg/errors"
-	"net/http"
 )
 
 func (h handler) DeleteProgram(w http.ResponseWriter, r *http.Request, id string) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
@@ -58,5 +59,4 @@ func (h handler) AddPrograms(w http.ResponseWriter, r *http.Request, id string) 
 	}
 
 	rest.InternalServerError(string(UnexpectedError), err, w, r)
-
 }

@@ -1,10 +1,11 @@
 package v1
 
 import (
+	"net/http"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 	"github.com/pkg/errors"
-	"net/http"
 )
 
 func (h handler) GetSpecialties(w http.ResponseWriter, r *http.Request, id string) {
@@ -56,11 +57,11 @@ func (h handler) AddSpecialties(w http.ResponseWriter, r *http.Request, id strin
 }
 
 func (h handler) DeleteSpecialty(w http.ResponseWriter, r *http.Request, id string) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (h handler) GetSpecificSpecialty(w http.ResponseWriter, r *http.Request, id string) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }

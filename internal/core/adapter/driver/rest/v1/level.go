@@ -2,10 +2,11 @@ package v1
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 	"github.com/pkg/errors"
-	"net/http"
 )
 
 func (h handler) GetLevels(w http.ResponseWriter, r *http.Request) {
@@ -47,6 +48,6 @@ func (h handler) CreateLevel(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h handler) GetSpecificLevel(w http.ResponseWriter, r *http.Request, levelID string) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }

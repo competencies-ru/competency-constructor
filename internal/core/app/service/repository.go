@@ -30,21 +30,21 @@ type (
 
 type (
 	UgsnRepository interface {
-		AddUgsn(ctx context.Context, level *education.Level) error
-		GetUgsn(ctx context.Context, id string) (*education.Level, error)
+		AddUgsn(ctx context.Context, ugsn *education.Ugsn) error
+		GetUgsn(ctx context.Context, id string) (*education.Ugsn, error)
 	}
 )
 
 type (
 	SpecialtyRepository interface {
-		AddSpecialty(ctx context.Context, level *education.Level) error
-		GetSpecialty(ctx context.Context, id string) (*education.Level, error)
+		AddSpecialty(ctx context.Context, level *education.Speciality) error
+		GetSpecialty(ctx context.Context, id string) (*education.Speciality, error)
 	}
 )
 
 type (
 	ProgramRepository interface {
-		AddProgram(ctx context.Context, level *education.Level) error
-		GetProgram(ctx context.Context, id string) (*education.Level, error)
+		AddProgram(ctx context.Context, level *education.Program) error
+		GetProgram(ctx context.Context, id string) (*education.Program, error)
 	}
 )

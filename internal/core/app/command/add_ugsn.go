@@ -15,8 +15,7 @@ type AddUgsnHandler interface {
 	Handle(ctx context.Context, levelID string, command CreateUgsnCommand) error
 }
 
-type addUgsnHandler struct {
-}
+type addUgsnHandler struct{}
 
 func NewAddUgsnHandler(repo service.LevelRepository) AddUgsnHandler {
 	if repo == nil {

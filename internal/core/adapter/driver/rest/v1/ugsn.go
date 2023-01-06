@@ -1,10 +1,11 @@
 package v1
 
 import (
+	"net/http"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 	"github.com/pkg/errors"
-	"net/http"
 )
 
 func (h handler) GetUgsn(w http.ResponseWriter, r *http.Request, levelID string) {
@@ -54,11 +55,11 @@ func (h handler) AddUgsn(w http.ResponseWriter, r *http.Request, levelID string)
 }
 
 func (h handler) DeleteUgsn(w http.ResponseWriter, r *http.Request, id string) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (h handler) GetSpecificUgsn(w http.ResponseWriter, r *http.Request, id string) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }

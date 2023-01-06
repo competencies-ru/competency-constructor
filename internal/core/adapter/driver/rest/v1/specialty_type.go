@@ -1,10 +1,11 @@
 package v1
 
 import (
+	"net/http"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/app/command"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/query"
 	"github.com/go-chi/render"
-	"net/http"
 )
 
 func decodeSpecialtyRequest(w http.ResponseWriter, r *http.Request) (command.CreateSpecialtyCommand, bool) {

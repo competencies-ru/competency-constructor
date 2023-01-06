@@ -15,8 +15,7 @@ type AddSpecialtiesHandler interface {
 	Handle(ctx context.Context, uid string, command CreateSpecialtyCommand) error
 }
 
-type addSpecialtiesHandler struct {
-}
+type addSpecialtiesHandler struct{}
 
 func NewAddSpecialtiesHandler(repo service.LevelRepository) AddSpecialtiesHandler {
 	if repo == nil {

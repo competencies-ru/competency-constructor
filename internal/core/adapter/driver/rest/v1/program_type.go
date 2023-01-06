@@ -1,10 +1,11 @@
 package v1
 
 import (
+	"net/http"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/app/command"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/query"
 	"github.com/go-chi/render"
-	"net/http"
 )
 
 func decodeProgramRequest(w http.ResponseWriter, r *http.Request) (command.CreateProgramCommand, bool) {
@@ -18,7 +19,6 @@ func decodeProgramRequest(w http.ResponseWriter, r *http.Request) (command.Creat
 }
 
 func renderProgramsResponse(w http.ResponseWriter, r *http.Request, models []query.ProgramModel) {
-
 	response := make([]ProgramResponse, 0, len(models))
 
 	for _, model := range models {

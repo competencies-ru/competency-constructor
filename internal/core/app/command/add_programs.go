@@ -2,6 +2,7 @@ package command
 
 import (
 	"context"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 )
 
@@ -14,8 +15,7 @@ type AddProgramHandler interface {
 	Handle(ctx context.Context, sid string, commands CreateProgramCommand) error
 }
 
-type addProgramHandler struct {
-}
+type addProgramHandler struct{}
 
 func NewAddProgramsHandler(repo service.LevelRepository) AddProgramHandler {
 	if repo == nil {
