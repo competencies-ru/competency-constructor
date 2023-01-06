@@ -1,0 +1,39 @@
+version: '3.4'
+
+networks:
+  back-tier:
+
+services:
+  competency-constructor:
+    image: competency-constructor
+    container_name: competency-constructor
+    build:
+      context: .
+      dockerfile: ./build/package/dev/Dockerfile
+    networks:
+      - back-tier
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./.bin/:/root/
+      - ./configs/:/root/configs/
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+      - MONGODB_DATABASE=constructor
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    volumes:
+      - ./.data/db:/data/db
+    networks:
+      - back-tier
+    ports:
+      - '27019:27017'

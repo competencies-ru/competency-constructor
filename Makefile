@@ -20,6 +20,16 @@ run:
 	go run ./cmd/competency-constructor
 
 
+linux-build:
+	go mod download && CGO_ENABLED=0 GOOS=linux go build -o ./.bin/competency-constructor ./cmd/competency-constructor
+
+
+run-dev: linux-build
+	docker-compose -f ./deployments/dev/docker-compose.yml --project-directory . up --remove-orphans competency-constructor
+
+stop-dev:
+	docker-compose -f ./deployments/dev/docker-compose.yml --project-directory . stop competency-constructor
+
 export TEST_DB_URI=mongodb://localhost:27019
 export TEST_DB_NAME=test
 export TEST_DB_CONTAINER_NAME=test-db
