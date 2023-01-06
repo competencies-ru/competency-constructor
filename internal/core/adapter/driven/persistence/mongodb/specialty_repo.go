@@ -28,7 +28,7 @@ func (s *SpecialtyRepository) FindAllSpecialties(ctx context.Context, uid string
 	documents, err := s.geSpecialtyDocuments(
 		ctx,
 		bson.M{"ugsn_id": uid},
-		options.Find().SetSort(bson.D{{"code", 1}}),
+		options.Find().SetSort(bson.M{"code": 1}),
 	)
 	if err != nil {
 		return nil, err

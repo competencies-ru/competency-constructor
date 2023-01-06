@@ -57,10 +57,10 @@ func (p *ProgramRepository) FindAllPrograms(ctx context.Context, sid string) ([]
 	documents, err := p.getProgramDocuments(
 		ctx,
 		bson.M{"specialty_id": sid},
-		options.Find().SetSort(bson.D{{"code", 1}}),
+		options.Find().SetSort(bson.M{"code": 1}),
 	)
 	if err != nil {
-		return []query.ProgramModel{}, nil
+		return []query.ProgramModel{}, err
 	}
 
 	return newProgramModels(documents), nil

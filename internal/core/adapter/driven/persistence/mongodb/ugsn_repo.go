@@ -28,7 +28,7 @@ func (u *UgsnRepository) FindAllUgsn(ctx context.Context, levelID string) ([]que
 	documents, err := u.geUgsnDocuments(
 		ctx,
 		bson.M{"level_id": levelID},
-		options.Find().SetSort(bson.D{{"code", 1}}),
+		options.Find().SetSort(bson.M{"code": 1}),
 	)
 	if err != nil {
 		return nil, err
