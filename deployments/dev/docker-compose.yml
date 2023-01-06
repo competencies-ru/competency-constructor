@@ -28,12 +28,13 @@ services:
     environment:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
-      - MONGODB_DATABASE=constructor
+      - MONGO_INITDB_DATABASE=competency-constructor
       - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_ROOT_PASSWORD=qwerty
     volumes:
+      - ./deployments/dev/init.js:/docker-entrypoint-initdb.d/init.js:ro
       - ./.data/db:/data/db
     networks:
       - back-tier
     ports:
-      - '27019:27017'
+      - "27019:27017"
