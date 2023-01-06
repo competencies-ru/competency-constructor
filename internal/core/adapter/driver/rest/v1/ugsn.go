@@ -36,6 +36,7 @@ func (h handler) AddUgsn(w http.ResponseWriter, r *http.Request, levelID string)
 
 	if err == nil {
 		w.WriteHeader(http.StatusCreated)
+
 		return
 	}
 

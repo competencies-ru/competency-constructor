@@ -35,6 +35,7 @@ func (h handler) CreateLevel(w http.ResponseWriter, r *http.Request) {
 			fmt.Sprintf("/levels/%s", id),
 		)
 		w.WriteHeader(http.StatusCreated)
+
 		return
 	}
 
