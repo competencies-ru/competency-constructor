@@ -2,6 +2,7 @@ package v1
 
 import (
 	"fmt"
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 	"net/http"
 
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
@@ -41,6 +42,12 @@ func (h handler) CreateLevel(w http.ResponseWriter, r *http.Request) {
 
 	if errors.Is(err, service.ErrLevelAlreadyExists) {
 		rest.NotFound(string(BadRequest), err, w, r)
+
+		return
+	}
+
+	if education.IsInvalidLevelParametersError(err) {
+		rest.UnprocessableEntity(string(InvalidLevelParameters), err, w, r)
 
 		return
 	}
