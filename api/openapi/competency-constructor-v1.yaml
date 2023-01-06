@@ -124,9 +124,7 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/CreateUgsnRequest"
+              $ref: "#/components/schemas/CreateUgsnRequest"
       responses:
         200:
           description: Added new ugsn to level.
@@ -237,9 +235,7 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/CreateSpecialtyRequest"
+              $ref: "#/components/schemas/CreateSpecialtyRequest"
       responses:
         200:
           description: Added new specialty to ugsn.
@@ -270,9 +266,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/SpecificSpecialtyResponse"
+                $ref: "#/components/schemas/SpecificSpecialtyResponse"
         404:
           description: Entity not found.
           content:
@@ -350,9 +344,7 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/CreateProgramRequest"
+              $ref: "#/components/schemas/CreateProgramRequest"
       responses:
         200:
           description: Added program.
