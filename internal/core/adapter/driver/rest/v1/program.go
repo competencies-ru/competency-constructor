@@ -3,6 +3,8 @@ package v1
 import (
 	"net/http"
 
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 	"github.com/pkg/errors"
@@ -54,6 +56,12 @@ func (h handler) AddPrograms(w http.ResponseWriter, r *http.Request, id string) 
 
 	if errors.Is(err, service.ErrProgramAlreadyExists) {
 		rest.NotFound(string(BadRequest), err, w, r)
+
+		return
+	}
+
+	if education.IsInvalidProgramParameters(err) {
+		rest.NotFound(string(InvalidSpecialtiesParameters), err, w, r)
 
 		return
 	}

@@ -41,12 +41,14 @@ type singletonZapLogger struct {
 }
 
 type persistenceContext struct {
-	levelRepo              service.LevelRepository
-	levelsReadModel        query.LevelReadModels
-	specificLevelReadModel query.SpecificLevelReadModel
-	ugsnReadModel          query.UgsnReadModels
-	programReadModel       query.ProgramsReadModels
-	specialtiesReadModel   query.SpecialtiesReadModels
+	levelRepo           service.LevelRepository
+	levelsReadModel     query.LevelReadModels
+	ugsnReadModels      query.UgsnReadModels
+	specialtyReadModels query.SpecialtiesReadModels
+	programReadModels   query.ProgramsReadModels
+	ugsnRepo            service.UgsnRepository
+	specialtyRepo       service.SpecialtyRepository
+	programRepo         service.ProgramRepository
 }
 
 type Runner struct {
@@ -88,12 +90,33 @@ func (r *Runner) initPersistent() {
 	args := []interface{}{"db", "mongo"}
 
 	levelRepo := mongoRepo.NewLevelRepository(database)
+	ugsnRepo := mongoRepo.NewUgsnRepository(database)
+	specialtyRepo := mongoRepo.NewSpecialtyRepository(database)
+	programRepo := mongoRepo.NewProgramRepository(database)
 
 	r.persistence.levelRepo = levelRepo
 	r.logger.Info("Level repository initialization completed", args...)
 
 	r.persistence.levelsReadModel = levelRepo
 	r.logger.Info("Levels read model repository initialization completed", args...)
+
+	r.persistence.ugsnRepo = ugsnRepo
+	r.logger.Info("Ugsn repository initialization completed", args...)
+
+	r.persistence.specialtyRepo = specialtyRepo
+	r.logger.Info("Specialty repository initialization completed", args...)
+
+	r.persistence.programRepo = programRepo
+	r.logger.Info("Program repository initialization completed", args...)
+
+	r.persistence.programReadModels = programRepo
+	r.logger.Info("Program read models repository initialization completed", args...)
+
+	r.persistence.specialtyReadModels = specialtyRepo
+	r.logger.Info("Specialty read models repository initialization completed", args...)
+
+	r.persistence.ugsnReadModels = ugsnRepo
+	r.logger.Info("Ugsn read models repository initialization completed", args...)
 }
 
 func (r *Runner) initLogger() {
@@ -125,10 +148,16 @@ func (r *Runner) initServer() {
 func (r *Runner) initApplication() {
 	r.app = &app.Application{
 		Commands: app.Commands{
-			CreateLevel: command.NewCreateLevelHandler(r.persistence.levelRepo),
+			CreateLevel:    command.NewCreateLevelHandler(r.persistence.levelRepo),
+			AddUgsn:        command.NewAddUgsnHandler(r.persistence.ugsnRepo, r.persistence.levelRepo),
+			AddPrograms:    command.NewAddProgramsHandler(r.persistence.programRepo, r.persistence.specialtyRepo),
+			AddSpecialties: command.NewAddSpecialtiesHandler(r.persistence.specialtyRepo, r.persistence.ugsnRepo),
 		},
 		Queries: app.Queries{
-			FindLevels: query.NewFindLevelsHandler(r.persistence.levelsReadModel),
+			FindLevels:         query.NewFindLevelsHandler(r.persistence.levelsReadModel),
+			FindAllUgsn:        query.NewFindUgsnHandler(r.persistence.ugsnReadModels),
+			FindAllSpecialties: query.NewFindSpecialtiesHandler(r.persistence.specialtyReadModels),
+			FindAllPrograms:    query.NewFindProgramsHandler(r.persistence.programReadModels),
 		},
 	}
 }

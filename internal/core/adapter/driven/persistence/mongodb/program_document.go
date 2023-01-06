@@ -1,13 +1,16 @@
 package mongodb
 
-import "github.com/competencies-ru/competency-constructor/internal/core/entity/education"
+import (
+	"github.com/competencies-ru/competency-constructor/internal/core/app/query"
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
+)
 
 type (
 	programsDocument struct {
 		ID            string `bson:"_id,omitempty"`
 		Code          string `bson:"code"`
 		Title         string `bson:"title"`
-		SpecialtiesID string `bson:"specialties_id"`
+		SpecialtiesID string `bson:"specialty_id"`
 	}
 )
 
@@ -39,4 +42,19 @@ func newPrograms(documents []programsDocument) []*education.Program {
 	}
 
 	return programs
+}
+
+func newProgramModels(documents []programsDocument) []query.ProgramModel {
+	result := make([]query.ProgramModel, 0, len(documents))
+
+	for _, document := range documents {
+		result = append(result, query.ProgramModel{
+			ID:          document.ID,
+			Code:        document.Code,
+			Title:       document.Title,
+			SpecialtyID: document.SpecialtiesID,
+		})
+	}
+
+	return result
 }

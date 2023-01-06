@@ -12,6 +12,7 @@ var (
 	ErrLevelNotFound          = errors.New("level not found")
 	ErrUgsnNotFound           = errors.New("ugsn not found")
 	ErrSpecialtyNotFound      = errors.New("specialty not found")
+	ErrProgramNotFound        = errors.New("program not found")
 	ErrProgramAlreadyExists   = errors.New("program already exists")
 	ErrSpecialtyAlreadyExists = errors.New("specialty already exists")
 	ErrUgsnAlreadyExists      = errors.New("ugsn already exists")

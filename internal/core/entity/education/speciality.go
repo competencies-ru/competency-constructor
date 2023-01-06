@@ -48,7 +48,7 @@ func NewSpeciality(param SpecialityParams) (*Speciality, error) {
 		return nil, ErrSpecialityTitleIsEmpty
 	}
 
-	if SpecialtyCodeValidate(param.Code) {
+	if !SpecialtyCodeValidate(param.Code) {
 		return nil, ErrSpecialityParseCode
 	}
 

@@ -61,7 +61,7 @@ func NewUgsn(param UgsnParams) (*Ugsn, error) {
 		return nil, ErrUgsnTitleIsEmpty
 	}
 
-	if UgsnCodeValidate(param.Code) {
+	if !UgsnCodeValidate(param.Code) {
 		return nil, ErrUgsnParseCode
 	}
 

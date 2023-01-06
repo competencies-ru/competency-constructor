@@ -3,6 +3,8 @@ package v1
 import (
 	"net/http"
 
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 	"github.com/pkg/errors"
@@ -48,6 +50,12 @@ func (h handler) AddUgsn(w http.ResponseWriter, r *http.Request, levelID string)
 
 	if errors.Is(err, service.ErrUgsnAlreadyExists) {
 		rest.NotFound(string(BadRequest), err, w, r)
+
+		return
+	}
+
+	if education.IsInvalidUgsnParametersError(err) {
+		rest.UnprocessableEntity(string(InvalidUgsnParameters), err, w, r)
 
 		return
 	}

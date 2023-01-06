@@ -41,7 +41,7 @@ func (r *LevelRepository) AddLevel(ctx context.Context, level *education.Level) 
 }
 
 func (r *LevelRepository) GetLevel(ctx context.Context, id string) (*education.Level, error) {
-	filter := bson.M{"id": id}
+	filter := bson.M{"_id": id}
 
 	document, err := r.getLevelDocument(ctx, filter)
 	if err != nil {

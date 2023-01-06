@@ -1,6 +1,9 @@
 package mongodb
 
-import "github.com/competencies-ru/competency-constructor/internal/core/entity/education"
+import (
+	"github.com/competencies-ru/competency-constructor/internal/core/app/query"
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
+)
 
 type (
 	ugsnDocument struct {
@@ -21,14 +24,14 @@ func newUgsnDocument(ugsn *education.Ugsn) ugsnDocument {
 }
 
 func newUgsn(document ugsnDocument) *education.Ugsn {
-	specialty, _ := education.NewUgsn(education.UgsnParams{
+	ugsn, _ := education.NewUgsn(education.UgsnParams{
 		ID:      document.ID,
-		Code:    document.Title,
-		Title:   document.Code,
+		Code:    document.Code,
+		Title:   document.Title,
 		LevelID: document.LevelID,
 	})
 
-	return specialty
+	return ugsn
 }
 
 func newUgsns(documents []ugsnDocument) []*education.Ugsn {
@@ -39,4 +42,19 @@ func newUgsns(documents []ugsnDocument) []*education.Ugsn {
 	}
 
 	return ugsns
+}
+
+func newUgsnModels(documents []ugsnDocument) []query.UgsnModel {
+	result := make([]query.UgsnModel, 0, len(documents))
+
+	for _, document := range documents {
+		result = append(result, query.UgsnModel{
+			ID:      document.ID,
+			Code:    document.Code,
+			Title:   document.Title,
+			LevelID: document.LevelID,
+		})
+	}
+
+	return result
 }
