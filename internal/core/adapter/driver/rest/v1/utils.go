@@ -3,6 +3,8 @@ package v1
 import (
 	"net/http"
 
+	"github.com/google/uuid"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
 	"github.com/go-chi/render"
 )
@@ -15,4 +17,8 @@ func decode[T any](w http.ResponseWriter, r *http.Request, v T) bool {
 	}
 
 	return true
+}
+
+func toUUID(id string) uuid.UUID {
+	return uuid.MustParse(id)
 }

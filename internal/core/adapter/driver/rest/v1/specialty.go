@@ -3,6 +3,8 @@ package v1
 import (
 	"net/http"
 
+	openapiTypes "github.com/deepmap/oapi-codegen/pkg/types"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
@@ -10,8 +12,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (h handler) GetSpecialties(w http.ResponseWriter, r *http.Request, id string) {
-	models, err := h.app.Queries.FindAllSpecialties.Handle(r.Context(), id)
+func (h handler) GetSpecialties(w http.ResponseWriter, r *http.Request, id openapiTypes.UUID) {
+	models, err := h.app.Queries.FindAllSpecialties.Handle(r.Context(), id.String())
 
 	if err == nil {
 		renderSpecialtyResponse(w, r, models)
@@ -28,14 +30,14 @@ func (h handler) GetSpecialties(w http.ResponseWriter, r *http.Request, id strin
 	rest.InternalServerError(string(UnexpectedError), err, w, r)
 }
 
-func (h handler) AddSpecialties(w http.ResponseWriter, r *http.Request, id string) {
+func (h handler) AddSpecialties(w http.ResponseWriter, r *http.Request, id openapiTypes.UUID) {
 	command, ok := decodeSpecialtyRequest(w, r)
 
 	if !ok {
 		return
 	}
 
-	err := h.app.Commands.AddSpecialties.Handle(r.Context(), id, command)
+	err := h.app.Commands.AddSpecialties.Handle(r.Context(), id.String(), command)
 
 	if err == nil {
 		w.WriteHeader(http.StatusCreated)
@@ -64,12 +66,12 @@ func (h handler) AddSpecialties(w http.ResponseWriter, r *http.Request, id strin
 	rest.InternalServerError(string(UnexpectedError), err, w, r)
 }
 
-func (h handler) DeleteSpecialty(w http.ResponseWriter, r *http.Request, id string) {
+func (h handler) DeleteSpecialty(w http.ResponseWriter, r *http.Request, id openapiTypes.UUID) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func (h handler) GetSpecificSpecialty(w http.ResponseWriter, r *http.Request, id string) {
+func (h handler) GetSpecificSpecialty(w http.ResponseWriter, r *http.Request, id openapiTypes.UUID) {
 	// TODO implement me
 	panic("implement me")
 }

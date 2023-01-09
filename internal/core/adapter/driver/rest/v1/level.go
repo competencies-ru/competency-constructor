@@ -2,8 +2,10 @@ package v1
 
 import (
 	"fmt"
-	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 	"net/http"
+
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
+	openapiTypes "github.com/deepmap/oapi-codegen/pkg/types"
 
 	"github.com/competencies-ru/competency-constructor/internal/core/adapter/driver/rest"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
@@ -55,7 +57,7 @@ func (h handler) CreateLevel(w http.ResponseWriter, r *http.Request) {
 	rest.InternalServerError(string(UnexpectedError), err, w, r)
 }
 
-func (h handler) GetSpecificLevel(w http.ResponseWriter, r *http.Request, levelID string) {
+func (h handler) GetSpecificLevel(w http.ResponseWriter, r *http.Request, levelID openapiTypes.UUID) {
 	// TODO implement me
 	panic("implement me")
 }

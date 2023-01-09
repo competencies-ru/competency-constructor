@@ -35,10 +35,10 @@ paths:
               $ref: "#/components/schemas/CreateLevelRequest"
       responses:
         201:
-          description: Test campaign is created.
+          description: Level is created.
           headers:
             Location:
-              description: Created test campaign URI.
+              description: Created level URI.
               schema:
                 type: string
         400:
@@ -59,7 +59,7 @@ paths:
           name: levelId
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: Level ID to return
       responses:
@@ -87,7 +87,7 @@ paths:
           name: levelId
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: Return ugsn by level id
       responses:
@@ -115,7 +115,7 @@ paths:
           name: levelId
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: Return ugsn by level id
       requestBody:
@@ -148,7 +148,7 @@ paths:
           name: id
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: ugsn code
       responses:
@@ -174,7 +174,7 @@ paths:
           name: id
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: level id
       responses:
@@ -198,7 +198,7 @@ paths:
           name: id
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: id
       responses:
@@ -226,7 +226,7 @@ paths:
           name: id
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: ugsn id
       requestBody:
@@ -257,7 +257,7 @@ paths:
           name: id
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: specialty id
       responses:
@@ -283,7 +283,7 @@ paths:
           name: id
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: level id
       responses:
@@ -307,7 +307,7 @@ paths:
           name: id
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: specialty id
       responses:
@@ -335,7 +335,7 @@ paths:
           name: id
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: specialty id
       requestBody:
@@ -366,7 +366,7 @@ paths:
           name: id
           schema:
             type: string
-            pattern: uuid
+            format: uuid
           required: true
           description: program id
       responses:
@@ -378,6 +378,161 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
+  /competencies:
+    post:
+      tags:
+        - competencies
+      operationId: createCompetency
+      summary: create competency
+      requestBody:
+        description: Create competence type.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCompetencyRequest"
+      responses:
+        201:
+          description: Competency is created.
+          headers:
+            Location:
+              description: Created competency URI.
+              schema:
+                type: string
+        400:
+          description: Bad-request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        422:
+          description: Invalid-competency-parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+        404:
+          description: Entity not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    get:
+      tags:
+        - competencies
+      operationId: filterCompetency
+      summary: filter competency
+      requestBody:
+        description: filter type for competence.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompetencyFilterRequest"
+      responses:
+        200:
+          description: Get competencies.
+          headers:
+            Location:
+              description: Created competency URI.
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CompetencyResponse"
+        400:
+          description: Bad-request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+  /competency/{competencyId}/inicators:
+    post:
+      tags:
+        - indicators
+      operationId: createIndicator
+      summary: create indicator
+      parameters:
+        - in: path
+          name: competencyId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: competency Id
+      requestBody:
+        description: Create competence type.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateIndicatorRequest"
+      responses:
+        201:
+          description: Competency is created.
+          headers:
+            Location:
+              description: Created indicator URI.
+              schema:
+                type: string
+        400:
+          description: Bad-request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        422:
+          description: Invalid-competency-parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+        404:
+          description: Entity not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    get:
+      tags:
+        - indicators
+      operationId: getIndicators
+      summary: get indicators by competencyId
+      parameters:
+        - in: path
+          name: competencyId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: competency Id
+      responses:
+        200:
+          description: Get competencies.
+          headers:
+            Location:
+              description: Created competency URI.
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CompetencyResponse"
+        400:
+          description: Bad-request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+
+
+
 
 
 
@@ -404,6 +559,8 @@ components:
         - ugsn-not-found
         - specialty-not-found
         - program-not-found
+        - competency-not-found
+        - indicator-not-found
         - invalid-json
         - bad-request
         - unexpected-error
@@ -414,6 +571,8 @@ components:
         - invalid-ugsn-parameters
         - invalid-specialties-parameters
         - invalid-program-parameters
+        - invalid-competency-parameters
+        - invalid-indicator-parameters
 
     CreateUgsnRequest:
       type: object
@@ -455,7 +614,7 @@ components:
       properties:
         id:
           type: string
-          pattern: uuid
+          format: uuid
         title:
           type: string
 
@@ -468,7 +627,7 @@ components:
       properties:
         id:
           type: string
-          pattern: uuid
+          format: uuid
         title:
           type: string
         ugsn:
@@ -486,7 +645,7 @@ components:
       properties:
         id:
           type: string
-          pattern: uuid
+          format: uuid
         code:
           type: string
           pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})-(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
@@ -494,7 +653,7 @@ components:
           type: string
         specialtyId:
           type: string
-          pattern: uuid
+          format: uuid
 
     SpecificSpecialtyResponse:
       type: object
@@ -506,7 +665,7 @@ components:
       properties:
         id:
           type: string
-          pattern: uuid
+          format: uuid
         code:
           type: string
           pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
@@ -527,7 +686,7 @@ components:
       properties:
         id:
           type: string
-          pattern: uuid
+          format: uuid
         code:
           type: string
           pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.00\.00$'
@@ -548,7 +707,7 @@ components:
       properties:
         id:
           type: string
-          pattern: uuid
+          format: uuid
         code:
           type: string
           pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.00\.00$'
@@ -556,7 +715,7 @@ components:
           type: string
         levelId:
           type: string
-          pattern: uuid
+          format: uuid
 
     SpecialtyResponse:
       type: object
@@ -568,7 +727,7 @@ components:
       properties:
         id:
           type: string
-          pattern: uuid
+          format: uuid
         code:
           type: string
           pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
@@ -576,7 +735,7 @@ components:
           type: string
         ugsnId:
           type: string
-          pattern: uuid
+          format: uuid
 
     CreateProgramRequest:
       type: object
@@ -589,3 +748,125 @@ components:
           pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})-(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
         title:
           type: string
+
+    CreateCompetencyRequest:
+      type: object
+      required:
+        - category
+        - title
+        - type
+        - code
+      properties:
+        category:
+          type: string
+        code:
+          type: string
+          pattern: '^(УК|ОПК|ПК)-([1-9]{1}[0-9]?)$'
+        title:
+          type: string
+        type:
+          $ref: "#/components/schemas/Type"
+        ugsnId:
+          type: string
+          format: uuid
+        levelId:
+          type: string
+          format: uuid
+        specialtyId:
+          type: string
+          format: uuid
+        programId:
+          type: string
+          format: uuid
+
+    Type:
+      type: string
+      enum:
+        - УК
+        - ОПК
+        - ПК
+
+    CompetencyResponse:
+      type: object
+      required:
+        - id
+        - category
+        - title
+        - type
+        - code
+      properties:
+        id:
+          type: string
+          format: uuid
+        category:
+          type: string
+        code:
+          type: string
+          pattern: '^(УК|ОПК|ПК)-([1-9]{1}[0-9]?)$'
+        title:
+          type: string
+        type:
+          $ref: "#/components/schemas/Type"
+        ugsnId:
+          type: string
+          format: uuid
+        levelId:
+          type: string
+          format: uuid
+        specialtyId:
+          type: string
+          format: uuid
+        programId:
+          type: string
+          format: uuid
+
+
+    CompetencyFilterRequest:
+      type: object
+      properties:
+        ugsnId:
+          type: string
+          format: uuid
+        levelId:
+          type: string
+          format: uuid
+        specialtyId:
+          type: string
+          format: uuid
+        programId:
+          type: string
+          format: uuid
+
+    CreateIndicatorRequest:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^(УК|ОПК|ПК)-([1-9]{1}[0-9]?\.[1-9]{1}[0-9]?)$'
+        title:
+          type: string
+
+
+    IndicatorResponse:
+      type: object
+      required:
+        - id
+        - code
+        - title
+        - competencyId
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+          pattern: '^(УК|ОПК|ПК)-([1-9]{1}[0-9]?\.[1-9]{1}[0-9]?)$'
+        title:
+          type: string
+        competencyId:
+          type: string
+          format: uuid
+

@@ -31,8 +31,8 @@ func renderProgramsResponse(w http.ResponseWriter, r *http.Request, models []que
 func newProgramResponse(model query.ProgramModel) ProgramResponse {
 	return ProgramResponse{
 		Code:        model.Code,
-		Id:          model.ID,
+		Id:          toUUID(model.ID),
 		Title:       model.Title,
-		SpecialtyId: model.SpecialtyID,
+		SpecialtyId: toUUID(model.SpecialtyID),
 	}
 }

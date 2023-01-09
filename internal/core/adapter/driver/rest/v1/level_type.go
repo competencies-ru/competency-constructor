@@ -23,7 +23,7 @@ func renderLevelResponse(w http.ResponseWriter, r *http.Request, models []query.
 
 	for _, model := range models {
 		response = append(response, LevelResponse{
-			Id:    model.ID,
+			Id:    toUUID(model.ID),
 			Title: model.Title,
 		})
 	}

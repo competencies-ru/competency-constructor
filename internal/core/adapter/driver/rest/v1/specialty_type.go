@@ -24,9 +24,9 @@ func renderSpecialtyResponse(w http.ResponseWriter, r *http.Request, models []qu
 	for _, model := range models {
 		response = append(response, SpecialtyResponse{
 			Code:   model.Code,
-			Id:     model.ID,
+			Id:     toUUID(model.ID),
 			Title:  model.Title,
-			UgsnId: model.UgsnID,
+			UgsnId: toUUID(model.UgsnID),
 		})
 	}
 

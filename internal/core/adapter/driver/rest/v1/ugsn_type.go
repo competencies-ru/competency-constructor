@@ -13,10 +13,10 @@ func renderUgsnReponse(w http.ResponseWriter, r *http.Request, models []query.Ug
 
 	for _, model := range models {
 		response = append(response, UgsnResponse{
-			Id:      model.ID,
+			Id:      toUUID(model.ID),
 			Code:    model.Code,
 			Title:   model.Title,
-			LevelId: model.LevelID,
+			LevelId: toUUID(model.LevelID),
 		})
 	}
 
