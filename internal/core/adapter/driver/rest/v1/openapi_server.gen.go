@@ -14,10 +14,10 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// filter competency
+	// filter competencies
 	// (GET /competencies)
-	FilterCompetency(w http.ResponseWriter, r *http.Request)
-	// create competency
+	FilterCompetency(w http.ResponseWriter, r *http.Request, params FilterCompetencyParams)
+	// create competencies
 	// (POST /competencies)
 	CreateCompetency(w http.ResponseWriter, r *http.Request)
 	// get indicators by competencyId
@@ -83,8 +83,45 @@ type MiddlewareFunc func(http.Handler) http.Handler
 func (siw *ServerInterfaceWrapper) FilterCompetency(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params FilterCompetencyParams
+
+	// ------------- Optional query parameter "levelId" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "levelId", r.URL.Query(), &params.LevelId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "levelId", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "ugsnId" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "ugsnId", r.URL.Query(), &params.UgsnId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ugsnId", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "specialtyId" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "specialtyId", r.URL.Query(), &params.SpecialtyId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "specialtyId", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "programId" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "programId", r.URL.Query(), &params.ProgramId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "programId", Err: err})
+		return
+	}
+
 	var handler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.FilterCompetency(w, r)
+		siw.Handler.FilterCompetency(w, r, params)
 	})
 
 	for _, middleware := range siw.HandlerMiddlewares {

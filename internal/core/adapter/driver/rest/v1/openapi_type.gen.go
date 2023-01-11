@@ -7,42 +7,35 @@ import (
 	openapi_types "github.com/deepmap/oapi-codegen/pkg/types"
 )
 
+// Defines values for CompetencyType.
+const (
+	GENERAL      CompetencyType = "GENERAL"
+	PROFESSIONAL CompetencyType = "PROFESSIONAL"
+	UNIVERSAL    CompetencyType = "UNIVERSAL"
+)
+
 // Defines values for ErrorSlug.
 const (
-	BadRequest                   ErrorSlug = "bad-request"
-	CompetencyNotFound           ErrorSlug = "competency-not-found"
-	EmptyBearerToken             ErrorSlug = "empty-bearer-token"
-	IndicatorNotFound            ErrorSlug = "indicator-not-found"
-	InvalidCompetencyParameters  ErrorSlug = "invalid-competency-parameters"
-	InvalidIndicatorParameters   ErrorSlug = "invalid-indicator-parameters"
-	InvalidJson                  ErrorSlug = "invalid-json"
-	InvalidLevelParameters       ErrorSlug = "invalid-level-parameters"
-	InvalidProgramParameters     ErrorSlug = "invalid-program-parameters"
-	InvalidSpecialtiesParameters ErrorSlug = "invalid-specialties-parameters"
-	InvalidUgsnParameters        ErrorSlug = "invalid-ugsn-parameters"
-	LevelNotFound                ErrorSlug = "level-not-found"
-	ProgramNotFound              ErrorSlug = "program-not-found"
-	SpecialtyNotFound            ErrorSlug = "specialty-not-found"
-	UgsnNotFound                 ErrorSlug = "ugsn-not-found"
-	UnableToVerifyJwt            ErrorSlug = "unable-to-verify-jwt"
-	UnauthorizedUser             ErrorSlug = "unauthorized-user"
-	UnexpectedError              ErrorSlug = "unexpected-error"
+	BadRequest                    ErrorSlug = "bad-request"
+	CompetenciesNotFound          ErrorSlug = "competencies-not-found"
+	EmptyBearerToken              ErrorSlug = "empty-bearer-token"
+	IndicatorNotFound             ErrorSlug = "indicator-not-found"
+	InvalidCompetenciesParameters ErrorSlug = "invalid-competencies-parameters"
+	InvalidIndicatorParameters    ErrorSlug = "invalid-indicator-parameters"
+	InvalidJson                   ErrorSlug = "invalid-json"
+	InvalidLevelParameters        ErrorSlug = "invalid-level-parameters"
+	InvalidProgramParameters      ErrorSlug = "invalid-program-parameters"
+	InvalidSpecialtiesParameters  ErrorSlug = "invalid-specialties-parameters"
+	InvalidUgsnParameters         ErrorSlug = "invalid-ugsn-parameters"
+	LevelNotFound                 ErrorSlug = "level-not-found"
+	NotFoundEntity                ErrorSlug = "not-found-entity"
+	ProgramNotFound               ErrorSlug = "program-not-found"
+	SpecialtyNotFound             ErrorSlug = "specialty-not-found"
+	UgsnNotFound                  ErrorSlug = "ugsn-not-found"
+	UnableToVerifyJwt             ErrorSlug = "unable-to-verify-jwt"
+	UnauthorizedUser              ErrorSlug = "unauthorized-user"
+	UnexpectedError               ErrorSlug = "unexpected-error"
 )
-
-// Defines values for Type.
-const (
-	ОПК Type = "ОПК"
-	ПК  Type = "ПК"
-	УК  Type = "УК"
-)
-
-// CompetencyFilterRequest defines model for CompetencyFilterRequest.
-type CompetencyFilterRequest struct {
-	LevelId     *openapi_types.UUID `json:"levelId,omitempty"`
-	ProgramId   *openapi_types.UUID `json:"programId,omitempty"`
-	SpecialtyId *openapi_types.UUID `json:"specialtyId,omitempty"`
-	UgsnId      *openapi_types.UUID `json:"ugsnId,omitempty"`
-}
 
 // CompetencyResponse defines model for CompetencyResponse.
 type CompetencyResponse struct {
@@ -53,9 +46,12 @@ type CompetencyResponse struct {
 	ProgramId   *openapi_types.UUID `json:"programId,omitempty"`
 	SpecialtyId *openapi_types.UUID `json:"specialtyId,omitempty"`
 	Title       string              `json:"title"`
-	Type        Type                `json:"type"`
+	Type        CompetencyType      `json:"type"`
 	UgsnId      *openapi_types.UUID `json:"ugsnId,omitempty"`
 }
+
+// CompetencyType defines model for CompetencyType.
+type CompetencyType string
 
 // CreateCompetencyRequest defines model for CreateCompetencyRequest.
 type CreateCompetencyRequest struct {
@@ -65,7 +61,7 @@ type CreateCompetencyRequest struct {
 	ProgramId   *openapi_types.UUID `json:"programId,omitempty"`
 	SpecialtyId *openapi_types.UUID `json:"specialtyId,omitempty"`
 	Title       string              `json:"title"`
-	Type        Type                `json:"type"`
+	Type        CompetencyType      `json:"type"`
 	UgsnId      *openapi_types.UUID `json:"ugsnId,omitempty"`
 }
 
@@ -152,9 +148,6 @@ type SpecificUgsnResponse struct {
 	Title     string                      `json:"title"`
 }
 
-// Type defines model for Type.
-type Type string
-
 // UgsnResponse defines model for UgsnResponse.
 type UgsnResponse struct {
 	Code    string             `json:"code"`
@@ -163,8 +156,20 @@ type UgsnResponse struct {
 	Title   string             `json:"title"`
 }
 
-// FilterCompetencyJSONRequestBody defines body for FilterCompetency for application/json ContentType.
-type FilterCompetencyJSONRequestBody = CompetencyFilterRequest
+// FilterCompetencyParams defines parameters for FilterCompetency.
+type FilterCompetencyParams struct {
+	// LevelId select level id
+	LevelId *openapi_types.UUID `form:"levelId,omitempty" json:"levelId,omitempty"`
+
+	// UgsnId select ugsn id
+	UgsnId *openapi_types.UUID `form:"ugsnId,omitempty" json:"ugsnId,omitempty"`
+
+	// SpecialtyId select specialty id
+	SpecialtyId *openapi_types.UUID `form:"specialtyId,omitempty" json:"specialtyId,omitempty"`
+
+	// ProgramId select program id
+	ProgramId *openapi_types.UUID `form:"programId,omitempty" json:"programId,omitempty"`
+}
 
 // CreateCompetencyJSONRequestBody defines body for CreateCompetency for application/json ContentType.
 type CreateCompetencyJSONRequestBody = CreateCompetencyRequest

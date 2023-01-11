@@ -15,19 +15,19 @@ type FindProgramsHandler interface {
 }
 
 type findProgramsHandler struct {
-	levelRepo ProgramsReadModels
+	programsReadModels ProgramsReadModels
 }
 
 func NewFindProgramsHandler(repo ProgramsReadModels) FindProgramsHandler {
 	if repo == nil {
-		panic("level repository is nil")
+		panic("program repository is nil")
 	}
 
-	return findProgramsHandler{levelRepo: repo}
+	return findProgramsHandler{programsReadModels: repo}
 }
 
 func (h findProgramsHandler) Handle(ctx context.Context, sid string) ([]ProgramModel, error) {
-	models, err := h.levelRepo.FindAllPrograms(ctx, sid)
+	models, err := h.programsReadModels.FindAllPrograms(ctx, sid)
 
 	return models, errors.Wrapf(err, "get programs by specialty id: %s", sid)
 }

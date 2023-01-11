@@ -1,8 +1,9 @@
 package competencies
 
 import (
-	"github.com/pkg/errors"
 	"strconv"
+
+	"github.com/pkg/errors"
 )
 
 var ErrNoSuchValue = errors.New("competencies type: no such value")
@@ -25,7 +26,7 @@ func (t Type) String() string {
 		return "УК"
 	}
 
-	return "%!CompetencyType(" + strconv.Itoa(t) + ")"
+	return "%!CompetencyType(" + strconv.Itoa(int(t)) + ")"
 }
 
 func (t Type) IsValid() bool {

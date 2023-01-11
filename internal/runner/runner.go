@@ -41,14 +41,16 @@ type singletonZapLogger struct {
 }
 
 type persistenceContext struct {
-	levelRepo           service.LevelRepository
-	levelsReadModel     query.LevelReadModels
-	ugsnReadModels      query.UgsnReadModels
-	specialtyReadModels query.SpecialtiesReadModels
-	programReadModels   query.ProgramsReadModels
-	ugsnRepo            service.UgsnRepository
-	specialtyRepo       service.SpecialtyRepository
-	programRepo         service.ProgramRepository
+	levelRepo            service.LevelRepository
+	levelsReadModel      query.LevelReadModels
+	ugsnReadModels       query.UgsnReadModels
+	specialtyReadModels  query.SpecialtiesReadModels
+	programReadModels    query.ProgramsReadModels
+	ugsnRepo             service.UgsnRepository
+	specialtyRepo        service.SpecialtyRepository
+	programRepo          service.ProgramRepository
+	competencyRepo       service.CompetencyRepository
+	filterCompetencyRepo query.FilterCompetencyReadModels
 }
 
 type Runner struct {
@@ -93,6 +95,7 @@ func (r *Runner) initPersistent() {
 	ugsnRepo := mongoRepo.NewUgsnRepository(database)
 	specialtyRepo := mongoRepo.NewSpecialtyRepository(database)
 	programRepo := mongoRepo.NewProgramRepository(database)
+	competencyRepo := mongoRepo.NewCompetencyRepository(database)
 
 	r.persistence.levelRepo = levelRepo
 	r.logger.Info("Level repository initialization completed", args...)
@@ -117,6 +120,12 @@ func (r *Runner) initPersistent() {
 
 	r.persistence.ugsnReadModels = ugsnRepo
 	r.logger.Info("Ugsn read models repository initialization completed", args...)
+
+	r.persistence.competencyRepo = competencyRepo
+	r.logger.Info("Competency repository initialization completed", args...)
+
+	r.persistence.filterCompetencyRepo = competencyRepo
+	r.logger.Info("filter competency models repository initialization completed", args...)
 }
 
 func (r *Runner) initLogger() {
@@ -152,12 +161,20 @@ func (r *Runner) initApplication() {
 			AddUgsn:        command.NewAddUgsnHandler(r.persistence.ugsnRepo, r.persistence.levelRepo),
 			AddPrograms:    command.NewAddProgramsHandler(r.persistence.programRepo, r.persistence.specialtyRepo),
 			AddSpecialties: command.NewAddSpecialtiesHandler(r.persistence.specialtyRepo, r.persistence.ugsnRepo),
+			CreateCompetency: command.NewCreateCompetencyHandler(
+				r.persistence.competencyRepo,
+				r.persistence.levelRepo,
+				r.persistence.ugsnRepo,
+				r.persistence.specialtyRepo,
+				r.persistence.programRepo,
+			),
 		},
 		Queries: app.Queries{
 			FindLevels:         query.NewFindLevelsHandler(r.persistence.levelsReadModel),
 			FindAllUgsn:        query.NewFindUgsnHandler(r.persistence.ugsnReadModels),
 			FindAllSpecialties: query.NewFindSpecialtiesHandler(r.persistence.specialtyReadModels),
 			FindAllPrograms:    query.NewFindProgramsHandler(r.persistence.programReadModels),
+			FindAllCompetency:  query.NewFilterCompetenciesHandler(r.persistence.filterCompetencyRepo),
 		},
 	}
 }

@@ -12,10 +12,11 @@ type (
 	}
 
 	Commands struct {
-		CreateLevel    command.CreateLevelHandler
-		AddUgsn        command.AddUgsnHandler
-		AddSpecialties command.AddSpecialtiesHandler
-		AddPrograms    command.AddProgramHandler
+		CreateLevel      command.CreateLevelHandler
+		AddUgsn          command.AddUgsnHandler
+		AddSpecialties   command.AddSpecialtiesHandler
+		AddPrograms      command.AddProgramHandler
+		CreateCompetency command.CreateCompetenceHandler
 	}
 
 	Queries struct {
@@ -24,5 +25,6 @@ type (
 		FindAllUgsn        query.FindUgsnHandler
 		FindAllSpecialties query.FindSpecialtiesHandler
 		FindAllPrograms    query.FindProgramsHandler
+		FindAllCompetency  query.FilterCompetenciesHandler
 	}
 )

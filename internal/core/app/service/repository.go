@@ -3,20 +3,23 @@ package service
 import (
 	"context"
 
+	"github.com/competencies-ru/competency-constructor/internal/core/entity/competencies"
+
 	"github.com/pkg/errors"
 
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 )
 
 var (
-	ErrLevelNotFound          = errors.New("level not found")
-	ErrUgsnNotFound           = errors.New("ugsn not found")
-	ErrSpecialtyNotFound      = errors.New("specialty not found")
-	ErrProgramNotFound        = errors.New("program not found")
-	ErrProgramAlreadyExists   = errors.New("program already exists")
-	ErrSpecialtyAlreadyExists = errors.New("specialty already exists")
-	ErrUgsnAlreadyExists      = errors.New("ugsn already exists")
-	ErrLevelAlreadyExists     = errors.New("level already exists")
+	ErrLevelNotFound           = errors.New("level not found")
+	ErrUgsnNotFound            = errors.New("ugsn not found")
+	ErrSpecialtyNotFound       = errors.New("specialty not found")
+	ErrProgramNotFound         = errors.New("program not found")
+	ErrProgramAlreadyExists    = errors.New("program already exists")
+	ErrCompetencyAlreadyExists = errors.New("competency already exists")
+	ErrSpecialtyAlreadyExists  = errors.New("specialty already exists")
+	ErrUgsnAlreadyExists       = errors.New("ugsn already exists")
+	ErrLevelAlreadyExists      = errors.New("level already exists")
 )
 
 type (
@@ -49,3 +52,17 @@ type (
 		GetProgram(ctx context.Context, id string) (*education.Program, error)
 	}
 )
+
+type (
+	CompetencyRepository interface {
+		AddCompetency(ctx context.Context, competency *competencies.Competency) error
+		GetCompetency(ctx context.Context, id string) (*competencies.Competency, error)
+	}
+)
+
+func IsNotFoundEntity(err error) bool {
+	return errors.Is(err, ErrUgsnNotFound) ||
+		errors.Is(err, ErrLevelNotFound) ||
+		errors.Is(err, ErrSpecialtyNotFound) ||
+		errors.Is(err, ErrProgramNotFound)
+}

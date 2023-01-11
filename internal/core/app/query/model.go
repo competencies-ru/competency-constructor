@@ -1,5 +1,7 @@
 package query
 
+import "github.com/competencies-ru/competency-constructor/internal/core/entity/competencies"
+
 type (
 	LevelModel struct {
 		ID    string
@@ -49,5 +51,26 @@ type (
 		Code        string
 		Title       string
 		Specialties []SpecificSpecialtyModel
+	}
+)
+
+type (
+	FilterCompetencyParam struct {
+		LevelID     string
+		UgsnID      string
+		ProgramID   string
+		SpecialtyID string
+	}
+
+	CompetencyModel struct {
+		ID             string
+		Code           string
+		Title          string
+		Category       string
+		CompetencyType competencies.Type
+		LevelID        string
+		UgsnID         string
+		SpecialtyID    string
+		ProgramID      string
 	}
 )

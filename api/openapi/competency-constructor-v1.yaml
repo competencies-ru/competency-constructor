@@ -573,6 +573,7 @@ components:
     ErrorSlug:
       type: string
       enum:
+        - not-found-entity
         - level-not-found
         - ugsn-not-found
         - specialty-not-found
@@ -825,23 +826,6 @@ components:
           type: string
         type:
           $ref: "#/components/schemas/CompetencyType"
-        ugsnId:
-          type: string
-          format: uuid
-        levelId:
-          type: string
-          format: uuid
-        specialtyId:
-          type: string
-          format: uuid
-        programId:
-          type: string
-          format: uuid
-
-
-    CompetencyFilterRequest:
-      type: object
-      properties:
         ugsnId:
           type: string
           format: uuid
