@@ -384,7 +384,7 @@ paths:
       tags:
         - competencies
       operationId: createCompetency
-      summary: create competency
+      summary: create competencies
       requestBody:
         description: Create competence type.
         required: true
@@ -397,7 +397,7 @@ paths:
           description: Competency is created.
           headers:
             Location:
-              description: Created competency URI.
+              description: Created competencies URI.
               schema:
                 type: string
         400:
@@ -407,7 +407,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
         422:
-          description: Invalid-competency-parameters
+          description: Invalid-competencies-parameters
           content:
             application/json:
               schema:
@@ -424,7 +424,7 @@ paths:
       tags:
         - competencies
       operationId: filterCompetency
-      summary: filter competency
+      summary: filter competencies
       requestBody:
         description: filter type for competence.
         required: true
@@ -437,7 +437,7 @@ paths:
           description: Get competencies.
           headers:
             Location:
-              description: Created competency URI.
+              description: Created competencies URI.
               schema:
                 type: array
                 items:
@@ -463,7 +463,7 @@ paths:
             type: string
             format: uuid
           required: true
-          description: competency Id
+          description: competencies Id
       requestBody:
         description: Create competence type.
         required: true
@@ -486,7 +486,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
         422:
-          description: Invalid-competency-parameters
+          description: Invalid-competencies-parameters
           content:
             application/json:
               schema:
@@ -511,13 +511,13 @@ paths:
             type: string
             format: uuid
           required: true
-          description: competency Id
+          description: competencies Id
       responses:
         200:
           description: Get competencies.
           headers:
             Location:
-              description: Created competency URI.
+              description: Created competencies URI.
               schema:
                 type: array
                 items:
@@ -559,7 +559,7 @@ components:
         - ugsn-not-found
         - specialty-not-found
         - program-not-found
-        - competency-not-found
+        - competencies-not-found
         - indicator-not-found
         - invalid-json
         - bad-request
@@ -571,7 +571,7 @@ components:
         - invalid-ugsn-parameters
         - invalid-specialties-parameters
         - invalid-program-parameters
-        - invalid-competency-parameters
+        - invalid-competencies-parameters
         - invalid-indicator-parameters
 
     CreateUgsnRequest:
@@ -765,7 +765,7 @@ components:
         title:
           type: string
         type:
-          $ref: "#/components/schemas/Type"
+          $ref: "#/components/schemas/CompetencyType"
         ugsnId:
           type: string
           format: uuid
@@ -779,12 +779,12 @@ components:
           type: string
           format: uuid
 
-    Type:
+    CompetencyType:
       type: string
       enum:
-        - УК
-        - ОПК
-        - ПК
+        - UNIVERSAL
+        - GENERAL
+        - PROFESSIONAL
 
     CompetencyResponse:
       type: object
@@ -806,7 +806,7 @@ components:
         title:
           type: string
         type:
-          $ref: "#/components/schemas/Type"
+          $ref: "#/components/schemas/CompetencyType"
         ugsnId:
           type: string
           format: uuid
@@ -869,4 +869,3 @@ components:
         competencyId:
           type: string
           format: uuid
-
