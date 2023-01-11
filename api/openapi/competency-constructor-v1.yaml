@@ -425,13 +425,31 @@ paths:
         - competencies
       operationId: filterCompetency
       summary: filter competencies
-      requestBody:
-        description: filter type for competence.
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CompetencyFilterRequest"
+      parameters:
+        - in: query
+          name: levelId
+          schema:
+            type: string
+            format: uuid
+          description: select level id
+        - in: query
+          name: ugsnId
+          schema:
+            type: string
+            format: uuid
+          description: select ugsn id
+        - in: query
+          name: specialtyId
+          schema:
+            type: string
+            format: uuid
+          description: select specialty id
+        - in: query
+          name: programId
+          schema:
+            type: string
+            format: uuid
+          description: select program id
       responses:
         200:
           description: Get competencies.
