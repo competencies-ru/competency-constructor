@@ -27,6 +27,7 @@ func decodeCreateCompetencyRequest(w http.ResponseWriter, r *http.Request) (comm
 	return command.CreateCompetencyCommand{
 		Code:           request.Code,
 		Title:          request.Title,
+		Category:       request.Category,
 		CompetencyType: ctype,
 		LevelID:        toString(request.LevelId),
 		UgsnID:         toString(request.UgsnId),
