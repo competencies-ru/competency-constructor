@@ -56,17 +56,10 @@ func (r *CompetencyRepository) FilterCompetencies(
 	programID string,
 ) ([]query.CompetencyModel, error) {
 
-	var documents []competencyDocument
+	sort := options.Find().SetSort(bson.M{"code": 1})
 
-	cursor, err := r.competency.Find(ctx, makeFilterCompetency(levelID, ugsnID, specialtyID, programID))
+	documents, err := r.geCompetencyDocuments(ctx, makeFilterCompetency(levelID, ugsnID, specialtyID, programID), sort)
 	if err != nil {
-		return nil, err
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	if err := cursor.All(ctx, &documents); err != nil {
 		return nil, err
 	}
 
@@ -131,7 +124,7 @@ func (r *CompetencyRepository) geCompetencyDocument(
 
 func (r *CompetencyRepository) geCompetencyDocuments(
 	ctx context.Context,
-	filter bson.M,
+	filter interface{},
 	opts ...*options.FindOptions,
 ) ([]competencyDocument, error) {
 	var documents []competencyDocument
