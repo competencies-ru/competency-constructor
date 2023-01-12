@@ -1,6 +1,10 @@
 package competencies
 
-import "github.com/pkg/errors"
+import (
+	"strings"
+
+	"github.com/pkg/errors"
+)
 
 var (
 	ErrProgramIDIsEmpty            = errors.New("competency: programID is empty")
@@ -10,6 +14,7 @@ var (
 	ErrCompetencyTitleIsEmpty      = errors.New("competency: title is empty")
 	ErrCompetencyCategoryIsEmpty   = errors.New("competency: category is empty")
 	ErrCompetencyTypeInvalid       = errors.New("competency: type is invalid")
+	ErrInvalidCode                 = errors.New("competency: code is invalid")
 )
 
 type (
@@ -63,6 +68,10 @@ func NewCompetency(param CompetencyParam) (*Competency, error) {
 		return nil, err
 	}
 
+	if !isMatchCode(param.Code, param.CompetencyType) {
+		return nil, ErrInvalidCode
+	}
+
 	return &Competency{
 		id:             param.ID,
 		title:          param.Title,
@@ -74,6 +83,19 @@ func NewCompetency(param CompetencyParam) (*Competency, error) {
 		specialtyID:    param.SpecialtyID,
 		programID:      param.ProgramID,
 	}, nil
+}
+
+func isMatchCode(code string, p Type) bool {
+	switch p {
+	case GENERAL:
+		return strings.Contains(code[:3], p.String())
+	case PROFESSIONAL:
+		return strings.Contains(code[:2], p.String())
+	case UNIVERSAL:
+		return strings.Contains(code[:2], p.String())
+	}
+
+	return false
 }
 
 func competencyTypeDefinition(param CompetencyParam) error {
