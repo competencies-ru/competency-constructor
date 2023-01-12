@@ -81,12 +81,24 @@ func makeFilterCompetencyOnType(competency *competencies.Competency) bson.M {
 }
 
 func makeFilterCompetency(levelID, ugsnID, specialtyID, programID string) bson.M {
-	return bson.M{
-		"level_id":     levelID,
-		"ugsn_id":      ugsnID,
-		"specialty_id": specialtyID,
-		"program_id":   programID,
+	m := make(map[string]interface{})
+	if levelID != "" {
+		m["level_id"] = levelID
 	}
+
+	if ugsnID == "" {
+		m["ugsn_id"] = ugsnID
+	}
+
+	if specialtyID == "" {
+		m["specialty_id"] = specialtyID
+	}
+
+	if programID == "" {
+		m["program_id"] = programID
+	}
+
+	return m
 }
 
 func (r *CompetencyRepository) geCompetencyDocument(
