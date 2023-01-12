@@ -22,7 +22,7 @@ func match(patter, code string) bool {
 
 func ValidateCodeCompetency(code string) bool {
 	return match(
-		`^(УК|ОПК|ПК)-([1-9]{1}[0-9]?\.[1-9]{1}[0-9]?)$`,
+		`^(УК|ОПК|ПК)-([1-9]{1}[0-9]?)$`,
 		code,
 	)
 }
