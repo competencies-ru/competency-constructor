@@ -55,7 +55,6 @@ func (r *CompetencyRepository) FilterCompetencies(
 	specialtyID,
 	programID string,
 ) ([]query.CompetencyModel, error) {
-
 	sort := options.Find().SetSort(bson.M{"code": 1})
 
 	documents, err := r.geCompetencyDocuments(ctx, makeFilterCompetency(levelID, ugsnID, specialtyID, programID), sort)
