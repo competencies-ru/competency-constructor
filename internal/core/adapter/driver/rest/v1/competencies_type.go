@@ -3,6 +3,8 @@ package v1
 import (
 	"net/http"
 
+	"github.com/pkg/errors"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/app/query"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
@@ -51,13 +53,30 @@ func decodeCompetencyType(w http.ResponseWriter, r *http.Request, ctype Competen
 	return competencies.Type(0), false
 }
 
-func mappingFilterCompetencyParams(param FilterCompetencyParams) query.FilterCompetencyParam {
+func mappingFilterCompetencyParams(
+	w http.ResponseWriter,
+	r *http.Request,
+	param FilterCompetencyParams,
+) (query.FilterCompetencyParam, bool) {
+	if !validateParam(param) {
+		rest.BadRequest(string(BadRequest), errors.New("all params is nil"), w, r)
+
+		return query.FilterCompetencyParam{}, false
+	}
+
 	return query.FilterCompetencyParam{
 		LevelID:     toString(param.LevelId),
 		UgsnID:      toString(param.UgsnId),
 		ProgramID:   toString(param.ProgramId),
 		SpecialtyID: toString(param.SpecialtyId),
-	}
+	}, true
+}
+
+func validateParam(param FilterCompetencyParams) bool {
+	return param.LevelId != nil ||
+		param.UgsnId != nil ||
+		param.SpecialtyId != nil ||
+		param.ProgramId != nil
 }
 
 func mappingCompetencyType(t competencies.Type) CompetencyType {

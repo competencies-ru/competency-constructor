@@ -10,7 +10,11 @@ import (
 )
 
 func (h handler) FilterCompetency(w http.ResponseWriter, r *http.Request, params FilterCompetencyParams) {
-	filterCompetencyParams := mappingFilterCompetencyParams(params)
+	filterCompetencyParams, ok := mappingFilterCompetencyParams(w, r, params)
+
+	if !ok {
+		return
+	}
 
 	models, err := h.app.Queries.FindAllCompetency.Handle(r.Context(), filterCompetencyParams)
 	if err == nil {
