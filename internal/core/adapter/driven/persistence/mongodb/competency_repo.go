@@ -55,8 +55,18 @@ func (r *CompetencyRepository) FilterCompetencies(
 	specialtyID,
 	programID string,
 ) ([]query.CompetencyModel, error) {
-	documents, err := r.geCompetencyDocuments(ctx, makeFilterCompetency(levelID, ugsnID, specialtyID, programID))
+
+	var documents []competencyDocument
+
+	cursor, err := r.competency.Find(ctx, makeFilterCompetency(levelID, ugsnID, specialtyID, programID))
 	if err != nil {
+		return nil, err
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	if err := cursor.All(ctx, &documents); err != nil {
 		return nil, err
 	}
 
@@ -80,7 +90,7 @@ func makeFilterCompetencyOnType(competency *competencies.Competency) bson.M {
 	return bson.M{}
 }
 
-func makeFilterCompetency(levelID, ugsnID, specialtyID, programID string) bson.M {
+func makeFilterCompetency(levelID, ugsnID, specialtyID, programID string) bson.D {
 	m := make(map[string]interface{})
 	if levelID != "" {
 		m["level_id"] = levelID
@@ -98,7 +108,7 @@ func makeFilterCompetency(levelID, ugsnID, specialtyID, programID string) bson.M
 		m["program_id"] = programID
 	}
 
-	return m
+	return bson.D{{Key: "$or", Value: bson.A{m}}}
 }
 
 func (r *CompetencyRepository) geCompetencyDocument(
