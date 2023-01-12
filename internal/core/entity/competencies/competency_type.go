@@ -19,7 +19,7 @@ const (
 func (t Type) String() string {
 	switch t {
 	case GENERAL:
-		return "OПК"
+		return "ОПК"
 	case PROFESSIONAL:
 		return "ПК"
 	case UNIVERSAL:
