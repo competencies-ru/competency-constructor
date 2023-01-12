@@ -10,10 +10,11 @@ var ErrNoSuchValue = errors.New("competencies type: no such value")
 
 type Type uint8
 
+// Type - тип компетенции. Представляет собой enum.
 const (
-	GENERAL Type = iota + 1
-	PROFESSIONAL
-	UNIVERSAL
+	UNIVERSAL    Type = 1
+	GENERAL      Type = 2
+	PROFESSIONAL Type = 3
 )
 
 func (t Type) String() string {

@@ -88,11 +88,11 @@ func NewCompetency(param CompetencyParam) (*Competency, error) {
 func isMatchCode(code string, p Type) bool {
 	switch p {
 	case GENERAL:
-		return strings.Contains(code[:3], p.String())
+		return strings.Contains(code, p.String())
 	case PROFESSIONAL:
-		return strings.Contains(code[:2], p.String())
+		return strings.Contains(code, p.String())
 	case UNIVERSAL:
-		return strings.Contains(code[:2], p.String())
+		return strings.Contains(code, p.String())
 	}
 
 	return false

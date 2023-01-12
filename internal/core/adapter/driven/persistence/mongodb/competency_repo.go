@@ -55,9 +55,10 @@ func (r *CompetencyRepository) FilterCompetencies(
 	specialtyID,
 	programID string,
 ) ([]query.CompetencyModel, error) {
-	sort := options.Find().SetSort(bson.M{"code": 1})
+	sort := options.Find().SetSort(bson.D{{Key: "type", Value: 1}, {Key: "code", Value: 1}})
+	filter := makeFilterCompetency(levelID, ugsnID, specialtyID, programID)
 
-	documents, err := r.geCompetencyDocuments(ctx, makeFilterCompetency(levelID, ugsnID, specialtyID, programID), sort)
+	documents, err := r.geCompetencyDocuments(ctx, filter, sort)
 	if err != nil {
 		return nil, err
 	}
@@ -83,24 +84,24 @@ func makeFilterCompetencyOnType(competency *competencies.Competency) bson.M {
 }
 
 func makeFilterCompetency(levelID, ugsnID, specialtyID, programID string) bson.D {
-	m := make(map[string]interface{})
+	field := make([]bson.D, 0, 4)
 	if levelID != "" {
-		m["level_id"] = levelID
+		field = append(field, bson.D{{Key: "level_id", Value: levelID}})
 	}
 
-	if ugsnID == "" {
-		m["ugsn_id"] = ugsnID
+	if ugsnID != "" {
+		field = append(field, bson.D{{Key: "ugsn_id", Value: ugsnID}})
 	}
 
-	if specialtyID == "" {
-		m["specialty_id"] = specialtyID
+	if specialtyID != "" {
+		field = append(field, bson.D{{Key: "specialty_id", Value: specialtyID}})
 	}
 
-	if programID == "" {
-		m["program_id"] = programID
+	if programID != "" {
+		field = append(field, bson.D{{Key: "program_id", Value: programID}})
 	}
 
-	return bson.D{{Key: "$or", Value: bson.A{m}}}
+	return bson.D{{Key: "$or", Value: field}}
 }
 
 func (r *CompetencyRepository) geCompetencyDocument(
