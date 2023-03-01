@@ -1,0 +1,873 @@
+openapi: 3.0.3
+info:
+  title: Constructor competence API
+  description: The service is designed to create and fill a bank of competencies
+  version: 0.0.1
+servers:
+  - url: "https://{hostname}/competency-constructor/api/v1"
+paths:
+  /levels:
+    get:
+      tags:
+        - levels
+      operationId: getLevels
+      summary: Returns level of the educational program.
+      responses:
+        200:
+          description: Found previously created level educational.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LevelResponse"
+    post:
+      tags:
+        - levels
+      operationId: createLevel
+      summary: Create the level of the educational program
+      requestBody:
+        description: Level to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLevelRequest"
+      responses:
+        201:
+          description: Level is created.
+          headers:
+            Location:
+              description: Created level URI.
+              schema:
+                type: string
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /levels/{levelId}:
+    get:
+      tags:
+        - levels
+      operationId: getSpecificLevel
+      summary: Returns level with such ID.
+      parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Level ID to return
+      responses:
+        200:
+          description: Found previously created level.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpecificLevelResponse"
+        404:
+          description: Level with such ID not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /levels/{levelId}/ugsn:
+    get:
+      tags:
+        - ugsn
+      operationId: getUgsn
+      summary: return ugsn by level id
+      parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Return ugsn by level id
+      responses:
+        200:
+          description: Found previously created level.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UgsnResponse"
+        404:
+          description: Level with such ID not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - ugsn
+      operationId: addUgsn
+      summary: addedUgsn by level id
+      parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Return ugsn by level id
+      requestBody:
+        description: Added ugsn to level.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUgsnRequest"
+      responses:
+        200:
+          description: Added new ugsn to level.
+        404:
+          description: Level with such ID not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+
+  /ugsn/{id}:
+    get:
+      tags:
+        - ugsn
+      operationId: getSpecificUgsn
+      summary: return specific ugsn by level id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ugsn code
+      responses:
+        200:
+          description: Found previously created ugsn.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpecificUgsnResponse"
+        404:
+          description: Entity not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - ugsn
+      operationId: deleteUgsn
+      summary: delete ugsn by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: level id
+      responses:
+        200:
+          description: Delete ugsn by code.
+        404:
+          description: Ugsn not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /ugsn/{id}/specialties:
+    get:
+      tags:
+        - specialties
+      operationId: getSpecialties
+      summary: return specialties by ugsn id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: id
+      responses:
+        200:
+          description: Found previously created specialties.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SpecialtyResponse"
+        404:
+          description: Entity not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - specialties
+      operationId: addSpecialties
+      summary: add specialties by level id and ugsn code
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ugsn id
+      requestBody:
+        description: Added specialties to ugsn.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSpecialtyRequest"
+      responses:
+        200:
+          description: Added new specialty to ugsn.
+        404:
+          description: ugsn with such ID not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /specialty/{id}:
+    get:
+      tags:
+        - specialties
+      operationId: getSpecificSpecialty
+      summary: return specific ugsn by level id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: specialty id
+      responses:
+        200:
+          description: Found previously created level.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpecificSpecialtyResponse"
+        404:
+          description: Entity not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - specialties
+      operationId: deleteSpecialty
+      summary: delete specialty by code ugsn and level id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: level id
+      responses:
+        200:
+          description: Delete ugsn by code.
+        404:
+          description: Ugsn not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /specialty/{id}/programs:
+    get:
+      tags:
+        - programs
+      operationId: getPrograms
+      summary: return programs
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: specialty id
+      responses:
+        200:
+          description: Return programs by level and ugsn code and specialty code.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProgramResponse"
+        404:
+          description: Entity not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - programs
+      operationId: addPrograms
+      summary: create programs
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: specialty id
+      requestBody:
+        description: Added program to specialties.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProgramRequest"
+      responses:
+        200:
+          description: Added program.
+        404:
+          description: Entity not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /programs/{id}:
+    delete:
+      tags:
+        - programs
+      operationId: deleteProgram
+      summary: delete program by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: program id
+      responses:
+        200:
+          description: Delete program by code.
+        404:
+          description: Entity not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /competencies:
+    post:
+      tags:
+        - competencies
+      operationId: createCompetency
+      summary: create competencies
+      requestBody:
+        description: Create competence type.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCompetencyRequest"
+      responses:
+        201:
+          description: Competency is created.
+          headers:
+            Location:
+              description: Created competencies URI.
+              schema:
+                type: string
+        400:
+          description: Bad-request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        422:
+          description: Invalid-competencies-parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+        404:
+          description: Entity not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    get:
+      tags:
+        - competencies
+      operationId: filterCompetency
+      summary: filter competencies
+      parameters:
+        - in: query
+          name: levelId
+          schema:
+            type: string
+            format: uuid
+          description: select level id
+        - in: query
+          name: ugsnId
+          schema:
+            type: string
+            format: uuid
+          description: select ugsn id
+        - in: query
+          name: specialtyId
+          schema:
+            type: string
+            format: uuid
+          description: select specialty id
+        - in: query
+          name: programId
+          schema:
+            type: string
+            format: uuid
+          description: select program id
+      responses:
+        200:
+          description: Get competencies.
+          headers:
+            Location:
+              description: Created competencies URI.
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CompetencyResponse"
+        400:
+          description: Bad-request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+  /competency/{competencyId}/inicators:
+    post:
+      tags:
+        - indicators
+      operationId: createIndicator
+      summary: create indicator
+      parameters:
+        - in: path
+          name: competencyId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: competencies Id
+      requestBody:
+        description: Create competence type.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateIndicatorRequest"
+      responses:
+        201:
+          description: Competency is created.
+          headers:
+            Location:
+              description: Created indicator URI.
+              schema:
+                type: string
+        400:
+          description: Bad-request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        422:
+          description: Invalid-competencies-parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+        404:
+          description: Entity not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    get:
+      tags:
+        - indicators
+      operationId: getIndicators
+      summary: get indicators by competencyId
+      parameters:
+        - in: path
+          name: competencyId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: competencies Id
+      responses:
+        200:
+          description: Get competencies.
+          headers:
+            Location:
+              description: Created competencies URI.
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CompetencyResponse"
+        400:
+          description: Bad-request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+
+
+
+
+
+
+
+
+
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - slug
+        - details
+      properties:
+        slug:
+          $ref: "#/components/schemas/ErrorSlug"
+        details:
+          type: string
+
+    ErrorSlug:
+      type: string
+      enum:
+        - not-found-entity
+        - level-not-found
+        - ugsn-not-found
+        - specialty-not-found
+        - program-not-found
+        - competencies-not-found
+        - indicator-not-found
+        - invalid-json
+        - bad-request
+        - unexpected-error
+        - empty-bearer-token
+        - unable-to-verify-jwt
+        - unauthorized-user
+        - invalid-level-parameters
+        - invalid-ugsn-parameters
+        - invalid-specialties-parameters
+        - invalid-program-parameters
+        - invalid-competencies-parameters
+        - invalid-indicator-parameters
+
+    CreateUgsnRequest:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.00\.00$'
+        title:
+          type: string
+
+    CreateSpecialtyRequest:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
+        title:
+          type: string
+
+    CreateLevelRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+
+    LevelResponse:
+      type: object
+      required:
+        - id
+        - title
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+
+    SpecificLevelResponse:
+      type: object
+      required:
+        - id
+        - title
+        - ugsn
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        ugsn:
+          type: array
+          items:
+            $ref: "#/components/schemas/SpecificUgsnResponse"
+
+    ProgramResponse:
+      type: object
+      required:
+        - id
+        - code
+        - title
+        - specialtyId
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})-(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
+        title:
+          type: string
+        specialtyId:
+          type: string
+          format: uuid
+
+    SpecificSpecialtyResponse:
+      type: object
+      required:
+        - id
+        - code
+        - title
+        - program
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
+        title:
+          type: string
+        program:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProgramResponse"
+
+    SpecificUgsnResponse:
+      type: object
+      required:
+        - id
+        - code
+        - title
+        - specialty
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.00\.00$'
+        title:
+          type: string
+        specialty:
+          type: array
+          items:
+            $ref: "#/components/schemas/SpecificSpecialtyResponse"
+
+    UgsnResponse:
+      type: object
+      required:
+        - id
+        - code
+        - title
+        - levelId
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.00\.00$'
+        title:
+          type: string
+        levelId:
+          type: string
+          format: uuid
+
+    SpecialtyResponse:
+      type: object
+      required:
+        - id
+        - code
+        - title
+        - ugsnId
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
+        title:
+          type: string
+        ugsnId:
+          type: string
+          format: uuid
+
+    CreateProgramRequest:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})\.(0[1-9]{1}|[1-9]{1}[0-9]{1})-(0[1-9]{1}|[1-9]{1}[0-9]{1})$'
+        title:
+          type: string
+
+    CreateCompetencyRequest:
+      type: object
+      required:
+        - category
+        - title
+        - type
+        - code
+      properties:
+        category:
+          type: string
+        code:
+          type: string
+          pattern: '^(УК|ОПК|ПК)-([1-9]{1}[0-9]?)$'
+        title:
+          type: string
+        type:
+          $ref: "#/components/schemas/CompetencyType"
+        ugsnId:
+          type: string
+          format: uuid
+        levelId:
+          type: string
+          format: uuid
+        specialtyId:
+          type: string
+          format: uuid
+        programId:
+          type: string
+          format: uuid
+
+    CompetencyType:
+      type: string
+      enum:
+        - UNIVERSAL
+        - GENERAL
+        - PROFESSIONAL
+
+    CompetencyResponse:
+      type: object
+      required:
+        - id
+        - category
+        - title
+        - type
+        - code
+      properties:
+        id:
+          type: string
+          format: uuid
+        category:
+          type: string
+        code:
+          type: string
+          pattern: '^(УК|ОПК|ПК)-([1-9]{1}[0-9]?)$'
+        title:
+          type: string
+        type:
+          $ref: "#/components/schemas/CompetencyType"
+        ugsnId:
+          type: string
+          format: uuid
+        levelId:
+          type: string
+          format: uuid
+        specialtyId:
+          type: string
+          format: uuid
+        programId:
+          type: string
+          format: uuid
+
+    CreateIndicatorRequest:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+          pattern: '^(УК|ОПК|ПК)-([1-9]{1}[0-9]?\.[1-9]{1}[0-9]?)$'
+        title:
+          type: string
+
+
+    IndicatorResponse:
+      type: object
+      required:
+        - id
+        - code
+        - title
+        - competencyId
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+          pattern: '^(УК|ОПК|ПК)-([1-9]{1}[0-9]?\.[1-9]{1}[0-9]?)$'
+        title:
+          type: string
+        competencyId:
+          type: string
+          format: uuid
