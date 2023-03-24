@@ -73,4 +73,18 @@ type (
 		SpecialtyID    string
 		ProgramID      string
 	}
+
+	IndicatorModel struct {
+		ID           string
+		Code         string
+		Title        string
+		Subject      SubjectModel
+		CompetencyID string
+	}
+
+	SubjectModel struct {
+		ID        string
+		Name      string
+		ShortName string
+	}
 )

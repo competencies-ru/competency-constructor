@@ -3,9 +3,14 @@
 
 export API_V1 = api/openapi/competency-constructor-v1.yaml
 
-gen-api-v1:
+gen-openapi-v1:
 	oapi-codegen -generate types -o internal/core/adapter/driver/rest/v1/openapi_type.gen.go -package v1 $$API_V1
 	oapi-codegen -generate chi-server -o internal/core/adapter/driver/rest/v1/openapi_server.gen.go -package v1 $$API_V1
+
+gen-api-v1:
+	make gen-openapi-v1
+	cp $$API_V1 swagger/v1/competency-constructor-v1.yaml
+
 
 build:
 	go mod download && CGO_ENABLED=0 go build -o ./.bin/competency-constructor ./cmd/competency-constructor

@@ -60,6 +60,16 @@ type (
 	}
 )
 
+type (
+	IndicatorRepository interface {
+		AddIndicator(ctx context.Context, indicator *competencies.Indicator) error
+		GetIndicator(ctx context.Context, id string) (*competencies.Indicator, error)
+		UpdateIndicator(ctx context.Context, id string, updater IndicatorUpdate) error
+	}
+
+	IndicatorUpdate func(ctx context.Context, level *competencies.Indicator) (*competencies.Indicator, error)
+)
+
 func IsNotFoundEntity(err error) bool {
 	return errors.Is(err, ErrUgsnNotFound) ||
 		errors.Is(err, ErrLevelNotFound) ||

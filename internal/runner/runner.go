@@ -150,6 +150,10 @@ func (r *Runner) initServer() {
 				Pattern: "/competency-constructor/api/v1",
 				Handler: v1.NewHandler(r.app, r.logger),
 			},
+			{
+				Pattern: "/swagger-ui",
+				Handler: http.StripPrefix("/swagger-ui/", http.FileServer(http.Dir("./swagger/v1"))),
+			},
 		},
 	}))
 }
