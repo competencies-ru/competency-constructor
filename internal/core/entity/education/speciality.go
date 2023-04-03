@@ -5,18 +5,17 @@ import (
 )
 
 var (
-	ErrSpecialtyIDIsEmpty        = errors.New("speciality: id is empty")
-	ErrSpecialityTitleIsEmpty    = errors.New("speciality: title is empty")
-	ErrSpecialityCodeIsEmpty     = errors.New("speciality: code is empty")
-	ErrSpecialityUgsnCodeIsEmpty = errors.New("speciality: ugsnCode is empty")
-	ErrSpecialityProgramNotFound = errors.New("speciality: program not found")
+	ErrSpecialtyIDIsEmpty      = errors.New("speciality: id is empty")
+	ErrSpecialityTitleIsEmpty  = errors.New("speciality: title is empty")
+	ErrSpecialityCodeIsEmpty   = errors.New("speciality: code is empty")
+	ErrSpecialityUgsnIDIsEmpty = errors.New("speciality: ugsnID is empty")
 )
 
 func IsInvalidSpecialtyParametersError(err error) bool {
 	return errors.Is(err, ErrSpecialtyIDIsEmpty) ||
 		errors.Is(err, ErrSpecialityTitleIsEmpty) ||
 		errors.Is(err, ErrSpecialityCodeIsEmpty) ||
-		errors.Is(err, ErrSpecialityUgsnCodeIsEmpty) ||
+		errors.Is(err, ErrSpecialityUgsnIDIsEmpty) ||
 		errors.Is(err, ErrSpecialityNotMatchCode) ||
 		isInvalidCodeError(err)
 }
@@ -27,8 +26,6 @@ type (
 		code   string
 		title  string
 		ugsnID string
-		// key programCode, value pointer Program
-		programs map[string]*Program
 	}
 
 	SpecialityParams struct {
@@ -48,16 +45,23 @@ func NewSpeciality(param SpecialityParams) (*Speciality, error) {
 		return nil, ErrSpecialityTitleIsEmpty
 	}
 
+	if param.Code == "" {
+		return nil, ErrSpecialityCodeIsEmpty
+	}
+
 	if !SpecialtyCodeValidate(param.Code) {
 		return nil, ErrSpecialityParseCode
 	}
 
+	if param.UgsnID == "" {
+		return nil, ErrSpecialityUgsnIDIsEmpty
+	}
+
 	return &Speciality{
-		id:       param.ID,
-		title:    param.Title,
-		code:     param.Code,
-		ugsnID:   param.UgsnID,
-		programs: make(map[string]*Program),
+		id:     param.ID,
+		title:  param.Title,
+		code:   param.Code,
+		ugsnID: param.UgsnID,
 	}, nil
 }
 
@@ -75,46 +79,4 @@ func (s *Speciality) Code() string {
 
 func (s *Speciality) UgsnID() string {
 	return s.ugsnID
-}
-
-func (s *Speciality) AddProgram(p ProgramParams) error {
-	program, err := NewProgram(p)
-	if err != nil {
-		return err
-	}
-
-	if _, ok := s.programs[program.code]; !ok {
-		s.programs[program.code] = program
-	}
-
-	return nil
-}
-
-func (s *Speciality) ProgramByCode(code string) (*Program, error) {
-	p, ok := s.programs[code]
-
-	if !ok {
-		return nil, errors.Wrapf(ErrSpecialityProgramNotFound, "get program by code %s", code)
-	}
-
-	return p, nil
-}
-
-func (s *Speciality) ProgramByID(id string) (*Program, error) {
-	for _, program := range s.programs {
-		if program.ID() == id {
-			return program, nil
-		}
-	}
-
-	return nil, ErrSpecialityProgramNotFound
-}
-
-func (s *Speciality) Programs() []*Program {
-	programs := make([]*Program, 0, len(s.programs))
-	for _, value := range s.programs {
-		programs = append(programs, value)
-	}
-
-	return programs
 }
