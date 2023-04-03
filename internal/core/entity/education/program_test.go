@@ -110,7 +110,7 @@ func TestNewProgram(t *testing.T) {
 					require.Equal(t, c.Params.Title, s.Title())
 				})
 
-				t.Run("ugsnCode", func(t *testing.T) {
+				t.Run("specialtyID", func(t *testing.T) {
 					require.Equal(t, c.Params.SpecialtyID, s.SpecialtyID())
 				})
 			})
