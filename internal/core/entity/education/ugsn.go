@@ -38,10 +38,6 @@ type (
 		code    string
 		title   string
 		levelID string
-
-		// Key specialityCode.
-		// Value pointer Speciality
-		specialities map[string]*Speciality
 	}
 
 	UgsnParams struct {
@@ -61,6 +57,10 @@ func NewUgsn(param UgsnParams) (*Ugsn, error) {
 		return nil, ErrUgsnTitleIsEmpty
 	}
 
+	if param.Code == "" {
+		return nil, ErrUgsnCodeIsEmpty
+	}
+
 	if !UgsnCodeValidate(param.Code) {
 		return nil, ErrUgsnParseCode
 	}
@@ -70,69 +70,55 @@ func NewUgsn(param UgsnParams) (*Ugsn, error) {
 	}
 
 	return &Ugsn{
-		id:           param.ID,
-		title:        param.Title,
-		code:         param.Code,
-		levelID:      param.LevelID,
-		specialities: make(map[string]*Speciality),
+		id:      param.ID,
+		title:   param.Title,
+		code:    param.Code,
+		levelID: param.LevelID,
 	}, nil
 }
 
-func (e *Ugsn) Title() string {
-	return e.title
+func (u *Ugsn) Title() string {
+	return u.title
 }
 
-func (e *Ugsn) Code() string {
-	return e.code
+func (u *Ugsn) Code() string {
+	return u.code
 }
 
-func (e *Ugsn) ID() string {
-	return e.id
+func (u *Ugsn) ID() string {
+	return u.id
 }
 
-func (e *Ugsn) LeveID() string {
-	return e.levelID
+func (u *Ugsn) LeveID() string {
+	return u.levelID
 }
 
-func (e *Ugsn) AddSpeciality(s SpecialityParams) error {
-	speciality, err := NewSpeciality(s)
-	if err != nil {
-		return errors.Wrapf(err, "adding education by code: %s", s.Code)
+func (u *Ugsn) Rename(newTitle string) error {
+
+	if newTitle == "" {
+		return ErrUgsnTitleIsEmpty
 	}
 
-	if _, ok := e.specialities[speciality.code]; !ok {
-		e.specialities[speciality.code] = speciality
+	if len(newTitle) > MaxLenTitle {
+		return ErrUgsnTitleMaxLenTitle
 	}
+
+	u.title = newTitle
 
 	return nil
 }
 
-func (e *Ugsn) SpecialityByCode(code string) (Speciality, error) {
-	s, ok := e.specialities[code]
-	if !ok {
-		return Speciality{}, errors.Wrapf(
-			ErrUgsnSpecialityNotFound,
-			"get education by code: %s", code)
+func (u *Ugsn) ChangeCode(newCode string) error {
+
+	if newCode == "" {
+		return ErrUgsnCodeIsEmpty
 	}
 
-	return *s, nil
-}
-
-func (e *Ugsn) Specialities() []*Speciality {
-	specialities := make([]*Speciality, 0, len(e.specialities))
-	for _, value := range e.specialities {
-		specialities = append(specialities, value)
+	if !UgsnCodeValidate(newCode) {
+		return ErrUgsnParseCode
 	}
 
-	return specialities
-}
-
-func (e *Ugsn) Rename(newTitle string) error {
-	if newTitle == "" || len(newTitle) > MaxLenTitle {
-		return ErrUgsnTitleMaxLenTitle
-	}
-
-	e.title = newTitle
+	u.code = newCode
 
 	return nil
 }
