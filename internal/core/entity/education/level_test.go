@@ -20,7 +20,7 @@ func TestNewLevel(t *testing.T) {
 			Name: "without_error",
 			Params: education.LevelParam{
 				ID:    uuid.NewString(),
-				Title: "Test Program",
+				Title: "Test Level",
 			},
 			ShouldBeErr: false,
 			ExpectedErr: nil,
@@ -28,7 +28,7 @@ func TestNewLevel(t *testing.T) {
 		{
 			Name: "id_is_empty",
 			Params: education.LevelParam{
-				Title: "Test Program",
+				Title: "Test Level",
 			},
 			ShouldBeErr: true,
 			ExpectedErr: education.ErrLevelIDIsEmpty,
