@@ -104,7 +104,7 @@ func TestNewSpeciality(t *testing.T) {
 				})
 
 				t.Run("code", func(t *testing.T) {
-					require.Equal(t, c.Params.ID, s.ID())
+					require.Equal(t, c.Params.Code, s.Code())
 				})
 
 				t.Run("title", func(t *testing.T) {

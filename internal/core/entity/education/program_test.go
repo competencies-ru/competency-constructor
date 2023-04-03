@@ -102,8 +102,12 @@ func TestNewProgram(t *testing.T) {
 			t.Run("no_err", func(t *testing.T) {
 				require.NoError(t, err)
 
-				t.Run("code", func(t *testing.T) {
+				t.Run("id", func(t *testing.T) {
 					require.Equal(t, c.Params.ID, s.ID())
+				})
+
+				t.Run("code", func(t *testing.T) {
+					require.Equal(t, c.Params.Code, s.Code())
 				})
 
 				t.Run("title", func(t *testing.T) {
