@@ -17,9 +17,9 @@ type (
 )
 
 var (
-	ErrSubjectEmptyID    = errors.New("subject: ID cannot be empty")
+	ErrSubjectEmptyID    = errors.New("subject: id cannot be empty")
 	ErrSubjectEmptyName  = errors.New("subject: name cannot be empty")
-	ErrSubjectEmptySName = errors.New("subject: surname cannot be empty")
+	ErrSubjectEmptySName = errors.New("subject: sname cannot be empty")
 )
 
 func NewSubject(param SubjectParams) (*Subject, error) {
@@ -48,4 +48,24 @@ func (s *Subject) Name() string {
 
 func (s *Subject) SName() string {
 	return s.sname
+}
+
+func (s *Subject) ChangeName(name string) error {
+	if name == "" {
+		return ErrSubjectEmptyName
+	}
+
+	s.name = name
+
+	return nil
+}
+
+func (s *Subject) ChangeSName(sname string) error {
+	if sname == "" {
+		return ErrSubjectEmptySName
+	}
+
+	s.sname = sname
+
+	return nil
 }
