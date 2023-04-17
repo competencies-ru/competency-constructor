@@ -94,7 +94,6 @@ func (u *Ugsn) LeveID() string {
 }
 
 func (u *Ugsn) Rename(newTitle string) error {
-
 	if newTitle == "" {
 		return ErrUgsnTitleIsEmpty
 	}
@@ -109,7 +108,6 @@ func (u *Ugsn) Rename(newTitle string) error {
 }
 
 func (u *Ugsn) ChangeCode(newCode string) error {
-
 	if newCode == "" {
 		return ErrUgsnCodeIsEmpty
 	}

@@ -14,7 +14,7 @@ var (
 	ErrCompetencyTitleIsEmpty      = errors.New("competency: title is empty")
 	ErrCompetencyCategoryIsEmpty   = errors.New("competency: category is empty")
 	ErrCompetencyTypeInvalid       = errors.New("competency: type is invalid")
-	ErrInvalidCode                 = errors.New("competency: code is invalid")
+	ErrCompetencyInvalidCode       = errors.New("competency: code is invalid")
 )
 
 type (
@@ -69,7 +69,7 @@ func NewCompetency(param CompetencyParam) (*Competency, error) {
 	}
 
 	if !isMatchCode(param.Code, param.CompetencyType) {
-		return nil, ErrInvalidCode
+		return nil, ErrCompetencyInvalidCode
 	}
 
 	return &Competency{

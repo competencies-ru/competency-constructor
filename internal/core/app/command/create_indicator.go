@@ -2,6 +2,7 @@ package command
 
 import (
 	"context"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/app/service"
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/competencies"
 	"github.com/google/uuid"
@@ -28,7 +29,6 @@ func NewCreateIndicatorHandler(
 	repository service.IndicatorRepository,
 	competencyRepository service.CompetencyRepository,
 ) CreateIndicatorHandler {
-
 	if repository == nil {
 		panic("indicator repository is nil")
 	}
@@ -48,7 +48,6 @@ func (h createIndicatorHandler) Handle(
 	competencyID string,
 	cmd CreateIndicatorCommand,
 ) (id string, err error) {
-
 	defer func() {
 		err = errors.Wrapf(err, "create indicator by competency id: %s", competencyID)
 	}()

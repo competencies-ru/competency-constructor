@@ -1,11 +1,12 @@
 package education_test
 
 import (
+	"math/rand"
+	"testing"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
-	"math/rand"
-	"testing"
 )
 
 const charset = "abcdefghijklmnopqrstuvwxyz" +
@@ -142,7 +143,6 @@ func TestNewUgsn(t *testing.T) {
 }
 
 func TestRenameUgsn(t *testing.T) {
-
 	testCases := []struct {
 		Name        string
 		NewTitle    string
@@ -211,7 +211,6 @@ func TestRenameUgsn(t *testing.T) {
 				t.Run("newTitle", func(t *testing.T) {
 					require.Equal(t, c.NewTitle, s.Title())
 				})
-
 			})
 		})
 	}
@@ -288,7 +287,6 @@ func TestUgsnChangeCode(t *testing.T) {
 				t.Run("newCode", func(t *testing.T) {
 					require.Equal(t, c.NewCode, s.Code())
 				})
-
 			})
 		})
 	}

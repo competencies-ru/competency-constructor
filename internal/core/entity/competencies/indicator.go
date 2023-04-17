@@ -6,7 +6,6 @@ var (
 	ErrIndicatorCompetencyIDIsEmpty = errors.New("indicator: competencyID is empty")
 	ErrIndicatorIDIsEmpty           = errors.New("indicator: id is empty")
 	ErrIndicatorTitleIsEmpty        = errors.New("indicator: title is empty")
-	ErrIndicatorInvalidCode         = errors.New("indicator: code is invalid")
 	ErrIndicatorSubjectIDIsEmpty    = errors.New("indicator: code is invalid")
 )
 
@@ -38,7 +37,7 @@ func NewIndicator(param IndicatorParams) (*Indicator, error) {
 	}
 
 	if !ValidateCodeIndicator(param.Code) {
-		return nil, ErrIndicatorInvalidCode
+		return nil, ErrParseIndicatorCode
 	}
 
 	if param.CompetencyID == "" {

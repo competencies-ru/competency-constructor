@@ -1,10 +1,11 @@
 package education_test
 
 import (
+	"testing"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestNewSpeciality(t *testing.T) {
@@ -117,5 +118,4 @@ func TestNewSpeciality(t *testing.T) {
 			})
 		})
 	}
-
 }

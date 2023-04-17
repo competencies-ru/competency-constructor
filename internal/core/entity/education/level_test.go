@@ -1,10 +1,11 @@
 package education_test
 
 import (
+	"testing"
+
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestNewLevel(t *testing.T) {
@@ -69,7 +70,6 @@ func TestNewLevel(t *testing.T) {
 				t.Run("title", func(t *testing.T) {
 					require.Equal(t, c.Params.Title, s.Title())
 				})
-
 			})
 		})
 	}
