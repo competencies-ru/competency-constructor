@@ -12,8 +12,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-//
-
 type ProgramRepository struct {
 	program *mongo.Collection
 }

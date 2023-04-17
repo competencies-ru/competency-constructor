@@ -1,7 +1,8 @@
 package education_test
 
 import (
-	"math/rand"
+	"crypto/rand"
+	"math/big"
 	"testing"
 
 	"github.com/competencies-ru/competency-constructor/internal/core/entity/education"
@@ -15,8 +16,10 @@ const charset = "abcdefghijklmnopqrstuvwxyz" +
 func randStringRunes(charset string, n int) string {
 	b := make([]byte, n)
 	for i := range b {
-		b[i] = charset[rand.Intn(len(charset))]
+		b2, _ := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
+		b[i] = charset[b2.Int64()]
 	}
+
 	return string(b)
 }
 
@@ -143,6 +146,8 @@ func TestNewUgsn(t *testing.T) {
 }
 
 func TestRenameUgsn(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		Name        string
 		NewTitle    string

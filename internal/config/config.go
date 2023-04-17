@@ -132,11 +132,7 @@ func unmarshall(cfg *Config) error {
 		return err
 	}
 
-	if err := viper.UnmarshalKey("logger", &cfg.Logger); err != nil {
-		return err
-	}
-
-	return nil
+	return viper.UnmarshalKey("logger", &cfg.Logger)
 }
 
 func replaceEnvConfig() error {

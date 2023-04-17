@@ -69,5 +69,7 @@ func (h createIndicatorHandler) Handle(
 		return "", err
 	}
 
-	return id, h.repository.AddIndicator(ctx, indicator)
+	err = h.repository.AddIndicator(ctx, indicator)
+
+	return
 }

@@ -162,7 +162,6 @@ func createQuestionData(params QuestionParams) (QuestionData, error) {
 
 		data.taskSequence = mapping
 	case Test:
-
 		point, err := NewTaskPoint(params.TaskPoint)
 		if err != nil {
 			return QuestionData{}, err
@@ -230,7 +229,6 @@ func taskConformityMapping(params []TaskConformityParams) ([]*TaskConformity, er
 	buff := make([]*TaskConformity, 0, len(params))
 
 	for i := 0; i < len(params); i++ {
-
 		conformity, err := NewTaskConformity(params[i])
 		if err != nil {
 			return nil, err

@@ -16,7 +16,7 @@ type testCases []struct {
 	ExpectedErr error
 }
 
-// testing negative cases with fields
+// testing negative cases with fields.
 func TestNewQuestionErrField(t *testing.T) {
 	t.Parallel()
 
@@ -102,7 +102,10 @@ func TestNewQuestionErrField(t *testing.T) {
 	runQuestionTestCases(t, cases)
 }
 
+// testing conformity answer task.
 func TestNewQuestionConformity(t *testing.T) {
+	t.Parallel()
+
 	cases := testCases{
 		{
 			Name: "without_error_question_conformity",
@@ -174,7 +177,7 @@ func TestNewQuestionConformity(t *testing.T) {
 				TaskSequence: nil,
 				TaskConformity: []competencies.TaskConformityParams{
 					{
-						Left: "		",
+						Left:  "		",
 						Right: "b",
 					},
 					{
@@ -199,7 +202,7 @@ func TestNewQuestionConformity(t *testing.T) {
 				TaskConformity: []competencies.TaskConformityParams{
 					{
 						Right: "		",
-						Left: "b",
+						Left:  "b",
 					},
 					{
 						Left:  "a",
@@ -216,8 +219,10 @@ func TestNewQuestionConformity(t *testing.T) {
 	runQuestionTestCases(t, cases)
 }
 
-// testing complete answer task
+// testing complete answer task.
 func TestNewQuestionCompleteAnswer(t *testing.T) {
+	t.Parallel()
+
 	cases := testCases{
 		{
 			Name: "without_error_question_complete",
@@ -269,8 +274,10 @@ func TestNewQuestionCompleteAnswer(t *testing.T) {
 	runQuestionTestCases(t, cases)
 }
 
-// test questions sequence
+// test questions sequence.
 func TestNewQuestionSequence(t *testing.T) {
+	t.Parallel()
+
 	cases := testCases{
 		{
 			Name: "without_error_question_sequence",
@@ -424,8 +431,10 @@ func TestNewQuestionSequence(t *testing.T) {
 	runQuestionTestCases(t, cases[4:])
 }
 
-// testing task point questions
+// testing task point questions.
 func TestNewQuestionTaskPoints(t *testing.T) {
+	t.Parallel()
+
 	cases := testCases{
 		{
 			Name: "without_error_question_task_point_single",
@@ -440,7 +449,7 @@ func TestNewQuestionTaskPoints(t *testing.T) {
 				TaskPoint: competencies.TaskPointParams{
 					Single:   true,
 					Variants: []string{"a", "b", "c"},
-					Answers:  []int{1},
+					Answers:  []int{2},
 				},
 			},
 			ShouldBeErr: false,

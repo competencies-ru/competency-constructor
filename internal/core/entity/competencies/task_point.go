@@ -39,7 +39,7 @@ func NewTaskPoint(params TaskPointParams) (*TaskPoint, error) {
 		return nil, err
 	}
 
-	if err := validateAnswers(params); err != nil {
+	if err := validateAnswer(params); err != nil {
 		return nil, err
 	}
 
@@ -80,31 +80,38 @@ func validateVariants(variants []string) error {
 	return nil
 }
 
-func validateAnswers(params TaskPointParams) error {
-	if len(params.Answers) < 1 {
+func validateAnswer(param TaskPointParams) error {
+	if len(param.Answers) < 1 {
 		return ErrTaskPointAnswerIsEmpty
 	}
 
-	maxIndexVariants := len(params.Variants) - 1
+	maxIndexVariants := len(param.Variants) - 1
 
-	if params.Single {
-
-		if len(params.Answers) != 1 {
-			return ErrTaskPointAnswerNumberIncorrect
-		}
-
-		if params.Answers[0] < 0 || params.Answers[0] > maxIndexVariants {
-			return ErrTaskPointAnswerIncorrect
-		}
-
-		return nil
+	if param.Single {
+		return validateSingleAnswer(param, maxIndexVariants)
 	}
 
-	if len(params.Answers) < 2 || len(params.Answers) > MaxAnswerNumber {
+	return validateManyAnswer(param, maxIndexVariants)
+}
+
+func validateSingleAnswer(param TaskPointParams, maxIndexVariants int) error {
+	if len(param.Answers) != 1 {
 		return ErrTaskPointAnswerNumberIncorrect
 	}
 
-	for _, answer := range params.Answers {
+	if param.Answers[0] < 0 || param.Answers[0] > maxIndexVariants {
+		return ErrTaskPointAnswerIncorrect
+	}
+
+	return nil
+}
+
+func validateManyAnswer(param TaskPointParams, maxIndexVariants int) error {
+	if len(param.Answers) < 2 || len(param.Answers) > MaxAnswerNumber {
+		return ErrTaskPointAnswerNumberIncorrect
+	}
+
+	for _, answer := range param.Answers {
 		if answer < 0 || answer > maxIndexVariants {
 			return ErrTaskPointAnswerIncorrect
 		}
