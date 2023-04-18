@@ -14,7 +14,7 @@ var (
 	ErrCompetencyTitleIsEmpty      = errors.New("competency: title is empty")
 	ErrCompetencyCategoryIsEmpty   = errors.New("competency: category is empty")
 	ErrCompetencyTypeInvalid       = errors.New("competency: type is invalid")
-	ErrCompetencyInvalidCode       = errors.New("competency: code is invalid")
+	ErrCompetencyCodeInvalid       = errors.New("competency: code is invalid")
 )
 
 type (
@@ -64,12 +64,12 @@ func NewCompetency(param CompetencyParam) (*Competency, error) {
 		return nil, ErrCompetencyTypeInvalid
 	}
 
-	if err := competencyTypeDefinition(param); err != nil {
-		return nil, err
+	if !isMatchCode(param.Code, param.CompetencyType) {
+		return nil, ErrCompetencyCodeInvalid
 	}
 
-	if !isMatchCode(param.Code, param.CompetencyType) {
-		return nil, ErrCompetencyInvalidCode
+	if err := validateEducationParameters(param); err != nil {
+		return nil, err
 	}
 
 	return &Competency{
@@ -98,7 +98,7 @@ func isMatchCode(code string, p Type) bool {
 	return false
 }
 
-func competencyTypeDefinition(param CompetencyParam) error {
+func validateEducationParameters(param CompetencyParam) error {
 	if param.CompetencyType == UNIVERSAL && param.LevelID == "" {
 		return ErrLevelIDIsEmpty
 	}
