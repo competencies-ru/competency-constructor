@@ -83,8 +83,8 @@ type (
 	}
 
 	SubjectModel struct {
-		ID        string
-		Name      string
-		ShortName string
+		ID    string
+		Name  string
+		SName string
 	}
 )
