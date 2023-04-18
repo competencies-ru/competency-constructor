@@ -31,7 +31,7 @@ func NewTaskSequence(params TaskSequenceParams) (*TaskSequence, error) {
 		return nil, ErrTaskSequenceZero
 	}
 
-	if params.Sequence == MaxCountSequence+1 {
+	if params.Sequence > MaxCountSequence {
 		return nil, ErrTaskSequenceIncorrect
 	}
 
