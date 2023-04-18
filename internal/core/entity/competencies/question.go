@@ -25,34 +25,33 @@ const (
 
 type (
 	Question struct {
+		data         QuestionData
 		id           string
 		description  string
-		questionType QuestionType
-		rank         int
-		data         QuestionData
 		indicatorID  string
+		rank         int
+		questionType QuestionType
 	}
 
 	QuestionData struct {
 		taskPoint      *TaskPoint
 		taskSequence   map[int]*TaskSequence
-		taskConformity []*TaskConformity
 		completeAnswer string
+		taskConformity []*TaskConformity
 	}
 )
 
 type (
 	QuestionParams struct {
-		ID           string
-		Description  string
-		QuestionType QuestionType
-		Rank         int
-		IndicatorID  string
-
+		ID             string
+		Description    string
+		IndicatorID    string
+		CompleteAnswer string
+		TaskPoint      TaskPointParams
 		TaskSequence   []TaskSequenceParams
 		TaskConformity []TaskConformityParams
-		TaskPoint      TaskPointParams
-		CompleteAnswer string
+		Rank           int
+		QuestionType   QuestionType
 	}
 )
 

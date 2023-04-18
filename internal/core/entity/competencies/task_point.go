@@ -22,15 +22,15 @@ const (
 
 type (
 	TaskPoint struct {
-		single   bool
 		variants []string
 		answers  []int
+		single   bool
 	}
 
 	TaskPointParams struct {
-		Single   bool
 		Variants []string
 		Answers  []int
+		Single   bool
 	}
 )
 

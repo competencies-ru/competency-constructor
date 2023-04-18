@@ -23,11 +23,11 @@ type (
 		title          string
 		code           string
 		category       string
-		competencyType Type
 		levelID        string
 		ugsnID         string
 		specialtyID    string
 		programID      string
+		competencyType Type
 	}
 
 	CompetencyParam struct {
@@ -35,11 +35,11 @@ type (
 		Title          string
 		Code           string
 		Category       string
-		CompetencyType Type
 		LevelID        string
 		UgsnID         string
 		SpecialtyID    string
 		ProgramID      string
+		CompetencyType Type
 	}
 )
 

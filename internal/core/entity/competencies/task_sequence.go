@@ -14,13 +14,13 @@ var (
 
 type (
 	TaskSequence struct {
-		sequence int
 		answer   string
+		sequence int
 	}
 
 	TaskSequenceParams struct {
-		Sequence int
 		Answer   string
+		Sequence int
 	}
 )
 
