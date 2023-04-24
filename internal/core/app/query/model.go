@@ -78,7 +78,7 @@ type (
 		ID           string
 		Code         string
 		Title        string
-		Subject      SubjectModel
+		Subject      *SubjectModel
 		CompetencyID string
 	}
 

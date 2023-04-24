@@ -20,7 +20,7 @@ func (h handler) GetUgsn(w http.ResponseWriter, r *http.Request, levelID openapi
 		return
 	}
 
-	if errors.Is(err, service.ErrLevelNotFound) {
+	if errors.Is(err, service.NotFoundEntity) {
 		rest.NotFound(string(LevelNotFound), err, w, r)
 
 		return
@@ -44,13 +44,13 @@ func (h handler) AddUgsn(w http.ResponseWriter, r *http.Request, levelID openapi
 		return
 	}
 
-	if errors.Is(err, service.ErrLevelNotFound) {
+	if errors.Is(err, service.NotFoundEntity) {
 		rest.NotFound(string(LevelNotFound), err, w, r)
 
 		return
 	}
 
-	if errors.Is(err, service.ErrUgsnAlreadyExists) {
+	if errors.Is(err, service.AlreadyExistsEntity) {
 		rest.NotFound(string(BadRequest), err, w, r)
 
 		return

@@ -42,7 +42,7 @@ func (h handler) CreateLevel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if errors.Is(err, service.ErrLevelAlreadyExists) {
+	if errors.Is(err, service.AlreadyExistsEntity) {
 		rest.NotFound(string(BadRequest), err, w, r)
 
 		return

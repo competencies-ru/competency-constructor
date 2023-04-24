@@ -26,7 +26,7 @@ func (h handler) GetPrograms(w http.ResponseWriter, r *http.Request, id openapiT
 		return
 	}
 
-	if errors.Is(err, service.ErrSpecialtyNotFound) {
+	if errors.Is(err, service.NotFoundEntity) {
 		rest.NotFound(string(SpecialtyNotFound), err, w, r)
 
 		return
@@ -50,13 +50,13 @@ func (h handler) AddPrograms(w http.ResponseWriter, r *http.Request, id openapiT
 		return
 	}
 
-	if errors.Is(err, service.ErrSpecialtyNotFound) {
+	if errors.Is(err, service.NotFoundEntity) {
 		rest.NotFound(string(SpecialtyNotFound), err, w, r)
 
 		return
 	}
 
-	if errors.Is(err, service.ErrProgramAlreadyExists) {
+	if errors.Is(err, service.AlreadyExistsEntity) {
 		rest.NotFound(string(BadRequest), err, w, r)
 
 		return

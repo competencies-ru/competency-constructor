@@ -142,7 +142,7 @@ func unmarshall(cfg *Config) error {
 		return err
 	}
 
-	if err := viper.UnmarshalKey("postgres", &cfg.Mongodb); err != nil {
+	if err := viper.UnmarshalKey("postgres", &cfg.Postgres); err != nil {
 		return err
 	}
 

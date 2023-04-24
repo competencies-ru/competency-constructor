@@ -44,7 +44,7 @@ func (h handler) CreateCompetency(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if errors.Is(err, service.ErrCompetencyAlreadyExists) {
+	if errors.Is(err, service.AlreadyExistsEntity) {
 		rest.BadRequest(string(BadRequest), err, w, r)
 
 		return

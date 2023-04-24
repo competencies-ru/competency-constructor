@@ -3,11 +3,12 @@ package runner
 import (
 	"context"
 	"errors"
+	"github.com/competencies-ru/competency-constructor/pkg/database/postgres"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
 	"net/http"
 	"sync"
 
-	mongoRepo "github.com/competencies-ru/competency-constructor/internal/core/adapter/driven/persistence/mongodb"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/command"
 	"github.com/competencies-ru/competency-constructor/internal/core/app/query"
 
@@ -27,12 +28,18 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/competencies-ru/competency-constructor/internal/config"
+	postgresRepo "github.com/competencies-ru/competency-constructor/internal/core/adapter/driven/persistence/postgres"
 	"github.com/competencies-ru/competency-constructor/internal/server"
 )
 
 type singletonMongodb struct {
 	one sync.Once
 	db  *mongo.Database
+}
+
+type singletonPostgres struct {
+	one sync.Once
+	db  *pgxpool.Pool
 }
 
 type singletonZapLogger struct {
@@ -56,6 +63,7 @@ type persistenceContext struct {
 type Runner struct {
 	singletonZapLogger
 	singletonMongodb
+	singletonPostgres
 
 	logger      service.Logger
 	config      *config.Config
@@ -69,7 +77,7 @@ func New(path string) *Runner {
 
 	r.initConfig(path)
 	r.initLogger()
-	r.initPersistent()
+	r.initPostgresPersistent()
 	r.initApplication()
 	r.initServer()
 
@@ -87,15 +95,15 @@ func (r *Runner) initConfig(path string) {
 	r.config = cfg
 }
 
-func (r *Runner) initPersistent() {
-	database := r.mongo()
-	args := []interface{}{"db", "mongo"}
+func (r *Runner) initPostgresPersistent() {
+	database := r.postgres()
+	args := []interface{}{"db", "postgres"}
 
-	levelRepo := mongoRepo.NewLevelRepository(database)
-	ugsnRepo := mongoRepo.NewUgsnRepository(database)
-	specialtyRepo := mongoRepo.NewSpecialtyRepository(database)
-	programRepo := mongoRepo.NewProgramRepository(database)
-	competencyRepo := mongoRepo.NewCompetencyRepository(database)
+	levelRepo := postgresRepo.NewLevelRepository(database)
+	ugsnRepo := postgresRepo.NewUgsnRepository(database)
+	specialtyRepo := postgresRepo.NewSpecialtyRepository(database)
+	programRepo := postgresRepo.NewProgramRepository(database)
+	competencyRepo := postgresRepo.NewCompetencyRepository(database)
 
 	r.persistence.levelRepo = levelRepo
 	r.logger.Info("Level repository initialization completed", args...)
@@ -126,6 +134,7 @@ func (r *Runner) initPersistent() {
 
 	r.persistence.filterCompetencyRepo = competencyRepo
 	r.logger.Info("filter competency models repository initialization completed", args...)
+
 }
 
 func (r *Runner) initLogger() {
@@ -181,6 +190,19 @@ func (r *Runner) initApplication() {
 			FindAllCompetency:  query.NewFilterCompetenciesHandler(r.persistence.filterCompetencyRepo),
 		},
 	}
+}
+
+func (r *Runner) postgres() *pgxpool.Pool {
+	r.singletonPostgres.one.Do(func() {
+		client, err := postgres.NewClient(r.config.Postgres)
+		if err != nil {
+			log.Fatalf("failed to connect to postgres database", err)
+		}
+
+		r.singletonPostgres.db = client
+	})
+
+	return r.singletonPostgres.db
 }
 
 func (r *Runner) mongo() *mongo.Database {

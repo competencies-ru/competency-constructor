@@ -112,7 +112,7 @@ func (r *LevelRepository) getLevelDocument(
 
 	if err := r.level.FindOne(ctx, filter, opts...).Decode(&document); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return levelDocument{}, service.ErrLevelNotFound
+			return levelDocument{}, service.NotFoundEntity
 		}
 
 		return levelDocument{}, err

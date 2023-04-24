@@ -32,7 +32,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateLevelRequest"
+              $ref: "#/components/schemas/LevelRequest"
       responses:
         201:
           description: Level is created.
@@ -49,11 +49,11 @@ paths:
                 $ref: "#/components/schemas/Error"
 
   /levels/{levelId}:
-    get:
+    put:
       tags:
         - levels
-      operationId: getSpecificLevel
-      summary: Returns level with such ID.
+      operationId: changeTitle
+      summary: Change title level
       parameters:
         - in: path
           name: levelId
@@ -61,20 +61,46 @@ paths:
             type: string
             format: uuid
           required: true
-          description: Level ID to return
+          description: Level ID
+      requestBody:
+        description: change name level.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LevelRequest"
       responses:
         200:
-          description: Found previously created level.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SpecificLevelResponse"
-        404:
-          description: Level with such ID not found.
+          description: Title is change.
+        400:
+          description: Bad request.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - levels
+      operationId: changeTitle
+      summary: Change title level
+      parameters:
+        - in: path
+          name: levelId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Level ID
+      responses:
+        200:
+          description: Delete level with id.
+        404:
+          description: Entity not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 
   /levels/{levelId}/ugsn:
     get:
@@ -617,7 +643,7 @@ components:
         title:
           type: string
 
-    CreateLevelRequest:
+    LevelRequest:
       type: object
       required:
         - title

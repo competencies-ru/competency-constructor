@@ -21,7 +21,7 @@ func (h handler) GetSpecialties(w http.ResponseWriter, r *http.Request, id opena
 		return
 	}
 
-	if errors.Is(err, service.ErrUgsnNotFound) {
+	if errors.Is(err, service.NotFoundEntity) {
 		rest.NotFound(string(UgsnNotFound), err, w, r)
 
 		return
@@ -45,13 +45,13 @@ func (h handler) AddSpecialties(w http.ResponseWriter, r *http.Request, id opena
 		return
 	}
 
-	if errors.Is(err, service.ErrUgsnNotFound) {
+	if errors.Is(err, service.NotFoundEntity) {
 		rest.NotFound(string(UgsnNotFound), err, w, r)
 
 		return
 	}
 
-	if errors.Is(err, service.ErrSpecialtyAlreadyExists) {
+	if errors.Is(err, service.AlreadyExistsEntity) {
 		rest.NotFound(string(BadRequest), err, w, r)
 
 		return
