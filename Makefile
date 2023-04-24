@@ -35,13 +35,43 @@ run-dev: linux-build
 stop-dev:
 	docker-compose -f ./deployments/dev/docker-compose.yml --project-directory . stop competency-constructor
 
+# mongodb
 export TEST_DB_URI=mongodb://localhost:27019
 export TEST_DB_NAME=test
 export TEST_DB_CONTAINER_NAME=test-db
 
-run-test-db:
+run-test-mongo-db:
 	docker run --rm -d -p 27019:27017 --name $$TEST_DB_CONTAINER_NAME -e MONGODB_DATABASE=$$TEST_DB_NAME mongo:latest
 
-stop-test-db:
+stop-test-mongo-db:
 	docker stop $$TEST_DB_CONTAINER_NAME
 
+#postgresql
+export TEST_PSQL_DB_NAME=test-db-name
+export TEST_PSQL_DB_CONTAINER_NAME=test-db
+export TEST_PSQL_DB_USER=test-user
+export TEST_PSQL_DB_PASSWORD=test-password
+export TEST_PSQL_DB_HOST=localhost
+export TEST_PSQL_DB_PORT=5432
+
+run-test-psql-db:
+	docker run --rm -d -p 5432:5432\
+		 --name $$TEST_PSQL_DB_CONTAINER_NAME\
+		 -e POSTGRES_DB=$$TEST_PSQL_DB_NAME -e POSTGRES_USER=$$TEST_PSQL_DB_USER\
+ 		 -e POSTGRES_PASSWORD=$$TEST_PSQL_DB_PASSWORD postgres:latest
+
+stop-test-psql-db:
+	docker stop $$TEST_DB_CONTAINER_NAME
+
+
+#migrate
+create-migration:
+	 migrate create -ext sql -dir migrations ${NAME}
+
+dev-up:
+	migrate -path ./migrations -database\
+		'postgres://${TEST_PSQL_DB_USER}:${TEST_PSQL_DB_PASSWORD}@${TEST_PSQL_DB_HOST}:${TEST_PSQL_PORT}/${TEST_PSQL_DB_NAME}?sslmode=disable' up
+
+dev-down:
+	migrate -path ./migrations -database\
+		'postgres://${TEST_PSQL_DB_USER}:${TEST_PSQL_DB_PASSWORD}@${TEST_PSQL_DB_HOST}:${TEST_PSQL_PORT}/${TEST_PSQL_DB_NAME}?sslmode=disable' down 1

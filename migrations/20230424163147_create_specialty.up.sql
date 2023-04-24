@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS SPECIALTY
+(
+    ID      UUID PRIMARY KEY,
+    TITLE   VARCHAR(255)                                NOT NULL,
+    CODE    VARCHAR(8)                                  NOT NULL,
+    UGSN_ID UUID REFERENCES UGSN (ID) ON DELETE CASCADE NOT NULL
+);
